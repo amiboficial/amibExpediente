@@ -115,3 +115,8 @@ log4j.main = {
            'org.hibernate',
            'net.sf.ehcache.hibernate'
 }
+
+grails.plugin.reveng.defaultSchema='dbo'
+grails.plugin.reveng.excludeTables = [
+	'dbamibexpediente.sys.check_constraints'
+]
