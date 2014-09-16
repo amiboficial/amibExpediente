@@ -14,4 +14,7 @@ class SustentanteRestfulController extends RestfulController{
 		super(Sustentante)
 	}
 	
+	def obtenerSustentantePorMatricula(long id) {
+		respond Sustentante.findAllByNumeroMatricula(id)
+	}
 }
