@@ -1,14 +1,13 @@
-package mx.amib.sistemas.expediente.model
+package mx.amib.sistemas.expediente.persona.model.catalog
 
-import mx.amib.sistemas.expediente.persona.model.Sustentante;
 import grails.test.mixin.TestFor
 import spock.lang.Specification
 
 /**
  * See the API for {@link grails.test.mixin.domain.DomainClassUnitTestMixin} for usage instructions
  */
-@TestFor(Sustentante)
-class SustentanteSpec extends Specification {
+@TestFor(Nacionalidad)
+class NacionalidadSpec extends Specification {
 
     def setup() {
     }

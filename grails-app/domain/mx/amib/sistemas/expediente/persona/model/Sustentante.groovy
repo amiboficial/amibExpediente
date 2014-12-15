@@ -1,8 +1,12 @@
-package mx.amib.sistemas.expediente.model
+package mx.amib.sistemas.expediente.persona.model
+
+import mx.amib.sistemas.expediente.persona.model.catalog.Nacionalidad
+import mx.amib.sistemas.expediente.persona.model.catalog.NivelEstudios
+import mx.amib.expediente.certificacion.model.Certificacion
 
 class Sustentante {
 	
-	int numeroMatricula
+	Integer numeroMatricula
 	String nombre
 	String primerApellido
 	String segundoApellido
@@ -10,12 +14,18 @@ class Sustentante {
 	String rfc
 	String curp
 	Date fechaNacimiento
+	String correoElectronico
 	
 	Date fechaCreacion
 	Date fechaModificacion
 	
+	Nacionalidad nacionalidad
+	NivelEstudios nivelEstudios
+	
+	static hasMany = [ telefonos:TelefonoSustentante , documentos:DocumentoSustentante, puestos:Puesto, certificaciones:Certificacion ]
+	
 	static mapping = {
-		table 't001_t_sustentante'
+		table 't101_t_sustentante'
 		
 		id generator: "identity"
 		
@@ -27,9 +37,13 @@ class Sustentante {
 		rfc column:'tx_rfc'
 		curp column:'tx_curp'
 		fechaNacimiento column:'fh_nacimiento'
+		correoElectronico column:'tx_correoe'
 		
 		fechaCreacion column:'fh_creacion'
 		fechaModificacion column:'fh_modificacion'
+		
+		nacionalidad column:'id_107f_nacionalidad'
+		nivelEstudios column:'id_108f_nivelestudios'
 		
 		version false
 	}
@@ -43,6 +57,7 @@ class Sustentante {
 		rfc nullable: true, maxSize: 13
 		curp nullable: true, maxSize: 18
 		fechaNacimiento nullable: true
+		correoElectronico nullable: true, maxSize: 254
 		
 		fechaCreacion nullable: true
 		fechaModificacion nullable: true

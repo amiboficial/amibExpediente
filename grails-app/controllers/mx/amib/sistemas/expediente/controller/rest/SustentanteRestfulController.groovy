@@ -1,7 +1,7 @@
 package mx.amib.sistemas.expediente.controller.rest
 
 import static org.springframework.http.HttpStatus.*
-import mx.amib.sistemas.expediente.model.Sustentante
+import mx.amib.sistemas.expediente.persona.model.Sustentante;
 import grails.rest.RestfulController
 import grails.transaction.Transactional
 
@@ -15,6 +15,6 @@ class SustentanteRestfulController extends RestfulController{
 	}
 	
 	def obtenerSustentantePorMatricula(long id) {
-		respond Sustentante.findAllByNumeroMatricula(id)
+		respond Sustentante.findByNumeroMatricula(id)
 	}
 }
