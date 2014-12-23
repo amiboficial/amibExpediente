@@ -12,8 +12,6 @@ class TipoDocumentoSustentate {
 		
 		descripcion column:'ds_tpdocsust'
 		vigente column:'st_vigente'
-		
-		version false
 	}
 	
 	static constraints = {

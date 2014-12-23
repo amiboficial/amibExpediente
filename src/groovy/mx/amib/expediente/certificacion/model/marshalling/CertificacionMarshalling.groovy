@@ -6,7 +6,7 @@ import grails.converters.JSON
 import mx.amib.expediente.certificacion.model.Certificacion
 import mx.amib.expediente.certificacion.model.EventoPuntos
 import mx.amib.expediente.certificacion.model.MovimientoAutorizacion
-import mx.amib.expediente.certificacion.model.catalog.Figura
+import mx.amib.expediente.certificacion.model.catalog.VarianteFigura
 import mx.amib.expediente.certificacion.model.catalog.StatusAutorizacion
 import mx.amib.expediente.certificacion.model.catalog.StatusCertificacion
 import mx.amib.expediente.certificacion.model.catalog.TipoActualizacionCertificacion
@@ -65,7 +65,7 @@ class EventoPuntosMarshalling{
 
 class FiguraMarshalling {
 	void register(){
-		JSON.registerObjectMarshaller(Figura){ Figura obj ->
+		JSON.registerObjectMarshaller(VarianteFigura){ VarianteFigura obj ->
 			return [
 				descripcion: obj.descripcion,
 				tipoAutorizacion: obj.tipoAutorizacion,

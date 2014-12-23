@@ -12,8 +12,6 @@ class TipoTelefonoSustentante {
 		
 		descripcion column:'ds_tptelsust'
 		vigente column:'st_vigente'
-		
-		version false
 	}
 	
 	static constraints = {

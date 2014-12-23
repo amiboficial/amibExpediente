@@ -1,7 +1,7 @@
 package mx.amib.expediente.certificacion.model
 
 import java.util.Date
-import mx.amib.expediente.certificacion.model.catalog.Figura
+import mx.amib.expediente.certificacion.model.catalog.VarianteFigura
 import mx.amib.expediente.certificacion.model.catalog.StatusAutorizacion
 import mx.amib.expediente.certificacion.model.catalog.StatusCertificacion
 import mx.amib.expediente.certificacion.model.catalog.TipoActualizacionCertificacion
@@ -18,7 +18,7 @@ class Certificacion {
 	Date fechaCreacion
 	Date fechaModificacion
 	
-	Figura figura
+	VarianteFigura varianteFigura
 	StatusAutorizacion statusAutorizacion
 	StatusCertificacion statusCertificacion
 	TipoActualizacionCertificacion tipoActualizacionCertificacion
@@ -40,7 +40,7 @@ class Certificacion {
 		fechaCreacion column:'fh_creacion'
 		fechaModificacion column:'fh_modificacion'
 		
-		figura column:'id_103f_figura'
+		varianteFigura column:'id_103f_varfigura'
 		statusAutorizacion column:'id_205_stautorizacion'
 		statusCertificacion column:'id_203_stcertificacion'
 		tipoActualizacionCertificacion column:'id_204_tpactualcert'

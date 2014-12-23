@@ -12,8 +12,6 @@ class Nacionalidad {
 		
 		descripcion column:'ds_nacionalidad'
 		vigente column:'st_vigente'
-		
-		version false
 	}
 	
     static constraints = {

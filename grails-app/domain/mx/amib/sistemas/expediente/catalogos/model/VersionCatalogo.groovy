@@ -3,6 +3,7 @@ package mx.amib.sistemas.expediente.catalogos.model
 class VersionCatalogo {
 
 	Integer numeroCatalogo
+	Integer numeroCatalogoForaneo
 	Integer numeroVersion
 	
 	static mapping = {
@@ -10,7 +11,8 @@ class VersionCatalogo {
 		
 		id generator: "assigned"
 		
-		numeroCatalogo column:'nu_catalogo'
+		numeroCatalogo column:'nu_cat'
+		numeroCatalogoForaneo column:'nu_catforaneo'
 		numeroVersion column:'nu_version'
 		
 		version false

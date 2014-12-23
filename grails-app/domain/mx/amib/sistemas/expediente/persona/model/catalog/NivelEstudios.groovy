@@ -12,8 +12,6 @@ class NivelEstudios {
 		
 		descripcion column:'ds_nivelestudios'
 		vigente column:'st_vigente'
-		
-		version false
 	}
 	
     static constraints = {
