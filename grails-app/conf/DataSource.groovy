@@ -18,19 +18,19 @@ environments {
 	development {
 		dataSource {
 			dbCreate = "validate" // one of 'create', 'create-drop', 'update', 'validate', ''
-			url = "jdbc:sqlserver://bima-devqa-serv:1433;databaseName=dbamibexpediente"
+			url = "jdbc:sqlserver://bimalatrop.no-ip.biz:1433;databaseName=dbamibexpediente"
 		}
 	}
 	test {
 		dataSource {
 			dbCreate = "validate"
-		   url = "jdbc:sqlserver://bima-devqa-serv:1433;databaseName=dbamibexpediente"
+		   url = "jdbc:sqlserver://bimalatrop.no-ip.biz:1433;databaseName=dbamibexpediente"
 		}
 	}
 	production {
 		dataSource {
 			dbCreate = "validate"
-			url = "jdbc:sqlserver://bima-devqa-serv:1433;databaseName=dbamibexpediente"
+			url = "jdbc:sqlserver://bimalatrop.no-ip.biz:1433;databaseName=dbamibexpediente"
 			properties {
 			   // See http://grails.org/doc/latest/guide/conf.html#dataSource for documentation
 			   jmxEnabled = true

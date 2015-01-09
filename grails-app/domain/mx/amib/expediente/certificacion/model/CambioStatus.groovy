@@ -1,6 +1,6 @@
 package mx.amib.expediente.certificacion.model
 
-class MovimientoAutorizacion {
+class CambioStatus {
 	
 	Date fechaAutorizacion
 	String autorizadoPorUsuario
@@ -13,10 +13,10 @@ class MovimientoAutorizacion {
 	static belongsTo = [Certificacion]
 	
 	static mapping = {
-		table 't207_t_movautorizacion'
+		table 't207_t_cambiostatus'
 		
-		fechaAutorizacion column:'fh_autorizacion'
-		autorizadoPorUsuario column:'tx_autorizadopor'
+		fechaAutorizacion column:'fh_cambiostatus'
+		autorizadoPorUsuario column:'tx_usuario'
 		
 		fechaCreacion column:'fh_creacion'
 		fechaModificacion column:'fh_modificacion'

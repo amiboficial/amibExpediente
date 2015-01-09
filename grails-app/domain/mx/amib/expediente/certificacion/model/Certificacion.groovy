@@ -4,7 +4,7 @@ import java.util.Date
 import mx.amib.expediente.certificacion.model.catalog.VarianteFigura
 import mx.amib.expediente.certificacion.model.catalog.StatusAutorizacion
 import mx.amib.expediente.certificacion.model.catalog.StatusCertificacion
-import mx.amib.expediente.certificacion.model.catalog.TipoActualizacionCertificacion
+import mx.amib.expediente.certificacion.model.catalog.MetodoCertificacion
 import mx.amib.sistemas.expediente.persona.model.Sustentante
 
 
@@ -12,7 +12,7 @@ class Certificacion {
 	
 	Date fechaInicio
 	Date fechaFin
-	Date ultimaActualizacionStatusCertficacion
+	Date fechaObtencion
 	String nombreUsuarioActualizo
 	
 	Date fechaCreacion
@@ -21,20 +21,20 @@ class Certificacion {
 	VarianteFigura varianteFigura
 	StatusAutorizacion statusAutorizacion
 	StatusCertificacion statusCertificacion
-	TipoActualizacionCertificacion tipoActualizacionCertificacion
+	MetodoCertificacion metodoCertificacion
 	
 	Sustentante sustentante
 	
 	static belongsTo = [Sustentante]
 	
-	static hasMany = [ movimientosAutorizacion:MovimientoAutorizacion, eventosPuntos:EventoPuntos ]
+	static hasMany = [ movimientosAutorizacion:CambioStatus, eventosPuntos:EventoPuntos ]
 	
 	static mapping = {
 		table 't201_t_certificacion'
 		
 		fechaInicio column:'fh_inicio'
 		fechaFin column:'fh_fin'
-		ultimaActualizacionStatusCertficacion column:'fh_actualcert'
+		fechaObtencion column:'fh_obtencion'
 		nombreUsuarioActualizo column:'tx_usuarioactualizo'
 		
 		fechaCreacion column:'fh_creacion'
@@ -43,7 +43,7 @@ class Certificacion {
 		varianteFigura column:'id_103f_varfigura'
 		statusAutorizacion column:'id_205_stautorizacion'
 		statusCertificacion column:'id_203_stcertificacion'
-		tipoActualizacionCertificacion column:'id_204_tpactualcert'
+		metodoCertificacion column:'id_204_metodocert'
 		
 		sustentante column:'id_101_sustentante'
 		

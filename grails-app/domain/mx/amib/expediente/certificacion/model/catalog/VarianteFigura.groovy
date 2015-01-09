@@ -31,5 +31,9 @@ class VarianteFigura {
 	
     static constraints = {
 		nombre maxSize:254
+		nombreAcuseFigura nullable:true
+		esAutorizableFigura nullable:true
+		tipoAutorizacionFigura nullable:true
+		inicialesFigura nullable:true
     }
 }

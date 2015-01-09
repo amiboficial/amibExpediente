@@ -5,11 +5,11 @@ import java.util.Date
 import grails.converters.JSON
 import mx.amib.expediente.certificacion.model.Certificacion
 import mx.amib.expediente.certificacion.model.EventoPuntos
-import mx.amib.expediente.certificacion.model.MovimientoAutorizacion
+import mx.amib.expediente.certificacion.model.CambioStatus
 import mx.amib.expediente.certificacion.model.catalog.VarianteFigura
 import mx.amib.expediente.certificacion.model.catalog.StatusAutorizacion
 import mx.amib.expediente.certificacion.model.catalog.StatusCertificacion
-import mx.amib.expediente.certificacion.model.catalog.TipoActualizacionCertificacion
+import mx.amib.expediente.certificacion.model.catalog.MetodoCertificacion
 import mx.amib.sistemas.expediente.persona.model.Sustentante
 
 class CertificacionMarshalling {
@@ -20,13 +20,13 @@ class CertificacionMarshalling {
 				
 				fechaInicio: obj.fechaInicio,
 				fechaFin: obj.fechaFin,
-				ultimaActualizacionStatusCertficacion: obj.ultimaActualizacionStatusCertficacion,
+				ultimaActualizacionStatusCertficacion: obj.fechaObtencion,
 				nombreUsuarioActualizo: obj.nombreUsuarioActualizo,
 
-				figura: obj.figura,
+				figura: obj.varianteFigura,
 				statusAutorizacion: obj.statusAutorizacion.descripcion,
 				statusCertificacion: obj.statusCertificacion.descripcion,
-				tipoActualizacionCertificacion: obj.tipoActualizacionCertificacion.descripcion,
+				tipoActualizacionCertificacion: obj.metodoCertificacion.descripcion,
 				
 				movimientosAutorizacion: obj.movimientosAutorizacion,
 				eventosPuntos: obj.eventosPuntos,
@@ -37,9 +37,9 @@ class CertificacionMarshalling {
 	}
 }
 
-class MovimientoAutorizacionMarshalling{
+class CambioStatusMarshalling{
 	void register(){
-		JSON.registerObjectMarshaller(MovimientoAutorizacion){ MovimientoAutorizacion obj ->
+		JSON.registerObjectMarshaller(CambioStatus){ CambioStatus obj ->
 			return [
 				fechaAutorizacion: obj.fechaAutorizacion,
 				autorizadoPorUsuario: obj.autorizadoPorUsuario,
@@ -63,13 +63,14 @@ class EventoPuntosMarshalling{
 	}
 }
 
-class FiguraMarshalling {
+class VarianteFiguraMarshalling {
 	void register(){
 		JSON.registerObjectMarshaller(VarianteFigura){ VarianteFigura obj ->
 			return [
-				descripcion: obj.descripcion,
-				tipoAutorizacion: obj.tipoAutorizacion,
-				iniciales: obj.iniciales,
+				id: obj.id,
+				descripcion: obj.nombre,
+				tipoAutorizacion: obj.tipoAutorizacionFigura,
+				iniciales: obj.inicialesFigura,
 				vigente: obj.vigente
 			]
 		}
