@@ -9,7 +9,7 @@ import mx.amib.sistemas.expediente.persona.model.Sustentante
 import mx.amib.sistemas.expediente.persona.model.TelefonoSustentante
 import mx.amib.sistemas.expediente.persona.model.catalog.Nacionalidad
 import mx.amib.sistemas.expediente.persona.model.catalog.NivelEstudios
-import mx.amib.sistemas.expediente.persona.model.catalog.TipoDocumentoSustentate
+import mx.amib.sistemas.expediente.persona.model.catalog.TipoDocumentoSustentante
 import mx.amib.sistemas.expediente.persona.model.catalog.TipoTelefonoSustentante
 
 class SustentanteMarshalling {
@@ -44,6 +44,8 @@ class TelefonoSustentanteMarshalling {
 	void register(){
 		JSON.registerObjectMarshaller(TelefonoSustentante){ TelefonoSustentante obj ->
 			return [
+				id: obj.id,
+				
 				lada: obj.lada,
 				telefono: obj.telefono,
 				extension: obj.extension,
@@ -58,6 +60,8 @@ class DocumentoSustentanteMarshalling {
 	void register(){
 		JSON.registerObjectMarshaller(DocumentoSustentante){ DocumentoSustentante obj ->
 			return [
+				id: obj.id,
+				
 				uuid: obj.uuid,
 				vigente: obj.vigente,
 				
@@ -71,6 +75,8 @@ class PuestoMarshalling{
 	void register(){
 		JSON.registerObjectMarshaller(Puesto){ Puesto obj ->
 			return [
+				id: obj.id,
+				
 				empresa: obj.empresa,
 				fechaInicio: obj.fechaInicio,
 				fechaFin: obj.fechaFin,
@@ -85,6 +91,8 @@ class NacionalidadMarshalling{
 	void register(){
 		JSON.registerObjectMarshaller(Nacionalidad){ Nacionalidad obj ->
 			return [
+				id: obj.id,
+				
 				descripcion: obj.descripcion,
 				vigente: obj.vigente
 			]
@@ -96,6 +104,8 @@ class NivelEstudiosMarshalling{
 	void register(){
 		JSON.registerObjectMarshaller(NivelEstudios){ NivelEstudios obj ->
 			return [
+				id: obj.id,
+				
 				descripcion: obj.descripcion,
 				vigente: obj.vigente
 			]
@@ -105,8 +115,10 @@ class NivelEstudiosMarshalling{
 
 class TipoDocumentoSustentateMarshalling{
 	void register(){
-		JSON.registerObjectMarshaller(TipoDocumentoSustentate){ TipoDocumentoSustentate obj ->
+		JSON.registerObjectMarshaller(TipoDocumentoSustentante){ TipoDocumentoSustentante obj ->
 			return [
+				id: obj.id,
+				
 				descripcion: obj.descripcion,
 				vigente: obj.vigente
 			]
@@ -118,6 +130,8 @@ class TipoTelefonoSustentanteMarshalling{
 	void register(){
 		JSON.registerObjectMarshaller(TipoTelefonoSustentante){ TipoTelefonoSustentante obj ->
 			return [
+				id: obj.id,
+				
 				descripcion: obj.descripcion,
 				vigente: obj.vigente
 			]

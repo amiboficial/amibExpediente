@@ -7,7 +7,7 @@ public interface IModelSynchronizer {
 	long checkRemoteVersion()
 	Collection downloadAllElements()
 	Collection downloadUpdatedElements(long version)
-	Collection<Long> getIdsToRemove(Collection<Long> ids)
+	Collection<Long> getIdsToRemove(Collection<Long> currentIds)
 	
 	String getRestUrlVersionControl()
 	void setRestUrlVersionControl(String restUrlVersionControl)

@@ -1,6 +1,6 @@
 package mx.amib.sistemas.expediente.persona.model
 
-import mx.amib.sistemas.expediente.persona.model.catalog.TipoDocumentoSustentate
+import mx.amib.sistemas.expediente.persona.model.catalog.TipoDocumentoSustentante
 
 class DocumentoSustentante {
 
@@ -9,7 +9,7 @@ class DocumentoSustentante {
 	
 	Sustentante sustentante
 	
-	TipoDocumentoSustentate tipoDocumentoSustentate
+	TipoDocumentoSustentante tipoDocumentoSustentate
 	
 	static belongsTo = [Sustentante]
 	

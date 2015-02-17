@@ -19,6 +19,7 @@ environments {
 		dataSource {
 			dbCreate = "validate" // one of 'create', 'create-drop', 'update', 'validate', ''
 			url = "jdbc:sqlserver://bimalatrop.no-ip.biz:1433;databaseName=dbamibexpediente"
+			logSql = true
 		}
 	}
 	test {

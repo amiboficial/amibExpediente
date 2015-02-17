@@ -3,7 +3,7 @@ package mx.amib.expediente.certificacion.model.catalog
 class VarianteFigura {
 	String nombre
 	Boolean vigente
-	
+	Long numeroVersion
 	Long idFigura
 	String nombreFigura
 	String nombreAcuseFigura
@@ -16,6 +16,7 @@ class VarianteFigura {
 		table 't202_cf_varfigura'
 		
 		id generator: "assigned"
+		numeroVersion column:'nu_version'
 		
 		nombre column:'nb_varfigura'
 		
@@ -27,6 +28,7 @@ class VarianteFigura {
 		inicialesFigura column:'nb_iniciales'
 		
 		vigente column:'st_vigente'
+		version false
 	}
 	
     static constraints = {

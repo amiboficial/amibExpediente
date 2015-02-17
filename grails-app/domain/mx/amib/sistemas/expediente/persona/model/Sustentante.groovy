@@ -2,7 +2,7 @@ package mx.amib.sistemas.expediente.persona.model
 
 import mx.amib.sistemas.expediente.persona.model.catalog.Nacionalidad
 import mx.amib.sistemas.expediente.persona.model.catalog.NivelEstudios
-import mx.amib.expediente.certificacion.model.Certificacion
+import mx.amib.sistemas.expediente.certificacion.model.Certificacion
 
 class Sustentante {
 	

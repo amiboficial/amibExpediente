@@ -1,17 +1,17 @@
-package mx.amib.expediente.certificacion.model.datasync
+package mx.amib.sistemas.expediente.persona.model.datasync
 
-import java.util.Collection;
 
+import java.util.Collection
+
+import mx.amib.sistemas.expediente.persona.model.catalog.Nacionalidad
 import mx.amib.sistemas.expediente.catalogos.model.VersionCatalogo
-import mx.amib.expediente.certificacion.model.catalog.VarianteFigura
 import mx.amib.expediente.datasync.IModelSynchronizer
-
 import grails.converters.JSON
 import grails.plugins.rest.client.RestBuilder
 
 import org.codehaus.groovy.grails.web.json.JSONObject
 
-class VarianteFiguraSynchronizer implements IModelSynchronizer {
+class NacionalidadModelSynchronizer implements IModelSynchronizer {
 
 	private String _restUrlVersionControl
 	private String _restUrlGetAllElements
@@ -35,40 +35,40 @@ class VarianteFiguraSynchronizer implements IModelSynchronizer {
 		
 		if(removeMissing){
 			//elimina aquellos que hayan sido elminados en el catalogo amibCatalogos
-			def ids = VarianteFigura.executeQuery("select vf.id from VarianteFigura vf where vf.numeroVersion <= :numeroVersion",[numeroVersion:localVersion])
+			def ids = Nacionalidad.executeQuery("select na.id from Nacionalidad na where na.numeroVersion <= :numeroVersion",[numeroVersion:localVersion])
 			if(ids.size() > 0){
 				List<Long> idsToDelete = this.getIdsToRemove(ids)
 				if(idsToDelete != null && idsToDelete.size() > 0)
-					VarianteFigura.executeUpdate("delete from VarianteFigura vf where vf.id in :ids",[ids:idsToDelete])
+					Nacionalidad.executeUpdate("delete from Nacionalidad na where na.id in :ids",[ids:idsToDelete])
 			}
 		}
 		
 		//actualiza el numero de versión
-		def vc = VersionCatalogo.findByNumeroCatalogo(202)
+		def vc = VersionCatalogo.findByNumeroCatalogo(107)
 		vc.numeroVersion = remoteVersion
 		vc.save(failOnError:true,flush:true)
+
 	}
 
-	
 	@Override
 	public void refresh() {
-		VarianteFigura.executeUpdate("delete from VarianteFigura")
-		def variantesFigura = this.downloadAllElements()
-		variantesFigura.each{
+		Nacionalidad.executeUpdate("delete from Nacionalidad")
+		def elements = this.downloadAllElements()
+		elements.each{
 			it.save(failOnError:true,flush:true)
 		}
 	}
 
 	@Override
 	public long checkLocalVersion() {
-		Long numero = VersionCatalogo.findByNumeroCatalogo(202).numeroVersion
+		Long numero = VersionCatalogo.findByNumeroCatalogo(107).numeroVersion
 		return numero.value
 	}
 
 	@Override
 	public long checkRemoteVersion() {
 		long result = -1
-		Long numeroAmibCatalogos = VersionCatalogo.findByNumeroCatalogo(202).numeroCatalogoForaneo
+		Long numeroAmibCatalogos = VersionCatalogo.findByNumeroCatalogo(107).numeroCatalogoForaneo
 		
 		//llamada rest a catalogo foreano
 		String restUrl = _restUrlVersionControl + numeroAmibCatalogos
@@ -84,7 +84,7 @@ class VarianteFiguraSynchronizer implements IModelSynchronizer {
 
 	@Override
 	public Collection downloadAllElements() {
-		List<VarianteFigura> allVariantesFigura = new ArrayList<VarianteFigura>()
+		List<Nacionalidad> allElements = new ArrayList<Nacionalidad>()
 		
 		//llamada rest a catalogo foreano
 		String restUrl = _restUrlGetAllElements
@@ -93,31 +93,21 @@ class VarianteFiguraSynchronizer implements IModelSynchronizer {
 		resp.json instanceof JSONObject
 		
 		resp.json.each{
-			VarianteFigura vf = new VarianteFigura()
-			vf.id = it.id
-			vf.numeroVersion = it.numeroVersion
-			vf.nombre = it.nombre
-			vf.vigente = it.vigente
-			vf.idFigura = it.idFigura
-			vf.nombreFigura = it.nombreFigura
-			vf.nombreAcuseFigura = it.nombreAcuseFigura
-			vf.esAutorizableFigura = it.esAutorizableFigura
-			vf.tipoAutorizacionFigura = it.tipoAutorizacion
-			vf.inicialesFigura = it.inicialesFigura
-			vf.nombreAcuseFigura = (vf.nombreAcuseFigura == "null")?null:vf.nombreAcuseFigura
-			vf.esAutorizableFigura = (vf.esAutorizableFigura == "null")?null:vf.esAutorizableFigura
-			vf.tipoAutorizacionFigura = (vf.tipoAutorizacionFigura == "null")?null:vf.tipoAutorizacionFigura
-			vf.inicialesFigura = (vf.inicialesFigura == "null")?null:vf.inicialesFigura
+			Nacionalidad x = new Nacionalidad()
+			x.id = it.id
+			x.numeroVersion = it.numeroVersion
+			x.descripcion = it.descripcion
+			x.vigente = it.vigente
 			
-			allVariantesFigura.add(vf)
+			allElements.add(x)
 		}
 		
-		return allVariantesFigura
+		return allElements
 	}
 
 	@Override
 	public Collection downloadUpdatedElements(long version) {
-		List<VarianteFigura> updatedVariantesFigura = new ArrayList<VarianteFigura>()
+		List<Nacionalidad> updatedElements = new ArrayList<Nacionalidad>()
 		
 		//llamada rest a catalogo foreano
 		String restUrl = _restUrlGetUpdatedElements + version
@@ -126,25 +116,15 @@ class VarianteFiguraSynchronizer implements IModelSynchronizer {
 		resp.json instanceof JSONObject
 		
 		resp.json.each{
-			VarianteFigura vf = new VarianteFigura()
-			vf.id = it.id
-			vf.numeroVersion = it.numeroVersion
-			vf.nombre = it.nombre
-			vf.vigente = it.vigente
-			vf.idFigura = it.idFigura
-			vf.nombreFigura = it.nombreFigura
-			vf.nombreAcuseFigura = it.nombreAcuseFigura
-			vf.esAutorizableFigura = it.esAutorizableFigura
-			vf.tipoAutorizacionFigura = it.tipoAutorizacion
-			vf.inicialesFigura = it.inicialesFigura
-			vf.nombreAcuseFigura = (vf.nombreAcuseFigura == "null")?null:vf.nombreAcuseFigura
-			vf.esAutorizableFigura = (vf.esAutorizableFigura == "null")?null:vf.esAutorizableFigura
-			vf.tipoAutorizacionFigura = (vf.tipoAutorizacionFigura == "null")?null:vf.tipoAutorizacionFigura
-			vf.inicialesFigura = (vf.inicialesFigura == "null")?null:vf.inicialesFigura
-			updatedVariantesFigura.add(vf)
+			Nacionalidad x = new Nacionalidad()
+			x.id = it.id
+			x.numeroVersion = it.numeroVersion
+			x.descripcion = it.descripcion
+			x.vigente = it.vigente
+			updatedElements.add(x)
 		}
 		
-		return updatedVariantesFigura
+		return updatedElements
 	}
 
 	@Override
@@ -173,7 +153,6 @@ class VarianteFiguraSynchronizer implements IModelSynchronizer {
 		return idsToRemove
 	}
 
-	
 	@Override
 	public String getRestUrlVersionControl() {
 		return _restUrlVersionControl
