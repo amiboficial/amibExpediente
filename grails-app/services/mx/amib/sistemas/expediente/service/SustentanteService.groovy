@@ -38,9 +38,9 @@ class SustentanteService {
 		}
 		
 		if(palabraNombre != null && palabraNombre != ""){
-			hqlFilters.add("s.nombre like :palabraNombre")
-			hqlFilters.add("s.primerApellido like :palabraNombre")
-			hqlFilters.add("s.segundoApellido like :palabraNombre")
+			hqlFilters.add("s.nombre like :palabraNombre ")
+			hqlFilters.add("s.primerApellido like :palabraNombre ")
+			hqlFilters.add("s.segundoApellido like :palabraNombre ")
 			whereKeywordNeeded = true
 			namedParameters.put("palabraNombre",palabraNombre+"%")
 		}

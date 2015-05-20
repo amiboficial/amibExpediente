@@ -1,5 +1,6 @@
 package mx.amib.expediente.certificacion.model
 
+import mx.amib.sistemas.expediente.certificacion.model.CambioStatus;
 import grails.test.mixin.TestFor
 import spock.lang.Specification
 

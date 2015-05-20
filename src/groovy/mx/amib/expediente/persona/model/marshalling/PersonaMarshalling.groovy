@@ -7,6 +7,7 @@ import mx.amib.sistemas.expediente.persona.model.DocumentoSustentante
 import mx.amib.sistemas.expediente.persona.model.Puesto
 import mx.amib.sistemas.expediente.persona.model.Sustentante
 import mx.amib.sistemas.expediente.persona.model.TelefonoSustentante
+import mx.amib.sistemas.expediente.persona.model.catalog.EstadoCivil
 import mx.amib.sistemas.expediente.persona.model.catalog.Nacionalidad
 import mx.amib.sistemas.expediente.persona.model.catalog.NivelEstudios
 import mx.amib.sistemas.expediente.persona.model.catalog.TipoDocumentoSustentante
@@ -27,9 +28,16 @@ class SustentanteMarshalling {
 				curp: obj.curp,
 				fechaNacimiento: obj.fechaNacimiento,
 				correoElectronico: obj.correoElectronico,
+				calidadMigratoria: obj.calidadMigratoria,
+				profesion: obj.profesion,
+				calle: obj.calle,
+				numeroExterior: obj.numeroExterior,
+				numeroInterior: obj.numeroInterior,
+				idSepomex: obj.idSepomex,
 				
 				nacionalidad: obj.nacionalidad,
 				nivelEstudios: obj.nivelEstudios,
+				estadoCivil: obj.estadoCivil,
 				
 				telefonos:obj.telefonos, 
 				documentos:obj.documentos, 
@@ -77,7 +85,7 @@ class PuestoMarshalling{
 			return [
 				id: obj.id,
 				
-				empresa: obj.empresa,
+				idInstitucion: obj.idInstitucion,
 				fechaInicio: obj.fechaInicio,
 				fechaFin: obj.fechaFin,
 				nombrePuesto: obj.nombrePuesto,
@@ -103,6 +111,19 @@ class NacionalidadMarshalling{
 class NivelEstudiosMarshalling{
 	void register(){
 		JSON.registerObjectMarshaller(NivelEstudios){ NivelEstudios obj ->
+			return [
+				id: obj.id,
+				
+				descripcion: obj.descripcion,
+				vigente: obj.vigente
+			]
+		}
+	}
+}
+
+class EstadoCivilMarshalling{
+	void register(){
+		JSON.registerObjectMarshaller(EstadoCivil){ EstadoCivil obj ->
 			return [
 				id: obj.id,
 				

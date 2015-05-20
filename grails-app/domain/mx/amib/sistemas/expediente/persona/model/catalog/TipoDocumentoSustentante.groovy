@@ -1,7 +1,8 @@
 package mx.amib.sistemas.expediente.persona.model.catalog
 
-class TipoDocumentoSustentate {
+class TipoDocumentoSustentante {
 	
+	Long numeroVersion
 	String descripcion
 	Boolean vigente
 	
@@ -9,9 +10,10 @@ class TipoDocumentoSustentate {
 		table 't103_cf_tpdocsust'
 		
 		id generator: "assigned"
-		
+		numeroVersion column:'nu_version'
 		descripcion column:'ds_tpdocsust'
 		vigente column:'st_vigente'
+		version false
 	}
 	
 	static constraints = {

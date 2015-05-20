@@ -2,7 +2,7 @@ package mx.amib.sistemas.expediente.persona.model
 
 class Puesto {
 
-	String empresa
+	Long idInstitucion
 	Date fechaInicio
 	Date fechaFin
 	String nombrePuesto
@@ -20,7 +20,7 @@ class Puesto {
 		
 		id generator: "identity"
 		
-		empresa column:'tx_empresa'
+		idInstitucion column:'id_f_institucion'
 		fechaInicio column:'fh_inicio'
 		fechaFin column:'fh_termino'
 		nombrePuesto column:'tx_puesto'
@@ -35,7 +35,6 @@ class Puesto {
 	}
 	
     static constraints = {
-		empresa maxSize:100
 		nombrePuesto maxSize:100
 		
 		fechaCreacion nullable: true

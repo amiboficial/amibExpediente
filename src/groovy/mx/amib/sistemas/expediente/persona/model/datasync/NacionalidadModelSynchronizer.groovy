@@ -1,6 +1,5 @@
 package mx.amib.sistemas.expediente.persona.model.datasync
 
-
 import java.util.Collection
 
 import mx.amib.sistemas.expediente.persona.model.catalog.Nacionalidad

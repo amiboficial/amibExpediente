@@ -74,9 +74,9 @@ class VarianteFiguraSynchronizer implements IModelSynchronizer {
 		String restUrl = _restUrlVersionControl + numeroAmibCatalogos
 		def rest = new RestBuilder()
 		def resp = rest.get(restUrl)
-		resp.json instanceof JSONObject
-		if(resp.json != null){
-			result = resp.json.numeroVersion
+		
+		if(resp.json instanceof JSONObject){
+			result = resp.json.'numeroVersion'
 		}
 		
 		return result

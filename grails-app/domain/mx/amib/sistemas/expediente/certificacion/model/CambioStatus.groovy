@@ -1,4 +1,4 @@
-package mx.amib.expediente.certificacion.model
+package mx.amib.sistemas.expediente.certificacion.model
 
 class CambioStatus {
 	

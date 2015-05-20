@@ -1,5 +1,6 @@
 package mx.amib.sistemas.expediente.persona.model
 
+import mx.amib.sistemas.expediente.persona.model.catalog.EstadoCivil
 import mx.amib.sistemas.expediente.persona.model.catalog.Nacionalidad
 import mx.amib.sistemas.expediente.persona.model.catalog.NivelEstudios
 import mx.amib.sistemas.expediente.certificacion.model.Certificacion
@@ -15,12 +16,20 @@ class Sustentante {
 	String curp
 	Date fechaNacimiento
 	String correoElectronico
+	String calidadMigratoria
+	String profesion
+	
+	String calle
+	String numeroExterior
+	String numeroInterior
+	Long idSepomex
 	
 	Date fechaCreacion
 	Date fechaModificacion
 	
 	Nacionalidad nacionalidad
 	NivelEstudios nivelEstudios
+	EstadoCivil estadoCivil
 	
 	static hasMany = [ telefonos:TelefonoSustentante , documentos:DocumentoSustentante, puestos:Puesto, certificaciones:Certificacion ]
 	
@@ -38,12 +47,19 @@ class Sustentante {
 		curp column:'tx_curp'
 		fechaNacimiento column:'fh_nacimiento'
 		correoElectronico column:'tx_correoe'
+		calidadMigratoria column:'tx_calmigratoria'
+		profesion column:'tx_profesion'
+		calle column:'tx_calle'
+		numeroExterior column:'tx_numext'
+		numeroInterior column:'tx_numint'
+		idSepomex column:'id_f_sepomex'
 		
 		fechaCreacion column:'fh_creacion'
 		fechaModificacion column:'fh_modificacion'
 		
 		nacionalidad column:'id_107f_nacionalidad'
 		nivelEstudios column:'id_108f_nivelestudios'
+		estadoCivil column:'id_109f_edocivil'
 		
 		version false
 	}
@@ -58,6 +74,8 @@ class Sustentante {
 		curp nullable: true, maxSize: 18
 		fechaNacimiento nullable: true
 		correoElectronico nullable: true, maxSize: 254
+		
+		nacionalidad nullable: true
 		
 		fechaCreacion nullable: true
 		fechaModificacion nullable: true

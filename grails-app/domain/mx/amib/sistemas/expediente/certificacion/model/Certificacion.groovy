@@ -1,4 +1,4 @@
-package mx.amib.expediente.certificacion.model
+package mx.amib.sistemas.expediente.certificacion.model
 
 import java.util.Date
 import mx.amib.expediente.certificacion.model.catalog.VarianteFigura
@@ -15,6 +15,9 @@ class Certificacion {
 	Date fechaObtencion
 	String nombreUsuarioActualizo
 	
+	Boolean esLaActual
+	Date fechaUltimoCambioStatusEsLaActual
+	
 	Date fechaCreacion
 	Date fechaModificacion
 	
@@ -27,7 +30,7 @@ class Certificacion {
 	
 	static belongsTo = [Sustentante]
 	
-	static hasMany = [ movimientosAutorizacion:CambioStatus, eventosPuntos:EventoPuntos ]
+	static hasMany = [ cambiosStatus:CambioStatus, eventosPuntos:EventoPuntos ]
 	
 	static mapping = {
 		table 't201_t_certificacion'
@@ -36,6 +39,9 @@ class Certificacion {
 		fechaFin column:'fh_fin'
 		fechaObtencion column:'fh_obtencion'
 		nombreUsuarioActualizo column:'tx_usuarioactualizo'
+		
+		esLaActual column:'st_actual'
+		fechaUltimoCambioStatusEsLaActual column:'fh_setstactual'
 		
 		fechaCreacion column:'fh_creacion'
 		fechaModificacion column:'fh_modificacion'
