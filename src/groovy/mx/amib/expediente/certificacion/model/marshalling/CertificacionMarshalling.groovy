@@ -6,10 +6,10 @@ import grails.converters.JSON
 import mx.amib.sistemas.expediente.certificacion.model.Certificacion
 import mx.amib.sistemas.expediente.certificacion.model.EventoPuntos
 import mx.amib.sistemas.expediente.certificacion.model.CambioStatus
-import mx.amib.expediente.certificacion.model.catalog.VarianteFigura
-import mx.amib.expediente.certificacion.model.catalog.StatusAutorizacion
-import mx.amib.expediente.certificacion.model.catalog.StatusCertificacion
-import mx.amib.expediente.certificacion.model.catalog.MetodoCertificacion
+import mx.amib.sistemas.expediente.certificacion.model.catalog.VarianteFigura
+import mx.amib.sistemas.expediente.certificacion.model.catalog.StatusAutorizacion
+import mx.amib.sistemas.expediente.certificacion.model.catalog.StatusCertificacion
+import mx.amib.sistemas.expediente.certificacion.model.catalog.MetodoCertificacion
 import mx.amib.sistemas.expediente.persona.model.Sustentante
 
 class CertificacionMarshalling {
@@ -24,14 +24,17 @@ class CertificacionMarshalling {
 				nombreUsuarioActualizo: obj.nombreUsuarioActualizo,
 
 				varianteFigura: obj.varianteFigura,
-				statusAutorizacion: obj.statusAutorizacion.descripcion,
-				statusCertificacion: obj.statusCertificacion.descripcion,
-				metodoCertificacion: obj.metodoCertificacion.descripcion,
+				statusAutorizacion: obj.statusAutorizacion?.descripcion,
+				statusCertificacion: obj.statusCertificacion?.descripcion,
+				metodoCertificacion: obj.metodoCertificacion?.descripcion,
+				idStatusAutorizacion: obj.statusAutorizacion?.id,
+				idStatusCertificacion: obj.statusCertificacion?.id,
+				idMetodoCertificacion: obj.metodoCertificacion?.id,
 				
 				cambiosStatus: obj.cambiosStatus,
 				eventosPuntos: obj.eventosPuntos,
 				
-				idSustentante: obj.sustentante.id
+				idSustentante: obj.sustentante?.id
 			]
 		}
 	}
@@ -46,7 +49,7 @@ class CambioStatusMarshalling{
 				fechaAutorizacion: obj.fechaAutorizacion,
 				autorizadoPorUsuario: obj.autorizadoPorUsuario,
 				
-				idCertificacion: obj.certificacion.id
+				idCertificacion: obj.certificacion?.id
 			]
 		}
 	}
@@ -61,7 +64,7 @@ class EventoPuntosMarshalling{
 				idEvento: obj.idEvento,
 				puntaje: obj.puntaje,
 								
-				idCertificacion: obj.certificacion.id
+				idCertificacion: obj.certificacion?.id
 			]
 		}
 	}

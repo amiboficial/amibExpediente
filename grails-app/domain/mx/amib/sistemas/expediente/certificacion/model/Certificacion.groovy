@@ -1,10 +1,10 @@
 package mx.amib.sistemas.expediente.certificacion.model
 
 import java.util.Date
-import mx.amib.expediente.certificacion.model.catalog.VarianteFigura
-import mx.amib.expediente.certificacion.model.catalog.StatusAutorizacion
-import mx.amib.expediente.certificacion.model.catalog.StatusCertificacion
-import mx.amib.expediente.certificacion.model.catalog.MetodoCertificacion
+import mx.amib.sistemas.expediente.certificacion.model.catalog.VarianteFigura
+import mx.amib.sistemas.expediente.certificacion.model.catalog.StatusAutorizacion
+import mx.amib.sistemas.expediente.certificacion.model.catalog.StatusCertificacion
+import mx.amib.sistemas.expediente.certificacion.model.catalog.MetodoCertificacion
 import mx.amib.sistemas.expediente.persona.model.Sustentante
 
 
@@ -25,15 +25,26 @@ class Certificacion {
 	StatusAutorizacion statusAutorizacion
 	StatusCertificacion statusCertificacion
 	MetodoCertificacion metodoCertificacion
+	Long idVarianteFigura
+	Long idStatusAutorizacion
+	Long idStatusCertificacion
+	Long idMetodoCertificacion
 	
 	Sustentante sustentante
+	
+	Set cambiosStatus = []
+	Set eventosPuntos = []
 	
 	static belongsTo = [Sustentante]
 	
 	static hasMany = [ cambiosStatus:CambioStatus, eventosPuntos:EventoPuntos ]
 	
+	static transients = ['idVarianteFigura','idStatusAutorizacion','idStatusCertificacion','idMetodoCertificacion']
+	
 	static mapping = {
 		table 't201_t_certificacion'
+		
+		id generator: "identity"
 		
 		fechaInicio column:'fh_inicio'
 		fechaFin column:'fh_fin'
@@ -57,6 +68,12 @@ class Certificacion {
 	}
 	
     static constraints = {
+		
+		idVarianteFigura bindable: true
+		idStatusAutorizacion bindable: true
+		idStatusCertificacion bindable: true
+		idMetodoCertificacion bindable: true
+		
 		nombreUsuarioActualizo maxSize:254
     }
 }

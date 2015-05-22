@@ -6,7 +6,6 @@ import mx.amib.sistemas.expediente.persona.model.catalog.NivelEstudios
 import mx.amib.sistemas.expediente.certificacion.model.Certificacion
 
 class Sustentante {
-	
 	Integer numeroMatricula
 	String nombre
 	String primerApellido
@@ -30,13 +29,23 @@ class Sustentante {
 	Nacionalidad nacionalidad
 	NivelEstudios nivelEstudios
 	EstadoCivil estadoCivil
+	Long idNacionalidad
+	Long idNivelEstudios
+	Long idEstadoCivil
+	
+	Set telefonos = []
+	Set documentos = []
+	Set puestos = []
+	Set certificaciones = []
 	
 	static hasMany = [ telefonos:TelefonoSustentante , documentos:DocumentoSustentante, puestos:Puesto, certificaciones:Certificacion ]
 	
+	static transients = ['idNacionalidad','idNivelEstudios','idEstadoCivil']
+		
 	static mapping = {
 		table 't101_t_sustentante'
 		
-		id generator: "identity"
+		id generator: "assigned"
 		
 		numeroMatricula column:'nu_matricula'
 		nombre column:'nb_nombre'
@@ -65,6 +74,12 @@ class Sustentante {
 	}
 	
     static constraints = {
+		id bindable: true
+		
+		idNacionalidad bindable: true
+		idNivelEstudios bindable: true
+		idEstadoCivil bindable: true
+		
 		numeroMatricula unique: true
 		nombre maxSize: 100
 		primerApellido maxSize: 80

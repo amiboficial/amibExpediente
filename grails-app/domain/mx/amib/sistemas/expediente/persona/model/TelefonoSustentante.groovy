@@ -9,10 +9,13 @@ class TelefonoSustentante {
 	String extension
 
 	TipoTelefonoSustentante tipoTelefonoSustentante
+	Long idTipoTelefonoSustentante
 	
 	Sustentante sustentante
 	
 	static belongsTo = [Sustentante]
+	
+	static transients = ['idTipoTelefonoSustentante']
 	
 	static mapping = {
 		table 't104_t_telsust'
@@ -31,6 +34,8 @@ class TelefonoSustentante {
 	}
 	
     static constraints = {
+		idTipoTelefonoSustentante bindable: true
+		
 		lada maxSize:16
 		telefono maxSize:50
 		extension maxSize:6

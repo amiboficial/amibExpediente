@@ -1,4 +1,4 @@
-package mx.amib.expediente.certificacion.model.catalog
+package mx.amib.sistemas.expediente.certificacion.model.catalog
 
 class StatusCertificacion {
 

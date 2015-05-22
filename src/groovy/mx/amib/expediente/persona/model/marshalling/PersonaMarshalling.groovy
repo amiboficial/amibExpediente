@@ -38,6 +38,9 @@ class SustentanteMarshalling {
 				nacionalidad: obj.nacionalidad,
 				nivelEstudios: obj.nivelEstudios,
 				estadoCivil: obj.estadoCivil,
+				idNacionalidad: obj.nacionalidad?.id,
+				idNivelEstudios: obj.nivelEstudios?.id,
+				idEstadoCivil: obj.estadoCivil?.id,
 				
 				telefonos:obj.telefonos, 
 				documentos:obj.documentos, 
@@ -59,6 +62,7 @@ class TelefonoSustentanteMarshalling {
 				extension: obj.extension,
 			
 				tipoTelefonoSustentante: obj.tipoTelefonoSustentante,
+				idTipoTelefonoSustentante: obj.tipoTelefonoSustentante?.id,
 			]
 		}
 	}

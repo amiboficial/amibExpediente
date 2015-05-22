@@ -36,6 +36,7 @@ class Puesto {
 	
     static constraints = {
 		nombrePuesto maxSize:100
+		fechaFin nullable: true
 		
 		fechaCreacion nullable: true
 		fechaModificacion nullable: true
