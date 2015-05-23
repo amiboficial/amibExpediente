@@ -89,6 +89,7 @@ class Sustentante {
 		curp nullable: true, maxSize: 18
 		fechaNacimiento nullable: true
 		correoElectronico nullable: true, maxSize: 254
+		numeroInterior nullable: true
 		
 		nacionalidad nullable: true
 		

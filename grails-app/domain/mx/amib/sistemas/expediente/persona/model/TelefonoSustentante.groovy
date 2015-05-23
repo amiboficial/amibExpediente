@@ -36,8 +36,8 @@ class TelefonoSustentante {
     static constraints = {
 		idTipoTelefonoSustentante bindable: true
 		
-		lada maxSize:16
+		lada maxSize:16, nullable: true
 		telefono maxSize:50
-		extension maxSize:6
+		extension maxSize:6, nullable: true
     }
 }
