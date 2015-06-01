@@ -1,6 +1,7 @@
 package mx.amib.sistemas.expediente.controller.rest
 
 import static org.springframework.http.HttpStatus.*
+import org.apache.commons.io.IOUtils
 import mx.amib.sistemas.expediente.certificacion.model.catalog.MetodoCertificacion;
 import mx.amib.sistemas.expediente.certificacion.model.catalog.StatusAutorizacion;
 import mx.amib.sistemas.expediente.certificacion.model.catalog.StatusCertificacion;
@@ -83,11 +84,27 @@ class SustentanteRestfulController extends RestfulController<Sustentante>{
 	}
 	
 	//TODO: Eliminar este mÃ©todo y estandarizar nombres
-	def obtenerSustentantesPorIds()
-	{
+	def obtenerSustentantesPorIds(){
 		String idsArrayJson = params.'ids'
 		def ids = JSON.parse(idsArrayJson)
 		respond Sustentante.findAllByIdInList(ids)
+	}
+	
+	//POST AS JSON
+	def comprobarMatriculas(){
+		//println IOUtils.toString(request.getInputStream())
+		def matriculas = request.JSON.matriculas
+		
+		respond Sustentante.findAllByNumeroMatriculaInList(matriculas).collect{ it.numeroMatricula }
+	}
+	
+	//POST AS JSON
+	//a diferencia de comprobarMatriculas, este método devuelve las que no estan en Expediente
+	def comprobarMatriculasNotIn(){
+		def matriculas = request.JSON.matriculas
+		def onList = Sustentante.findAllByNumeroMatriculaInList(matriculas).collect{ it.numeroMatricula }
+		def matriculasNotIn = matriculas.findAll{ !onList.contains(it)  }
+		respond matriculasNotIn
 	}
 	
 	def findAllByIds(){
