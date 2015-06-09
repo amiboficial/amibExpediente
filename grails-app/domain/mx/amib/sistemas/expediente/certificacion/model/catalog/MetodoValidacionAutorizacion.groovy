@@ -1,16 +1,16 @@
 package mx.amib.sistemas.expediente.certificacion.model.catalog
 
-class MetodoCertificacion {
+class MetodoValidacionAutorizacion {
 	
 	String descripcion
 	Boolean vigente
 	
 	static mapping = {
-		table 't204_c_metodocert'
+		table 't204_c_metodoval'
 		
 		id generator: "assigned"
 		
-		descripcion column:'ds_metodocert'
+		descripcion column:'ds_metodoval'
 		vigente column:'st_vigente'
 		
 		version false

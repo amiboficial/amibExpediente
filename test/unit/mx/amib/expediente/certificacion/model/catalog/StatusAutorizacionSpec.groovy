@@ -1,5 +1,6 @@
 package mx.amib.expediente.certificacion.model.catalog
 
+import mx.amib.sistemas.expediente.certificacion.model.catalog.StatusAutorizacion;
 import grails.test.mixin.TestFor
 import spock.lang.Specification
 

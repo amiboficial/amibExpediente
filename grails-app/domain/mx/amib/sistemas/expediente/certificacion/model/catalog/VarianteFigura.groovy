@@ -28,6 +28,7 @@ class VarianteFigura {
 		inicialesFigura column:'nb_iniciales'
 		
 		vigente column:'st_vigente'
+		
 		version false
 	}
 	

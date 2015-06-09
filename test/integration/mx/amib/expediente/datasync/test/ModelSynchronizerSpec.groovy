@@ -2,7 +2,7 @@ package mx.amib.expediente.datasync.test
 
 import grails.converters.JSON
 import grails.transaction.Transactional
-import mx.amib.expediente.certificacion.model.catalog.VarianteFigura
+import mx.amib.sistemas.expediente.certificacion.model.catalog.VarianteFigura
 import mx.amib.expediente.certificacion.model.datasync.VarianteFiguraSynchronizer
 import mx.amib.expediente.datasync.IModelSynchronizer
 import mx.amib.sistemas.expediente.persona.model.datasync.EstadoCivilModelSynchronizer

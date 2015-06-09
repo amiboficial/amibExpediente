@@ -45,7 +45,7 @@ class Sustentante {
 	static mapping = {
 		table 't101_t_sustentante'
 		
-		id generator: "assigned"
+		id generator: "identity"
 		
 		numeroMatricula column:'nu_matricula'
 		nombre column:'nb_nombre'
@@ -89,6 +89,9 @@ class Sustentante {
 		curp nullable: true, maxSize: 18
 		fechaNacimiento nullable: true
 		correoElectronico nullable: true, maxSize: 254
+		calidadMigratoria nullable: true
+		profesion nullable: true
+		
 		numeroInterior nullable: true
 		
 		nacionalidad nullable: true

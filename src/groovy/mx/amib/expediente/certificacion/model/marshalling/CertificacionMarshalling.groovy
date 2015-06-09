@@ -5,11 +5,11 @@ import java.util.Date
 import grails.converters.JSON
 import mx.amib.sistemas.expediente.certificacion.model.Certificacion
 import mx.amib.sistemas.expediente.certificacion.model.EventoPuntos
-import mx.amib.sistemas.expediente.certificacion.model.CambioStatus
+import mx.amib.sistemas.expediente.certificacion.model.AplicacionAutorizacion
 import mx.amib.sistemas.expediente.certificacion.model.catalog.VarianteFigura
 import mx.amib.sistemas.expediente.certificacion.model.catalog.StatusAutorizacion
 import mx.amib.sistemas.expediente.certificacion.model.catalog.StatusCertificacion
-import mx.amib.sistemas.expediente.certificacion.model.catalog.MetodoCertificacion
+import mx.amib.sistemas.expediente.certificacion.model.catalog.MetodoValidacionAutorizacion
 import mx.amib.sistemas.expediente.persona.model.Sustentante
 
 class CertificacionMarshalling {
@@ -21,33 +21,35 @@ class CertificacionMarshalling {
 				fechaInicio: obj.fechaInicio,
 				fechaFin: obj.fechaFin,
 				fechaObtencion: obj.fechaObtencion,
-				nombreUsuarioActualizo: obj.nombreUsuarioActualizo,
+				isAutorizado: obj.isAutorizado,
+				isApoderado: obj.isApoderado,
 
 				varianteFigura: obj.varianteFigura,
-				statusAutorizacion: obj.statusAutorizacion?.descripcion,
-				statusCertificacion: obj.statusCertificacion?.descripcion,
-				metodoCertificacion: obj.metodoCertificacion?.descripcion,
+				statusAutorizacion: obj.statusAutorizacion,
+				statusCertificacion: obj.statusCertificacion,
+				idVarianteFigura: obj.varianteFigura?.id,
 				idStatusAutorizacion: obj.statusAutorizacion?.id,
 				idStatusCertificacion: obj.statusCertificacion?.id,
-				idMetodoCertificacion: obj.metodoCertificacion?.id,
 				
-				cambiosStatus: obj.cambiosStatus,
-				eventosPuntos: obj.eventosPuntos,
-				
+				aplicacionesAutorizacion: obj.aplicacionesAutorizacion,
+								
 				idSustentante: obj.sustentante?.id
 			]
 		}
 	}
 }
 
-class CambioStatusMarshalling{
+class AplicacionAutorizacionMarshalling{
 	void register(){
-		JSON.registerObjectMarshaller(CambioStatus){ CambioStatus obj ->
+		JSON.registerObjectMarshaller(AplicacionAutorizacion){ AplicacionAutorizacion obj ->
 			return [
 				id: obj.id,
 				
-				fechaAutorizacion: obj.fechaAutorizacion,
+				fechaAplicacion: obj.fechaAplicacion,
+				fechaInicio: obj.fechaInicio,
+				fechaFin: obj.fechaFin,
 				autorizadoPorUsuario: obj.autorizadoPorUsuario,
+				eventosPuntos: obj.eventosPuntos,
 				
 				idCertificacion: obj.certificacion?.id
 			]
@@ -64,7 +66,8 @@ class EventoPuntosMarshalling{
 				idEvento: obj.idEvento,
 				puntaje: obj.puntaje,
 								
-				idCertificacion: obj.certificacion?.id
+				idAplicacionAutorizacion: obj.aplicacionAutorizacion?.id,
+				idCertificacion: obj.aplicacionAutorizacion?.certificacion?.id
 			]
 		}
 	}

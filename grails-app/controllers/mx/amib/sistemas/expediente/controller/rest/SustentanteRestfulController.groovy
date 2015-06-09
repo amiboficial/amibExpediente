@@ -2,7 +2,7 @@ package mx.amib.sistemas.expediente.controller.rest
 
 import static org.springframework.http.HttpStatus.*
 import org.apache.commons.io.IOUtils
-import mx.amib.sistemas.expediente.certificacion.model.catalog.MetodoCertificacion;
+import mx.amib.sistemas.expediente.certificacion.model.catalog.MetodoValidacionAutorizacion;
 import mx.amib.sistemas.expediente.certificacion.model.catalog.StatusAutorizacion;
 import mx.amib.sistemas.expediente.certificacion.model.catalog.StatusCertificacion;
 import mx.amib.sistemas.expediente.certificacion.model.catalog.VarianteFigura;
@@ -43,7 +43,7 @@ class SustentanteRestfulController extends RestfulController<Sustentante>{
 					c.statusCertificacion = StatusCertificacion.get(c.idStatusCertificacion)
 				
 				if(c.idMetodoCertificacion != null && c.idMetodoCertificacion > 0)
-					c.metodoCertificacion = MetodoCertificacion.get(c.idMetodoCertificacion)
+					c.metodoCertificacion = MetodoValidacionAutorizacion.get(c.idMetodoCertificacion)
 		  }
 		}
 		if(s.telefonos){

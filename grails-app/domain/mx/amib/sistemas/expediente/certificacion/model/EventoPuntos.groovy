@@ -10,9 +10,9 @@ class EventoPuntos {
 	Date fechaCreacion
 	Date fechaModificacion
 	
-	Certificacion certificacion
+	AplicacionAutorizacion aplicacionAutorizacion
 	
-	static belongsTo = [Certificacion]
+	static belongsTo = [AplicacionAutorizacion]
 	
 	static mapping = {
 		table 't206_t_eventopuntos'
@@ -23,7 +23,7 @@ class EventoPuntos {
 		fechaCreacion column:'fh_creacion'
 		fechaModificacion column:'fh_modificacion'
 		
-		certificacion column:'id_201_certificacion'
+		aplicacionAutorizacion column:'id_207_aplautorizacion'
 	
 		version false
 	}

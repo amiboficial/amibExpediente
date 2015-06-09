@@ -4,19 +4,16 @@ import java.util.Date
 import mx.amib.sistemas.expediente.certificacion.model.catalog.VarianteFigura
 import mx.amib.sistemas.expediente.certificacion.model.catalog.StatusAutorizacion
 import mx.amib.sistemas.expediente.certificacion.model.catalog.StatusCertificacion
-import mx.amib.sistemas.expediente.certificacion.model.catalog.MetodoCertificacion
+import mx.amib.sistemas.expediente.certificacion.model.catalog.MetodoValidacionAutorizacion
 import mx.amib.sistemas.expediente.persona.model.Sustentante
-
 
 class Certificacion {
 	
 	Date fechaInicio
 	Date fechaFin
 	Date fechaObtencion
-	String nombreUsuarioActualizo
-	
-	Boolean esLaActual
-	Date fechaUltimoCambioStatusEsLaActual
+	Boolean isAutorizado
+	Boolean isApoderado
 	
 	Date fechaCreacion
 	Date fechaModificacion
@@ -24,22 +21,19 @@ class Certificacion {
 	VarianteFigura varianteFigura
 	StatusAutorizacion statusAutorizacion
 	StatusCertificacion statusCertificacion
-	MetodoCertificacion metodoCertificacion
 	Long idVarianteFigura
 	Long idStatusAutorizacion
 	Long idStatusCertificacion
-	Long idMetodoCertificacion
 	
 	Sustentante sustentante
 	
-	Set cambiosStatus = []
-	Set eventosPuntos = []
+	Set aplicacionesAutorizacion = []
 	
 	static belongsTo = [Sustentante]
 	
-	static hasMany = [ cambiosStatus:CambioStatus, eventosPuntos:EventoPuntos ]
+	static hasMany = [ aplicacionesAutorizacion:AplicacionAutorizacion ]
 	
-	static transients = ['idVarianteFigura','idStatusAutorizacion','idStatusCertificacion','idMetodoCertificacion']
+	static transients = ['idVarianteFigura','idStatusAutorizacion','idStatusCertificacion']
 	
 	static mapping = {
 		table 't201_t_certificacion'
@@ -49,18 +43,16 @@ class Certificacion {
 		fechaInicio column:'fh_inicio'
 		fechaFin column:'fh_fin'
 		fechaObtencion column:'fh_obtencion'
-		nombreUsuarioActualizo column:'tx_usuarioactualizo'
-		
-		esLaActual column:'st_actual'
-		fechaUltimoCambioStatusEsLaActual column:'fh_setstactual'
+		isAutorizado column:'st_isautorizado'
+		isApoderado column:'st_isapoderado'
 		
 		fechaCreacion column:'fh_creacion'
 		fechaModificacion column:'fh_modificacion'
 		
-		varianteFigura column:'id_103f_varfigura'
-		statusAutorizacion column:'id_205_stautorizacion'
+		varianteFigura column:'id_202f_varfigura'
+		
 		statusCertificacion column:'id_203_stcertificacion'
-		metodoCertificacion column:'id_204_metodocert'
+		statusAutorizacion column:'id_205_stautorizacion'
 		
 		sustentante column:'id_101_sustentante'
 		
@@ -68,12 +60,8 @@ class Certificacion {
 	}
 	
     static constraints = {
-		
-		idVarianteFigura bindable: true
-		idStatusAutorizacion bindable: true
-		idStatusCertificacion bindable: true
-		idMetodoCertificacion bindable: true
-		
-		nombreUsuarioActualizo maxSize:254
+		idVarianteFigura bindable:true
+		idStatusAutorizacion bindable:true
+		idStatusCertificacion bindable:true
     }
 }
