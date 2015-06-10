@@ -1,8 +1,8 @@
 package mx.amib.sistemas.expediente.certificacion.model
 
-import mx.amib.sistemas.expediente.certificacion.model.catalog.MetodoValidacionAutorizacion
+import mx.amib.sistemas.expediente.certificacion.model.catalog.MetodoValidacion
 
-class AplicacionAutorizacion {
+class Validacion {
 	
 	Date fechaAplicacion
 	Date fechaInicio
@@ -14,7 +14,7 @@ class AplicacionAutorizacion {
 	
 	Certificacion certificacion
 	
-	MetodoValidacionAutorizacion metodoValidacionAutorizacion
+	MetodoValidacion metodoValidacion
 	
 	Set eventosPuntos
 	
@@ -23,7 +23,7 @@ class AplicacionAutorizacion {
 	static hasMany = [ eventosPuntos:EventoPuntos ]
 	
 	static mapping = {
-		table 't207_t_aplautorizacion'
+		table 't207_t_validacion'
 		
 		id generator: "identity"
 		
@@ -36,7 +36,7 @@ class AplicacionAutorizacion {
 		fechaModificacion column:'fh_modificacion'
 		
 		certificacion column:'id_201_certificacion'
-		metodoValidacionAutorizacion column:'id_204_metodoval'
+		metodoValidacion column:'id_204_metodoval'
 		
 		version false
 	}

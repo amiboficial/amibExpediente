@@ -1,6 +1,6 @@
 package mx.amib.sistemas.expediente.certificacion.model.catalog
 
-class MetodoValidacionAutorizacion {
+class MetodoValidacion {
 	
 	String descripcion
 	Boolean vigente

@@ -5,11 +5,11 @@ import java.util.Date
 import grails.converters.JSON
 import mx.amib.sistemas.expediente.certificacion.model.Certificacion
 import mx.amib.sistemas.expediente.certificacion.model.EventoPuntos
-import mx.amib.sistemas.expediente.certificacion.model.AplicacionAutorizacion
+import mx.amib.sistemas.expediente.certificacion.model.Validacion
 import mx.amib.sistemas.expediente.certificacion.model.catalog.VarianteFigura
 import mx.amib.sistemas.expediente.certificacion.model.catalog.StatusAutorizacion
 import mx.amib.sistemas.expediente.certificacion.model.catalog.StatusCertificacion
-import mx.amib.sistemas.expediente.certificacion.model.catalog.MetodoValidacionAutorizacion
+import mx.amib.sistemas.expediente.certificacion.model.catalog.MetodoValidacion
 import mx.amib.sistemas.expediente.persona.model.Sustentante
 
 class CertificacionMarshalling {
@@ -31,7 +31,7 @@ class CertificacionMarshalling {
 				idStatusAutorizacion: obj.statusAutorizacion?.id,
 				idStatusCertificacion: obj.statusCertificacion?.id,
 				
-				aplicacionesAutorizacion: obj.aplicacionesAutorizacion,
+				validaciones: obj.validaciones,
 								
 				idSustentante: obj.sustentante?.id
 			]
@@ -39,9 +39,9 @@ class CertificacionMarshalling {
 	}
 }
 
-class AplicacionAutorizacionMarshalling{
+class ValidacionMarshalling{
 	void register(){
-		JSON.registerObjectMarshaller(AplicacionAutorizacion){ AplicacionAutorizacion obj ->
+		JSON.registerObjectMarshaller(Validacion){ Validacion obj ->
 			return [
 				id: obj.id,
 				
@@ -50,6 +50,7 @@ class AplicacionAutorizacionMarshalling{
 				fechaFin: obj.fechaFin,
 				autorizadoPorUsuario: obj.autorizadoPorUsuario,
 				eventosPuntos: obj.eventosPuntos,
+				metodoValidacion: obj.metodoValidacion,
 				
 				idCertificacion: obj.certificacion?.id
 			]
@@ -66,8 +67,8 @@ class EventoPuntosMarshalling{
 				idEvento: obj.idEvento,
 				puntaje: obj.puntaje,
 								
-				idAplicacionAutorizacion: obj.aplicacionAutorizacion?.id,
-				idCertificacion: obj.aplicacionAutorizacion?.certificacion?.id
+				idValidacion: obj.validacion?.id,
+				idCertificacion: obj.validacion?.certificacion?.id
 			]
 		}
 	}

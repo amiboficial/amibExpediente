@@ -4,7 +4,7 @@ import java.util.Date
 import mx.amib.sistemas.expediente.certificacion.model.catalog.VarianteFigura
 import mx.amib.sistemas.expediente.certificacion.model.catalog.StatusAutorizacion
 import mx.amib.sistemas.expediente.certificacion.model.catalog.StatusCertificacion
-import mx.amib.sistemas.expediente.certificacion.model.catalog.MetodoValidacionAutorizacion
+import mx.amib.sistemas.expediente.certificacion.model.catalog.MetodoValidacion
 import mx.amib.sistemas.expediente.persona.model.Sustentante
 
 class Certificacion {
@@ -27,11 +27,11 @@ class Certificacion {
 	
 	Sustentante sustentante
 	
-	Set aplicacionesAutorizacion = []
+	Set validaciones = []
 	
 	static belongsTo = [Sustentante]
 	
-	static hasMany = [ aplicacionesAutorizacion:AplicacionAutorizacion ]
+	static hasMany = [ validaciones:Validacion ]
 	
 	static transients = ['idVarianteFigura','idStatusAutorizacion','idStatusCertificacion']
 	

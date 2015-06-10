@@ -8,7 +8,7 @@ class CustomObjectMarshallers {
 	def register() {
 		
 		marshallers.each{ m ->
-			println "PASO POR LOS MARSHALLER!!! " + m.toString(); 
+			println "REGISTRANDO MARSHALLER: " + m.toString(); 
 			m.register();
 		}
 	}
