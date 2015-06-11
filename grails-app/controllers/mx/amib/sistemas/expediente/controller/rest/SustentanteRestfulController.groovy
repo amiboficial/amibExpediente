@@ -42,8 +42,17 @@ class SustentanteRestfulController extends RestfulController<Sustentante>{
 				if(c.idStatusCertificacion != null && c.idStatusCertificacion > 0)
 					c.statusCertificacion = StatusCertificacion.get(c.idStatusCertificacion)
 				
-				if(c.idMetodoCertificacion != null && c.idMetodoCertificacion > 0)
-					c.metodoCertificacion = MetodoValidacion.get(c.idMetodoCertificacion)
+				if(c.validaciones){
+					println "HAY VALIDACIONES PARA CERTIFICACION!!!"
+					c.validaciones.each{ v ->
+						println "IDMETODOVALIDACION " + v.idMetodoValidacion
+						v.certificacion = c
+						c.addToValidaciones(v)
+						if(v.idMetodoValidacion != null && v.idMetodoValidacion > 0)
+							v.metodoValidacion = MetodoValidacion.get(v.idMetodoValidacion)
+					}
+				}
+					
 		  }
 		}
 		if(s.telefonos){

@@ -15,12 +15,15 @@ class Validacion {
 	Certificacion certificacion
 	
 	MetodoValidacion metodoValidacion
+	Long idMetodoValidacion
 	
 	Set eventosPuntos
 	
 	static belongsTo = [ Certificacion ]
 	
 	static hasMany = [ eventosPuntos:EventoPuntos ]
+	
+	static transients = ['idMetodoValidacion']
 	
 	static mapping = {
 		table 't207_t_validacion'
@@ -43,5 +46,8 @@ class Validacion {
 	
     static constraints = {
 		autorizadoPorUsuario maxSize:254
+		idMetodoValidacion bindable:true
     }
+	
+	
 }
