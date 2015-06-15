@@ -10,6 +10,27 @@ class SustentanteService {
 	
 	def sessionFactory
 	
+	SearchResult findAll(Integer max, Integer offset, String sort, String order){
+		//Evitar sql injection en campos sort y order
+		if(sort == null || sort == ""){
+			sort = "id"
+		}
+		else if(["id","numeroMatricula","nombre","primerApellido","segundoApellido","rfc","curp","fechaNacimiento","correoElectronico"].find{ sort == it } == null){
+			sort = "id"
+		}
+		if(order == null || order == ""){
+			order = "asc"
+		}
+		else if(order != "desc" && order != "asc"){
+			order = "asc"
+		}
+		
+		def searchResult = new SearchResult()
+		searchResult.count = Sustentante.executeQuery("select count(s) from Sustentante as s")[0]
+		searchResult.list = Sustentante.findAll("from Sustentante as s order by s." + sort + " " + order,[max:max, offset:offset])
+		return searchResult
+	}
+	
     SearchResult findAllByPalabraNombre(String palabraNombre, Integer max, Integer offset, String sort, String order) {
 		List<String> hqlFilters = new ArrayList<String>()
 		String whereKeyword = "where "

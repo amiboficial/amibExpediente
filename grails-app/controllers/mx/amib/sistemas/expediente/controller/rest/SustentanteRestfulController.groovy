@@ -72,7 +72,7 @@ class SustentanteRestfulController extends RestfulController<Sustentante>{
 			}
 		}
 		if(s.idNacionalidad != null && s.idNacionalidad > 0){
-			
+			s.nacionalidad = Nacionalidad.get(s.idNacionalidad)
 		}
 		if(s.idNivelEstudios != null && s.idNivelEstudios > 0){
 			s.nivelEstudios = NivelEstudios.get(s.idNivelEstudios)
@@ -108,7 +108,7 @@ class SustentanteRestfulController extends RestfulController<Sustentante>{
 	}
 	
 	//POST AS JSON
-	//a diferencia de comprobarMatriculas, este método devuelve las que no estan en Expediente
+	//a diferencia de comprobarMatriculas, este mï¿½todo devuelve las que no estan en Expediente
 	def comprobarMatriculasNotIn(){
 		def matriculas = request.JSON.matriculas
 		def onList = Sustentante.findAllByNumeroMatriculaInList(matriculas).collect{ it.numeroMatricula }
@@ -146,6 +146,15 @@ class SustentanteRestfulController extends RestfulController<Sustentante>{
 		String sort = params.sort?:"id"
 		String order = params.order?:"desc"
 		
-		respond sustentanteService.findAllAdvancedSearch(nom, ap1, ap2, idfig, stcert, staut,max,offset,sort,order)
+		respond sustentanteService.findAllAdvancedSearch(nom, ap1, ap2, idfig, stcert, staut, max, offset, sort, order)
+	}
+	
+	def findAll(){
+		Integer max = Math.min(Integer.parseInt(params.max?:'10'), 100)
+		Integer offset = Integer.parseInt(params.offset?:'0')
+		String sort = params.sort?:"id"
+		String order = params.order?:"desc"
+		
+		respond sustentanteService.findAll(max, offset, sort, order)
 	}
 }
