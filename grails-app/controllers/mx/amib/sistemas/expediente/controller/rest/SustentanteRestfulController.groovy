@@ -138,6 +138,7 @@ class SustentanteRestfulController extends RestfulController<Sustentante>{
 		String ap1 = params.ap1?:""
 		String ap2 = params.ap2?:""
 		Long idfig = Long.parseLong(params.idfig?:"-1")
+		Long idvarfig = Long.parseLong(params.idvarfig?:"-1")
 		Long stcert = Long.parseLong(params.stcert?:"-1")
 		Long staut = Long.parseLong(params.staut?:"-1")
 		
@@ -146,7 +147,7 @@ class SustentanteRestfulController extends RestfulController<Sustentante>{
 		String sort = params.sort?:"id"
 		String order = params.order?:"desc"
 		
-		respond sustentanteService.findAllAdvancedSearch(nom, ap1, ap2, idfig, stcert, staut, max, offset, sort, order)
+		respond sustentanteService.findAllAdvancedSearch(nom, ap1, ap2, idfig, idvarfig, stcert, staut, max, offset, sort, order)
 	}
 	
 	def findAll(){

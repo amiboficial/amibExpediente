@@ -91,7 +91,7 @@ class SustentanteService {
 		return searchResult
     }
 	
-	SearchResult findAllAdvancedSearch(String nom, String ap1, String ap2, Long idfig, Long stcert, Long staut, Integer max, Integer offset, String sort, String order) {
+	SearchResult findAllAdvancedSearch(String nom, String ap1, String ap2, Long idfig, Long idvarfig, Long stcert, Long staut, Integer max, Integer offset, String sort, String order) {
 		List<String> hqlFilters = new ArrayList<String>()
 		String whereKeyword = "where "
 		Boolean whereKeywordNeeded = false
@@ -134,11 +134,20 @@ class SustentanteService {
 			namedParameters.put("nom",ap2+"%")
 		}
 
-		if(idfig != null && idfig > 0){
-			hqlFilters.add("ca.varianteFigura.idFigura = :idfig ")
-			whereKeywordNeeded = true
-			namedParameters.put("idfig",idfig)
+		
+		if(idvarfig == null || idvarfig <= 0){
+			if(idfig != null && idfig > 0){
+				hqlFilters.add("ca.varianteFigura.idFigura = :idfig ")
+				whereKeywordNeeded = true
+				namedParameters.put("idfig",idfig)
+			}
 		}
+		else{
+			hqlFilters.add("ca.varianteFigura.id = :idvarfig ")
+			whereKeywordNeeded = true
+			namedParameters.put("idvarfig",idvarfig)
+		}
+		
 		if(stcert != null && stcert > 0){
 			hqlFilters.add("ca.statusCertificacion.id = :stcert ")
 			whereKeywordNeeded = true
@@ -150,8 +159,8 @@ class SustentanteService {
 			namedParameters.put("staut",staut)
 		}
 		
-		strHqlCount.append("select count(s.id) from Sustentante as s inner join s.certificaciones ca with ca.esLaActual = true ")
-		sbHql.append("from Sustentante as s inner join s.certificaciones ca with ca.esLaActual = true ")
+		strHqlCount.append("select count(s.id) from Sustentante as s ")
+		sbHql.append("from Sustentante as s ")
 		
 		if(whereKeywordNeeded){
 			sbHql.append(whereKeyword)
