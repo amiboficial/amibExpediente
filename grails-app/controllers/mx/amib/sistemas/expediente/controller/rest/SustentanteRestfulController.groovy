@@ -137,6 +137,19 @@ class SustentanteRestfulController extends RestfulController<Sustentante>{
 		String nom = params.nom?:""
 		String ap1 = params.ap1?:""
 		String ap2 = params.ap2?:""
+		
+		Integer max = Math.min(Integer.parseInt(params.max?:'10'), 100)
+		Integer offset = Integer.parseInt(params.offset?:'0')
+		String sort = params.sort?:"id"
+		String order = params.order?:"desc"
+		
+		respond sustentanteService.findAllAdvancedSearch(nom, ap1, ap2, max, offset, sort, order)
+	}
+	
+	def findAllAdvancedSearchWithCertificacion(){
+		String nom = params.nom?:""
+		String ap1 = params.ap1?:""
+		String ap2 = params.ap2?:""
 		Long idfig = Long.parseLong(params.idfig?:"-1")
 		Long idvarfig = Long.parseLong(params.idvarfig?:"-1")
 		Long stcert = Long.parseLong(params.stcert?:"-1")
@@ -148,7 +161,7 @@ class SustentanteRestfulController extends RestfulController<Sustentante>{
 		String order = params.order?:"desc"
 		
 		
-		respond sustentanteService.findAllAdvancedSearch(nom, ap1, ap2, idfig, idvarfig, stcert, staut, max, offset, sort, order)
+		respond sustentanteService.findAllAdvancedSearchWithCertificacion(nom, ap1, ap2, idfig, idvarfig, stcert, staut, max, offset, sort, order)
 	}
 	
 	def findAll(){

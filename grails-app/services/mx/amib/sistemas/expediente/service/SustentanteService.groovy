@@ -91,7 +91,76 @@ class SustentanteService {
 		return searchResult
     }
 	
-	SearchResult findAllAdvancedSearch(String nom, String ap1, String ap2, Long idfig, Long idvarfig, Long stcert, Long staut, Integer max, Integer offset, String sort, String order) {
+	SearchResult findAllAdvancedSearch(String nom, String ap1, String ap2, Integer max, Integer offset, String sort, String order) {
+		List<String> hqlFilters = new ArrayList<String>()
+		String whereKeyword = "where "
+		Boolean whereKeywordNeeded = false
+		StringBuilder sbHql = new StringBuilder()
+		StringBuilder strHqlCount = new StringBuilder()
+		Map<String,Object> namedParameters = new HashMap<String,Object>()
+		
+		if(max == null || max <= 0){
+			max = 10
+		}
+		if(offset == null || offset <= 0){
+			offset = 0
+		}
+		if(sort == null || sort == ""){
+			sort = "id"
+		}
+		else if(["id","numeroMatricula","nombre","primerApellido","segundoApellido","rfc","curp","fechaNacimiento","correoElectronico"].find{ sort == it } == null){
+			sort = "id"
+		}
+		if(order == null || order == ""){
+			order = "asc"
+		}
+		else if(order != "desc" && order != "asc"){
+			order = "asc"
+		}
+		
+		if(nom != null && nom != ""){
+			hqlFilters.add("s.nombre like :nom ")
+			whereKeywordNeeded = true
+			namedParameters.put("nom",nom+"%")
+		}
+		if(ap1 != null && ap1 != ""){
+			hqlFilters.add("s.primerApellido like :ap1 ")
+			whereKeywordNeeded = true
+			namedParameters.put("ap1",ap1+"%")
+		}
+		if(ap2 != null && ap2 != ""){
+			hqlFilters.add("s.segundoApellido like :ap2 ")
+			whereKeywordNeeded = true
+			namedParameters.put("nom",ap2+"%")
+		}
+
+		strHqlCount.append("select count(s.id) from Sustentante as s ")
+		sbHql.append("from Sustentante as s ")
+		
+		if(whereKeywordNeeded){
+			sbHql.append(whereKeyword)
+			strHqlCount.append(whereKeyword)
+			hqlFilters.each{
+				if(it != hqlFilters.last()){
+					sbHql.append(it).append("and ")
+					strHqlCount.append(it).append("and ")
+				}
+				else{
+					sbHql.append(it)
+					strHqlCount.append(it)
+				}
+			}
+		}
+		sbHql.append("order by s.").append(sort).append(" ").append(order)
+		
+		def searchResult = new SearchResult()
+		searchResult.count = Sustentante.executeQuery(strHqlCount.toString(), namedParameters)[0]
+		searchResult.list = Sustentante.executeQuery(sbHql.toString(),namedParameters,[max: max, offset: offset])
+		
+		return searchResult
+	}
+	
+	SearchResult findAllAdvancedSearchWithCertificacion(String nom, String ap1, String ap2, Long idfig, Long idvarfig, Long stcert, Long staut, Integer max, Integer offset, String sort, String order) {
 		List<String> hqlFilters = new ArrayList<String>()
 		String whereKeyword = "where "
 		Boolean whereKeywordNeeded = false
