@@ -23,7 +23,8 @@ class CertificacionMarshalling {
 				fechaObtencion: obj.fechaObtencion,
 				isAutorizado: obj.isAutorizado,
 				isApoderado: obj.isApoderado,
-
+				isUltima: obj.isUltima,
+				
 				varianteFigura: obj.varianteFigura,
 				statusAutorizacion: obj.statusAutorizacion,
 				statusCertificacion: obj.statusCertificacion,

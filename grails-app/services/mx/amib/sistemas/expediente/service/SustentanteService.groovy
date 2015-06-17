@@ -159,8 +159,8 @@ class SustentanteService {
 			namedParameters.put("staut",staut)
 		}
 		
-		strHqlCount.append("select count(distinct s.id) from Sustentante as s inner join s.certificaciones ca ")
-		sbHql.append("select distinct s from Sustentante as s inner join s.certificaciones ca ")
+		strHqlCount.append("select count(distinct s.id) from Sustentante as s inner join s.certificaciones ca with ca.isUltima = true ")
+		sbHql.append("select distinct s from Sustentante as s inner join s.certificaciones ca with ca.isUltima = true ")
 		
 		if(whereKeywordNeeded){
 			sbHql.append(whereKeyword)

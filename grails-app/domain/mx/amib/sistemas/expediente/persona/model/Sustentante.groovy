@@ -22,7 +22,7 @@ class Sustentante {
 	String numeroExterior
 	String numeroInterior
 	Long idSepomex
-	
+
 	Date fechaCreacion
 	Date fechaModificacion
 	

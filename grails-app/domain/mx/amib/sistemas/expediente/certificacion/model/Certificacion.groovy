@@ -14,6 +14,7 @@ class Certificacion {
 	Date fechaObtencion
 	Boolean isAutorizado
 	Boolean isApoderado
+	Boolean isUltima
 	
 	Date fechaCreacion
 	Date fechaModificacion
@@ -45,6 +46,7 @@ class Certificacion {
 		fechaObtencion column:'fh_obtencion'
 		isAutorizado column:'st_isautorizado'
 		isApoderado column:'st_isapoderado'
+		isUltima column:'st_ultima'
 		
 		fechaCreacion column:'fh_creacion'
 		fechaModificacion column:'fh_modificacion'
