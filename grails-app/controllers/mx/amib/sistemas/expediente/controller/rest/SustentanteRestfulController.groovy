@@ -1,12 +1,19 @@
 package mx.amib.sistemas.expediente.controller.rest
 
 import static org.springframework.http.HttpStatus.*
+
 import org.apache.commons.io.IOUtils
+
+import org.codehaus.groovy.grails.web.json.JSONObject
+
+import java.text.DateFormat
+import java.text.SimpleDateFormat
 import mx.amib.sistemas.expediente.certificacion.model.catalog.MetodoValidacion;
 import mx.amib.sistemas.expediente.certificacion.model.catalog.StatusAutorizacion;
 import mx.amib.sistemas.expediente.certificacion.model.catalog.StatusCertificacion;
 import mx.amib.sistemas.expediente.certificacion.model.catalog.VarianteFigura;
 import mx.amib.sistemas.expediente.persona.model.Sustentante
+import mx.amib.sistemas.expediente.persona.model.TelefonoSustentante
 import mx.amib.sistemas.expediente.service.SustentanteService
 import mx.amib.sistemas.expediente.persona.model.catalog.*
 import grails.rest.RestfulController
@@ -24,7 +31,6 @@ class SustentanteRestfulController extends RestfulController<Sustentante>{
 	SustentanteRestfulController(){
 		super(Sustentante)
 	}
-	
 	
 	@Override
 	protected Sustentante createResource() {
@@ -81,6 +87,102 @@ class SustentanteRestfulController extends RestfulController<Sustentante>{
 			s.estadoCivil = EstadoCivil.get(s.idEstadoCivil)
 		}
 		s
+	}
+	
+	def updateDatosPersonales(){
+		def newData = request.JSON
+		Long id = newData.'id'
+		Sustentante sustentante = Sustentante.get(id)
+		
+		if(sustentante == null){
+			render status: NOT_FOUND
+		}
+		else{
+			DateFormat df = new SimpleDateFormat("yyyy-MM-dd")
+			
+			sustentante.nombre = newData.'nombre'
+			sustentante.primerApellido = newData.'primerApellido'
+			if(JSONObject.NULL.equals(newData.'segundoApellido')) sustentante.segundoApellido = null
+			else  sustentante.segundoApellido = newData.'segundoApellido'
+			sustentante.genero = newData.'genero'
+			sustentante.rfc = newData.'rfc'
+			if(JSONObject.NULL.equals(newData.'curp')) sustentante.curp = null
+			else sustentante.curp = newData.'curp'
+			sustentante.fechaNacimiento = df.parse(newData.'fechaNacimiento'.substring(0,10))
+			sustentante.correoElectronico = newData.'correoElectronico'
+			sustentante.calidadMigratoria = newData.'calidadMigratoria'
+			
+			sustentante.calle = newData.'calle'
+			if(JSONObject.NULL.equals(newData.'numeroExterior')) sustentante.numeroExterior = null
+			else sustentante.numeroExterior = newData.'numeroExterior'
+			if(JSONObject.NULL.equals(newData.'numeroExterior')) sustentante.numeroInterior = null
+			else sustentante.numeroInterior = newData.'numeroInterior'
+			sustentante.idSepomex = newData.'idSepomex'
+			
+			sustentante.fechaModificacion = new Date()
+			sustentante.idNacionalidad = newData.'idNacionalidad'
+			sustentante.idNivelEstudios = newData.'idNivelEstudios'
+			sustentante.idEstadoCivil = newData.'idEstadoCivil'
+			if(sustentante.idNacionalidad != null && sustentante.idNacionalidad > 0){
+				sustentante.nacionalidad = Nacionalidad.get(sustentante.idNacionalidad)
+			}
+			if(sustentante.idNivelEstudios != null && sustentante.idNivelEstudios > 0){
+				sustentante.nivelEstudios = NivelEstudios.get(sustentante.idNivelEstudios)
+			}
+			if(sustentante.idEstadoCivil != null && sustentante.idEstadoCivil > 0){
+				sustentante.estadoCivil = EstadoCivil.get(sustentante.idEstadoCivil)
+			}
+			
+			//borra los telefonos cuyo id no se encuentre en lista e inserta nuevos
+			
+			def oldTels = sustentante.telefonos.collect{ it.id.toString() }
+			def newTels = newData.'telefonos'.collect{ it.'id'.toString() }
+			
+			println "viejos ids: " + oldTels
+			println "nuevos ids: " + newTels
+			
+			oldTels.each{ x ->
+				if(!newTels.contains(x)){
+					TelefonoSustentante ts = TelefonoSustentante.get(x)
+					sustentante.removeFromTelefonos( ts )
+					ts.delete()
+				}
+			}
+			newData.'telefonos'.each { y ->
+				TelefonoSustentante ts = null
+				
+				if(JSONObject.NULL.equals(y.'id') || y.'id' <= 0){
+					ts = new TelefonoSustentante()
+					ts.sustentante = sustentante
+					
+					ts.lada = y.'lada'
+					ts.telefono = y.'telefono'
+					ts.extension = y.'extension'
+					ts.tipoTelefonoSustentante = TipoTelefonoSustentante.get(y.'idTipoTelefonoSustentante')
+					
+					sustentante.addToTelefonos(ts)
+				}
+				else{
+					ts = TelefonoSustentante.get(y.'id')
+					
+					ts.lada = y.'lada'
+					ts.telefono = y.'telefono'
+					ts.extension = y.'extension'
+					ts.tipoTelefonoSustentante = TipoTelefonoSustentante.get(y.'idTipoTelefonoSustentante')
+				}
+				
+				//if(ts != null){
+					//ts.lada = y.'lada'
+					//ts.telefono = y.'telefono'
+					//ts.extension = y.'extension'
+					//ts.tipoTelefonoSustentante = TipoTelefonoSustentante.get(y.'idTipoTelefonoSustentante')
+				//}
+			}
+			
+			sustentante.save(failOnError: true, flush:true)
+		}
+		
+		respond sustentante
 	}
 	
 	//TODO: Eliminar este método y estandarizar nombres
