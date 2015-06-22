@@ -171,12 +171,6 @@ class SustentanteRestfulController extends RestfulController<Sustentante>{
 					ts.tipoTelefonoSustentante = TipoTelefonoSustentante.get(y.'idTipoTelefonoSustentante')
 				}
 				
-				//if(ts != null){
-					//ts.lada = y.'lada'
-					//ts.telefono = y.'telefono'
-					//ts.extension = y.'extension'
-					//ts.tipoTelefonoSustentante = TipoTelefonoSustentante.get(y.'idTipoTelefonoSustentante')
-				//}
 			}
 			
 			sustentante.save(failOnError: true, flush:true)
