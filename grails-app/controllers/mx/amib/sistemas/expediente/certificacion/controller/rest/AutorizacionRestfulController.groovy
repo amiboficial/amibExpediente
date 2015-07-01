@@ -38,6 +38,21 @@ class AutorizacionRestfulController {
 		respond idCertificacionListMod
 	}
 	
+	def deshacerAutorizacionSinPoderes() {
+		List<Long> idCertificacionList = null
+		List<Long> idCertificacionListMod = null
+		
+		try{
+			idCertificacionList = new ArrayList<Long>(request.JSON)
+			idCertificacionListMod = autorizacionService.deshacerAutorizacionSinPoderes(idCertificacionList)
+		}
+		catch(Exception e){
+			response.sendError(HttpServletResponse.SC_BAD_REQUEST)
+		}
+		
+		respond idCertificacionListMod
+	}
+	
 	def apoderar() {
 		List<Long> idCertificacionList = null
 		List<Long> idCertificacionListMod = null
@@ -45,6 +60,21 @@ class AutorizacionRestfulController {
 		try{
 			idCertificacionList = new ArrayList<Long>(request.JSON)
 			idCertificacionListMod = autorizacionService.apoderar(idCertificacionList)
+		}
+		catch(Exception e){
+			response.sendError(HttpServletResponse.SC_BAD_REQUEST)
+		}
+		
+		respond idCertificacionListMod
+	}
+	
+	def deshacerApoderar() {
+		List<Long> idCertificacionList = null
+		List<Long> idCertificacionListMod = null
+		
+		try{
+			idCertificacionList = new ArrayList<Long>(request.JSON)
+			idCertificacionListMod = autorizacionService.deshacerApoderar(idCertificacionList)
 		}
 		catch(Exception e){
 			response.sendError(HttpServletResponse.SC_BAD_REQUEST)
@@ -75,6 +105,21 @@ class AutorizacionRestfulController {
 		try{
 			idCertificacionList = new ArrayList<Long>(request.JSON)
 			idCertificacionListMod = autorizacionService.revocar(idCertificacionList)
+		}
+		catch(Exception e){
+			response.sendError(HttpServletResponse.SC_BAD_REQUEST)
+		}
+		
+		respond idCertificacionListMod
+	}
+	
+	def deshacerRevocar(){
+		List<Long> idCertificacionList = null
+		List<Long> idCertificacionListMod = null
+		
+		try{
+			idCertificacionList = new ArrayList<Long>(request.JSON)
+			idCertificacionListMod = autorizacionService.deshacerRevocar(idCertificacionList)
 		}
 		catch(Exception e){
 			response.sendError(HttpServletResponse.SC_BAD_REQUEST)
