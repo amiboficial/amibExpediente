@@ -8,6 +8,11 @@ class Puesto {
 	String nombrePuesto
 	Boolean esActual
 	
+	Long statusEntManifProtesta
+	String obsEntManifProtesta
+	Long statusEntCartaInter
+	String obsEntCartaInter
+	
 	Date fechaCreacion
 	Date fechaModificacion
 	
@@ -26,6 +31,11 @@ class Puesto {
 		nombrePuesto column:'tx_puesto'
 		esActual column:'st_isactual'
 		
+		statusEntManifProtesta column:'id_301_stmanifesta'
+		obsEntManifProtesta column:'tx_obsmanifesta'
+		statusEntCartaInter column:'id_301_stcartainter'
+		obsEntCartaInter column:'tx_obscartainter'
+		
 		fechaCreacion column:'fh_creacion'
 		fechaModificacion column:'fh_modificacion'
 		
@@ -37,6 +47,9 @@ class Puesto {
     static constraints = {
 		nombrePuesto maxSize:100
 		fechaFin nullable: true
+		
+		obsEntManifProtesta nullable: true
+		obsEntCartaInter nullable: true
 		
 		fechaCreacion nullable: true
 		fechaModificacion nullable: true

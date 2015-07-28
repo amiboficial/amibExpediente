@@ -16,6 +16,13 @@ class Certificacion {
 	Boolean isApoderado
 	Boolean isUltima
 	
+	Long statusEntHistorialInforme
+	String  obsEntHistorialInforme
+	Long statusEntCartaRec
+	String obsEntCartaRec
+	Long statusConstBolVal
+	String obsConstBolVal
+	
 	Date fechaCreacion
 	Date fechaModificacion
 	
@@ -48,6 +55,13 @@ class Certificacion {
 		isApoderado column:'st_isapoderado'
 		isUltima column:'st_ultima'
 		
+		statusEntHistorialInforme column:'id_301_sthistinfo'
+		obsEntHistorialInforme column:'tx_obshistinfo'
+		statusEntCartaRec column:'id_301_stcartarec'
+		obsEntCartaRec column:'tx_obscartarec'
+		statusConstBolVal column:'id_301_stconstbolv'
+		obsConstBolVal column:'tx_constbolv'
+		
 		fechaCreacion column:'fh_creacion'
 		fechaModificacion column:'fh_modificacion'
 		
@@ -65,5 +79,9 @@ class Certificacion {
 		idVarianteFigura bindable:true
 		idStatusAutorizacion bindable:true
 		idStatusCertificacion bindable:true
+		
+		obsEntHistorialInforme nullable: true
+		obsEntCartaRec nullable: true
+		obsConstBolVal nullable: true
     }
 }

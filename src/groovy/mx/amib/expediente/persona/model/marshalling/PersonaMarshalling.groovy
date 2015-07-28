@@ -93,7 +93,11 @@ class PuestoMarshalling{
 				fechaInicio: obj.fechaInicio,
 				fechaFin: obj.fechaFin,
 				nombrePuesto: obj.nombrePuesto,
-				esActual: obj.esActual
+				esActual: obj.esActual,
+				statusEntManifProtesta: obj.statusEntManifProtesta,
+				obsEntManifProtesta: obj.obsEntManifProtesta,
+				statusEntCartaInter: obj.statusEntCartaInter,
+				obsEntCartaInter: obj.obsEntCartaInter
 			]
 		}
 	}

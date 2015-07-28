@@ -25,6 +25,13 @@ class CertificacionMarshalling {
 				isApoderado: obj.isApoderado,
 				isUltima: obj.isUltima,
 				
+				statusEntHistorialInforme: obj.statusEntHistorialInforme,
+				obsEntHistorialInforme: obj.obsEntHistorialInforme,
+				statusEntCartaRec: obj.statusEntCartaRec,
+				obsEntCartaRec: obj.obsEntCartaRec,
+				statusConstBolVal: obj.statusConstBolVal,
+				obsConstBolVal: obj.obsConstBolVal,
+				
 				varianteFigura: obj.varianteFigura,
 				statusAutorizacion: obj.statusAutorizacion,
 				statusCertificacion: obj.statusCertificacion,

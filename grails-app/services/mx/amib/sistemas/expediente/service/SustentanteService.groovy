@@ -10,6 +10,10 @@ class SustentanteService {
 	
 	def sessionFactory
 	
+	List<Sustentante> getAll(List<Long> ids){
+		return Sustentante.getAll().findAll{ it != null }
+	}
+	
 	SearchResult findAll(Integer max, Integer offset, String sort, String order){
 		//Evitar sql injection en campos sort y order
 		if(sort == null || sort == ""){
