@@ -1,10 +1,13 @@
 package mx.amib.sistemas.expediente.certificacion.service
 
+import org.hibernate.criterion.*
 import grails.gorm.DetachedCriteria
 import grails.transaction.Transactional
 import mx.amib.sistemas.expediente.certificacion.model.Certificacion
 import mx.amib.sistemas.expediente.service.SearchResult
 import mx.amib.sistemas.expediente.certificacion.model.catalog.*
+import mx.amib.sistemas.expediente.persona.model.Sustentante
+
 
 @Transactional
 class CertificacionService {
@@ -372,14 +375,14 @@ class CertificacionService {
 		return searchResult
 	}
 	
-	SearchResult findAllEnDictamenPrevioByMatricula(Integer max, Integer offset, String sort, String order, Integer numeroMatricula){
-		this.findAllByStatusAutorizacionAndNumeroMatricula(max, offset, sort, order, numeroMatricula,
+	SearchResult findAllEnDictamenPrevioByMatricula(Integer numeroMatricula){
+		return this.findAllByStatusAutorizacionAndNumeroMatricula(10, 0, "id", "asc", numeroMatricula,
 															StatusCertificacionTypes.CERTIFICADO, 
 															StatusAutorizacionTypes.DICTAMEN_PREVIO)
 	}
 	
-	SearchResult findAllEnDictamenPrevioByFolio(Integer max, Integer offset, String sort, String order, Integer idSustentante){
-		this.findAllByStatusAutorizacionAndIdSustentante(max, offset, sort, order, idSustentante, 
+	SearchResult findAllEnDictamenPrevioByFolio(Integer idSustentante){
+		return this.findAllByStatusAutorizacionAndIdSustentante(10, 0, "id", "asc", idSustentante, 
 															StatusCertificacionTypes.CERTIFICADO, 
 															StatusAutorizacionTypes.DICTAMEN_PREVIO)
 	}
@@ -388,10 +391,32 @@ class CertificacionService {
 											String nom, String ap1, String ap2, 
 											Long idfig, Long idvarfig){
 		
-		this.findAllByStatusAutorizacion(max, offset, sort, order, 
+		return this.findAllByStatusAutorizacion(max, offset, sort, order, 
 											nom, ap1, ap2, idfig, idvarfig, 
 											StatusCertificacionTypes.CERTIFICADO, 
 											StatusAutorizacionTypes.DICTAMEN_PREVIO)
+	}
+											
+	SearchResult findAllEnAutorizacionByMatricula(Integer numeroMatricula){
+		return this.findAllByStatusAutorizacionAndNumeroMatricula(10, 0, "id", "asc", numeroMatricula,
+															StatusCertificacionTypes.CERTIFICADO,
+															StatusAutorizacionTypes.EN_AUTORIZACION)
+	}
+	
+	SearchResult findAllEnAutorizacionByFolio(Integer idSustentante){
+		return this.findAllByStatusAutorizacionAndIdSustentante(10, 0, "id", "asc", idSustentante,
+															StatusCertificacionTypes.CERTIFICADO,
+															StatusAutorizacionTypes.EN_AUTORIZACION)
+	}
+
+	SearchResult findAllEnAutorizacion(Integer max, Integer offset, String sort, String order,
+											String nom, String ap1, String ap2,
+											Long idfig, Long idvarfig){
+		
+		return this.findAllByStatusAutorizacion(max, offset, sort, order,
+											nom, ap1, ap2, idfig, idvarfig,
+											StatusCertificacionTypes.CERTIFICADO,
+											StatusAutorizacionTypes.EN_AUTORIZACION)
 	}
 	
 	SearchResult findAllByStatusAutorizacionAndNumeroMatricula(Integer max, Integer offset, String sort, String order, 
@@ -409,10 +434,10 @@ class CertificacionService {
 		order = this.filterOrder(order)
 
 		try{
-			count = Certificacion.executeQuery("select count(c.id) from Certificacion as c where c.sustentante.numeroMatricula = :nm and c.statusAutorizacion.id = :idSA and c.statusCertificacion = :idSC",
-										[ nm : numeroMatricula , idSA : idStatusAutorizacion, idCA : idStatusCertificacion ])[0]
-			lc = Certificacion.findAll("from Certificacion as c where c.sustentante.numeroMatricula = :nm and c.statusAutorizacion.id = :idSA and c.statusCertificacion = :idSC order by " + sort + " " + order, 
-										[ nm : numeroMatricula, idSA : idStatusAutorizacion, idCA : idStatusCertificacion ],
+			count = Certificacion.executeQuery("select count(c.id) from Certificacion as c where c.sustentante.numeroMatricula = :nm and c.statusAutorizacion.id = :idSA and c.statusCertificacion.id = :idSC",
+										[ nm : numeroMatricula , idSA : idStatusAutorizacion, idSC : idStatusCertificacion ])[0]
+			lc = Certificacion.findAll("from Certificacion as c where c.sustentante.numeroMatricula = :nm and c.statusAutorizacion.id = :idSA and c.statusCertificacion.id = :idSC order by " + sort + " " + order, 
+										[ nm : numeroMatricula, idSA : idStatusAutorizacion, idSC : idStatusCertificacion ],
 										[ max: max, offset: offset ])
 		}
 		catch(Exception e){
@@ -445,10 +470,10 @@ class CertificacionService {
 		order = this.filterOrder(order)
 
 		try{
-			count = Certificacion.executeQuery("select count(c.id) from Certificacion as c where c.sustentante.id = :id and c.statusAutorizacion.id = :idSA and c.statusCertificacion = :idSC",
-										[ id : idSustentante , idSA : idStatusAutorizacion, idCA : idStatusCertificacion ])[0]
-			lc = Certificacion.findAll("from Certificacion as c where c.sustentante.id = :id and c.statusAutorizacion.id = :idSA and c.statusCertificacion = :idSC order by " + sort + " " + order,
-										[ id : idSustentante , idSA : idStatusAutorizacion, idCA : idStatusCertificacion ],
+			count = Certificacion.executeQuery("select count(c.id) from Certificacion as c where c.sustentante.id = :id and c.statusAutorizacion.id = :idSA and c.statusCertificacion.id = :idSC",
+										[ id : idSustentante , idSA : idStatusAutorizacion, idSC : idStatusCertificacion ])[0]
+			lc = Certificacion.findAll("from Certificacion as c where c.sustentante.id = :id and c.statusAutorizacion.id = :idSA and c.statusCertificacion.id = :idSC order by " + sort + " " + order,
+										[ id : idSustentante , idSA : idStatusAutorizacion, idSC : idStatusCertificacion ],
 										[ max: max, offset: offset ])
 		}
 		catch(Exception e){
@@ -464,7 +489,12 @@ class CertificacionService {
 		
 		return sr
 	}
-									
+
+	SearchResult findAllByStatusAutorizacionAndIdSustentante(Integer max, Integer offset, String sort, String order, 
+																Long idSustentante, Long idStatusCertificacion, Long idStatusAutorizacion){
+		
+	}
+	
 	SearchResult findAllByStatusAutorizacion(Integer max, Integer offset, String sort, String order, 
 												String nom, String ap1, String ap2, 
 												Long idfig, Long idvarfig, 
@@ -477,45 +507,172 @@ class CertificacionService {
 		String errorDetails = ""
 		SearchResult sr = new SearchResult()
 		
+		List<String> hqlFilters = new ArrayList<String>();
+		String whereKeyword = "where ";
+		Boolean whereKeywordNeeded = false;
+		StringBuilder sbHql = new StringBuilder()
+		StringBuilder strHqlCount = new StringBuilder()
+		Map<String,Object> namedParameters = new HashMap<String,Object>()
+		
 		max = this.filterMax(max?:10)
 		offset = this.filterOffset(offset?:0)
 		sort = this.filterSort(sort)
 		order = this.filterOrder(order)
 		
-		def whereCriteria = new DetachedCriteria(Certificacion).build {
-			if(nom != null && nom.trim().compareTo("") != 0){
-				ilike("sustentante.nombre",nom + '%')
-			}
-			if(ap1 != null && ap1.trim().compareTo("") != 0){
-				ilike("sustentante.primerApellido",ap1 + '%')
-			}
-			if(ap2 != null && ap2.trim().compareTo("") != 0){
-				ilike("sustentante.segundoApellido",ap2 + "%")
-			}
-			if(idvarfig != null && idvarfig > 0){
-				eq("sustentante.varianteFigura.id",idvarfig)
-			}
-			else if(idfig != null && idfig > 0){
-				eq("sustentante.varianteFigura.idFigura",idfig)
-			}
-			eq("sustentante.statusCertificacion.id", idStatusCertificacion)
-			eq("sustentante.statusAutorizacion.id", idStatusAutorizacion)
+		if(nom != null && nom.trim().compareTo("") != 0){
+			hqlFilters.add("c.sustentante.nombre like :nom ")
+			whereKeywordNeeded = true
+			namedParameters.put("nom",nom + '%')
+		}
+		if(ap1 != null && ap1.trim().compareTo("") != 0){
+			hqlFilters.add("c.sustentante.primerApellido like :ap1 ")
+			whereKeywordNeeded = true
+			namedParameters.put("ap1",ap1 + '%')
+		}
+		if(ap2 != null && ap2.trim().compareTo("") != 0){
+			hqlFilters.add("c.sustentante.segundoApellido like :ap2 ")
+			whereKeywordNeeded = true
+			namedParameters.put("ap2",ap2 + '%')
+		}
+		if(idvarfig != null && idvarfig > 0){
+			hqlFilters.add("c.varianteFigura.id = :idVarFigura ")
+			whereKeywordNeeded = true
+			namedParameters.put("idVarFigura",idvarfig)
+		}
+		else if(idfig != null && idfig > 0){
+			hqlFilters.add("c.varianteFigura.idFigura = :idFigura ")
+			whereKeywordNeeded = true
+			namedParameters.put("idFigura",idfig)
+		}
+		if(idStatusCertificacion != null && idStatusCertificacion > 0){
+			hqlFilters.add("c.statusCertificacion.id = :idSc ")
+			whereKeywordNeeded = true
+			namedParameters.put("idSc",idStatusCertificacion)
+		}
+		if(idStatusAutorizacion != null && idStatusAutorizacion > 0){
+			hqlFilters.add("c.statusAutorizacion.id = :idSa ")
+			whereKeywordNeeded = true
+			namedParameters.put("idSa",idStatusAutorizacion)
 		}
 		
+		strHqlCount.append("select count(c.id) from Certificacion as c ")
+		sbHql.append("from Certificacion as c ")
+		if(whereKeywordNeeded){
+			sbHql.append(whereKeyword)
+			strHqlCount.append(whereKeyword)
+			hqlFilters.each{
+				if(it != hqlFilters.last()){
+					sbHql.append(it).append("and ")
+					strHqlCount.append(it).append("and ")
+				}
+				else{
+					sbHql.append(it)
+					strHqlCount.append(it)
+				}
+			}
+		}
+		sbHql.append("order by c.").append(sort).append(" ").append(order)
+		
 		try{
-			sr.list = whereCriteria.list(max:max, offset: offset, sort: sort, order: order)
-			sr.count = whereCriteria.count()
-			sr.error = false
+			sr.count = Certificacion.executeQuery(strHqlCount.toString(),namedParameters)[0]
+			sr.list = Certificacion.executeQuery(sbHql.toString(),namedParameters,[max: max, offset: offset])
 		}
 		catch(Exception e){
 			sr.error = true
 			sr.errorDetails = e.message
 		}
-				
 		return sr
-											
+							
 	}
-											
+	
+	SearchResult findAllByStatusAutorizacion(Integer max, Integer offset, String sort, String order, 
+												String nom, String ap1, String ap2, 
+												Long idfig, Long idvarfig, 
+												Collection<Long> idsStCert, 
+												Collection<Long> idsStAut){
+		long count = 0
+		List<Certificacion> lc = new ArrayList<Certificacion>()
+		boolean error = false
+		String errorDetails = ""
+		SearchResult sr = new SearchResult()
+		
+		List<String> hqlFilters = new ArrayList<String>();
+		String whereKeyword = "where ";
+		Boolean whereKeywordNeeded = false;
+		StringBuilder sbHql = new StringBuilder()
+		StringBuilder strHqlCount = new StringBuilder()
+		Map<String,Object> namedParameters = new HashMap<String,Object>()
+		
+		max = this.filterMax(max?:10)
+		offset = this.filterOffset(offset?:0)
+		sort = this.filterSort(sort)
+		order = this.filterOrder(order)
+		
+		if(nom != null && nom.trim().compareTo("") != 0){
+			hqlFilters.add("c.sustentante.nombre like :nom ")
+			whereKeywordNeeded = true
+			namedParameters.put("nom",nom + '%')
+		}
+		if(ap1 != null && ap1.trim().compareTo("") != 0){
+			hqlFilters.add("c.sustentante.primerApellido like :ap1 ")
+			whereKeywordNeeded = true
+			namedParameters.put("ap1",ap1 + '%')
+		}
+		if(ap2 != null && ap2.trim().compareTo("") != 0){
+			hqlFilters.add("c.sustentante.segundoApellido like :ap2 ")
+			whereKeywordNeeded = true
+			namedParameters.put("ap2",ap2 + '%')
+		}
+		if(idvarfig != null && idvarfig > 0){
+			hqlFilters.add("c.varianteFigura.id = :idVarFigura ")
+			whereKeywordNeeded = true
+			namedParameters.put("idVarFigura",idvarfig)
+		}
+		else if(idfig != null && idfig > 0){
+			hqlFilters.add("c.varianteFigura.idFigura = :idFigura ")
+			whereKeywordNeeded = true
+			namedParameters.put("idFigura",idfig)
+		}
+		if(idsStCert != null && idsStCert.size() > 0){
+			hqlFilters.add("c.statusCertificacion.id in (:idSc) ")
+			whereKeywordNeeded = true
+			namedParameters.put("idSc",idsStCert)
+		}
+		if(idsStAut != null && idsStAut.size() > 0){
+			hqlFilters.add("c.statusAutorizacion.id in (:idSa) ")
+			whereKeywordNeeded = true
+			namedParameters.put("idSa",idsStAut)
+		}
+		
+		strHqlCount.append("select count(c.id) from Certificacion as c ")
+		sbHql.append("from Certificacion as c ")
+		if(whereKeywordNeeded){
+			sbHql.append(whereKeyword)
+			strHqlCount.append(whereKeyword)
+			hqlFilters.each{
+				if(it != hqlFilters.last()){
+					sbHql.append(it).append("and ")
+					strHqlCount.append(it).append("and ")
+				}
+				else{
+					sbHql.append(it)
+					strHqlCount.append(it)
+				}
+			}
+		}
+		sbHql.append("order by c.").append(sort).append(" ").append(order)
+		
+		try{
+			sr.count = Certificacion.executeQuery(strHqlCount.toString(),namedParameters)[0]
+			sr.list = Certificacion.executeQuery(sbHql.toString(),namedParameters,[max: max, offset: offset])
+		}
+		catch(Exception e){
+			sr.error = true
+			sr.errorDetails = e.message
+		}
+		return sr
+	}
+	
 	private int filterMax(int max){
 		if(max <= 0){
 			max = 10
