@@ -90,10 +90,16 @@ class CertificacionRestfulController extends RestfulController{
 		respond certificacionService.findAllEnDictamenPrevioByFolio(idSustentante)
 	}
 	def findAllEnDictamenPrevio(){
-		Integer max = params.max?:10
-		Integer offset = params.offset?:0
+		int max = Integer.parseInt(params.max?:"10")
+		int offset = Integer.parseInt(params.offset?:"0")
 		String sort = params.sort?:"id"
 		String order = params.order?:"asc"
+		
+		String nom = params.nom?:""
+		String ap1 = params.ap1?:""
+		String ap2 = params.ap2?:""
+		Long idfig = Long.parseLong(params.idfig?:"-1")
+		Long idvarfig = Long.parseLong(params.idvarfig?:"-1")
 		
 		respond certificacionService.findAllEnDictamenPrevio(max, offset, sort, order, nom, ap1, ap2, idfig, idvarfig)
 	}
@@ -106,8 +112,8 @@ class CertificacionRestfulController extends RestfulController{
 		respond certificacionService.findAllEnAutorizacionByFolio(idSustentante)
 	}
 	def findAllEnAutorizacion(){
-		Integer max = params.max?:10
-		Integer offset = params.offset?:0
+		int max = Integer.parseInt(params.max?:"10")
+		int offset = Integer.parseInt(params.offset?:"0")
 		String sort = params.sort?:"id"
 		String order = params.order?:"asc"
 		
@@ -120,8 +126,8 @@ class CertificacionRestfulController extends RestfulController{
 		respond certificacionService.findAllEnAutorizacion(max, offset, sort, order, nom, ap1, ap2, idfig, idvarfig)
 	}
 	def findAllAutorizadosConOSinPoderesByMatricula(Integer id){
-		Integer max = params.max?:10
-		Integer offset = params.offset?:0
+		int max = Integer.parseInt(params.max?:"10")
+		int offset = Integer.parseInt(params.offset?:"0")
 		String sort = params.sort?:"id"
 		String order = params.order?:"asc"
 		
@@ -130,8 +136,8 @@ class CertificacionRestfulController extends RestfulController{
 		respond certificacionService.findAllAutorizadosConOSinPoderesByMatricula(max, offset, sort, order, numeroMatricula)
 	}
 	def findAllAutorizadosConOSinPoderesByFolio(Long id){
-		Integer max = params.max?:10
-		Integer offset = params.offset?:0
+		int max = Integer.parseInt(params.max?:"10")
+		int offset = Integer.parseInt(params.offset?:"0")
 		String sort = params.sort?:"id"
 		String order = params.order?:"asc"
 		
@@ -140,8 +146,8 @@ class CertificacionRestfulController extends RestfulController{
 		respond certificacionService.findAllAutorizadosConOSinPoderesByFolio(max, offset, sort, order, idSustentante)
 	}
 	def findAllAutorizadosConOSinPoderes(){
-		Integer max = params.max?:10
-		Integer offset = params.offset?:0
+		int max = Integer.parseInt(params.max?:"10")
+		int offset = Integer.parseInt(params.offset?:"0")
 		String sort = params.sort?:"id"
 		String order = params.order?:"asc"
 		
