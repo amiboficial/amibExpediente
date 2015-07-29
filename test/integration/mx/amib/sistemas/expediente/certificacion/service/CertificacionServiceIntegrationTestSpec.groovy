@@ -11,9 +11,9 @@ import spock.lang.*
  */
 class CertificacionServiceIntegrationTestSpec extends Specification {
 
-	def certificacionService
+	CertificacionService certificacionService
 	
-	SearchResult testResult1
+	CertificacionService.SearchResult testResult1
 	
     def setup() {
 		
@@ -23,6 +23,8 @@ class CertificacionServiceIntegrationTestSpec extends Specification {
 		
     }
 
+	
+	/*
     void "Obtener certificación por matrícula especificando parámetros"() {
 		given:
 			Long idSC = StatusCertificacionTypes.CERTIFICADO
@@ -75,6 +77,20 @@ class CertificacionServiceIntegrationTestSpec extends Specification {
 	void "Obtener certificación en dictamen previo por folio"() {
 		when:
 			testResult1 = certificacionService.findAllEnDictamenPrevioByFolio(83486)
+			println (testResult1 as JSON)
+		then:
+			testResult1.count > 0
+	}*/
+	
+	void "Obtener credencializabes"(){
+		given:
+			String nom = ""
+			String ap1 = ""
+			String ap2 = ""
+			Long idfig = null
+			Long idvarfig = null
+		when:
+			testResult1 = certificacionService.findAllAutorizadosConOSinPoderes(10, 0, "id", "asc", nom, ap1, ap2, idfig, idvarfig)
 			println (testResult1 as JSON)
 		then:
 			testResult1.count > 0

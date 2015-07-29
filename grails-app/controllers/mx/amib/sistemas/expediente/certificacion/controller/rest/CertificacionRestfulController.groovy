@@ -1,6 +1,7 @@
 package mx.amib.sistemas.expediente.certificacion.controller.rest
 
 import javax.servlet.http.HttpServletResponse
+
 import static org.springframework.http.HttpStatus.*
 import mx.amib.sistemas.expediente.certificacion.model.Certificacion
 import mx.amib.sistemas.expediente.persona.model.Sustentante
@@ -78,27 +79,79 @@ class CertificacionRestfulController extends RestfulController{
 		def ids = JSON.parse(foliosJson)
 		respond Certificacion.findAllByIdInList(ids)
 	}
-	
-	def findAllEnDictamenPrevioByMatricula(){
+	def findAllEnDictamenPrevioByMatricula(Integer id){
+		Integer numeroMatricula = id
 		
+		respond certificacionService.findAllEnDictamenPrevioByMatricula(numeroMatricula)
 	}
-	def findAllEnDictamenPrevioByFolio(){
+	def findAllEnDictamenPrevioByFolio(Long id){
+		Long idSustentante = id
 		
+		respond certificacionService.findAllEnDictamenPrevioByFolio(idSustentante)
 	}
 	def findAllEnDictamenPrevio(){
+		Integer max = params.max?:10
+		Integer offset = params.offset?:0
+		String sort = params.sort?:"id"
+		String order = params.order?:"asc"
 		
+		respond certificacionService.findAllEnDictamenPrevio(max, offset, sort, order, nom, ap1, ap2, idfig, idvarfig)
 	}
-	def findAllEnAutorizacionByMatricula(){
-	
+	def findAllEnAutorizacionByMatricula(Integer id){
+		Integer numeroMatricula = id
+		respond certificacionService.findAllEnAutorizacionByMatricula(numeroMatricula)
 	}
-	def findAllEnAutorizacionByFolio(){
-		
+	def findAllEnAutorizacionByFolio(Long id){		
+		Long idSustentante = id
+		respond certificacionService.findAllEnAutorizacionByFolio(idSustentante)
 	}
 	def findAllEnAutorizacion(){
+		Integer max = params.max?:10
+		Integer offset = params.offset?:0
+		String sort = params.sort?:"id"
+		String order = params.order?:"asc"
 		
+		String nom = params.nom?:""
+		String ap1 = params.ap1?:""
+		String ap2 = params.ap2?:""
+		Long idfig = Long.parseLong(params.idfig?:"-1")
+		Long idvarfig = Long.parseLong(params.idvarfig?:"-1")
+		
+		respond certificacionService.findAllEnAutorizacion(max, offset, sort, order, nom, ap1, ap2, idfig, idvarfig)
+	}
+	def findAllAutorizadosConOSinPoderesByMatricula(Integer id){
+		Integer max = params.max?:10
+		Integer offset = params.offset?:0
+		String sort = params.sort?:"id"
+		String order = params.order?:"asc"
+		
+		Integer numeroMatricula = id
+		
+		respond certificacionService.findAllAutorizadosConOSinPoderesByMatricula(max, offset, sort, order, numeroMatricula)
+	}
+	def findAllAutorizadosConOSinPoderesByFolio(Long id){
+		Integer max = params.max?:10
+		Integer offset = params.offset?:0
+		String sort = params.sort?:"id"
+		String order = params.order?:"asc"
+		
+		Long idSustentante = id
+		
+		respond certificacionService.findAllAutorizadosConOSinPoderesByFolio(max, offset, sort, order, idSustentante)
+	}
+	def findAllAutorizadosConOSinPoderes(){
+		Integer max = params.max?:10
+		Integer offset = params.offset?:0
+		String sort = params.sort?:"id"
+		String order = params.order?:"asc"
+		
+		String nom = params.nom?:""
+		String ap1 = params.ap1?:""
+		String ap2 = params.ap2?:""
+		Long idfig = Long.parseLong(params.idfig?:"-1")
+		Long idvarfig = Long.parseLong(params.idvarfig?:"-1")
+		
+		respond certificacionService.findAllAutorizadosConOSinPoderes(max, offset, sort, order, nom, ap1, ap2, idfig, idvarfig)
 	}
 	//incluye ambos con o sin poderes
-	def findAllAutorizados(){
-		
-	}
 }

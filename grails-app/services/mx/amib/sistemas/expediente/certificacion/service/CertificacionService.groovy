@@ -1,17 +1,24 @@
 package mx.amib.sistemas.expediente.certificacion.service
 
 import org.hibernate.criterion.*
+
 import grails.gorm.DetachedCriteria
 import grails.transaction.Transactional
 import mx.amib.sistemas.expediente.certificacion.model.Certificacion
-import mx.amib.sistemas.expediente.service.SearchResult
 import mx.amib.sistemas.expediente.certificacion.model.catalog.*
 import mx.amib.sistemas.expediente.persona.model.Sustentante
-
 
 @Transactional
 class CertificacionService {
 
+	public static class SearchResult{
+		List<Certificacion> list
+		List<Sustentante> sustentantes
+		long count
+		boolean error
+		String errorDetails
+	}
+	
 	List<Certificacion> getAll(List<Long> ids){
 		return Certificacion.getAll(ids).findAll{ it != null }
 	}
@@ -381,7 +388,7 @@ class CertificacionService {
 															StatusAutorizacionTypes.DICTAMEN_PREVIO)
 	}
 	
-	SearchResult findAllEnDictamenPrevioByFolio(Integer idSustentante){
+	SearchResult findAllEnDictamenPrevioByFolio(Long idSustentante){
 		return this.findAllByStatusAutorizacionAndIdSustentante(10, 0, "id", "asc", idSustentante, 
 															StatusCertificacionTypes.CERTIFICADO, 
 															StatusAutorizacionTypes.DICTAMEN_PREVIO)
@@ -403,7 +410,7 @@ class CertificacionService {
 															StatusAutorizacionTypes.EN_AUTORIZACION)
 	}
 	
-	SearchResult findAllEnAutorizacionByFolio(Integer idSustentante){
+	SearchResult findAllEnAutorizacionByFolio(Long idSustentante){
 		return this.findAllByStatusAutorizacionAndIdSustentante(10, 0, "id", "asc", idSustentante,
 															StatusCertificacionTypes.CERTIFICADO,
 															StatusAutorizacionTypes.EN_AUTORIZACION)
@@ -417,6 +424,28 @@ class CertificacionService {
 											nom, ap1, ap2, idfig, idvarfig,
 											StatusCertificacionTypes.CERTIFICADO,
 											StatusAutorizacionTypes.EN_AUTORIZACION)
+	}
+	
+	SearchResult findAllAutorizadosConOSinPoderesByMatricula(Integer numeroMatricula){
+		return this.findAllByStatusAutorizacionAndNumeroMatricula(10, 0, "id", "asc", numeroMatricula,
+															[ StatusCertificacionTypes.CERTIFICADO ],
+															[ StatusAutorizacionTypes.AUTORIZADO, StatusAutorizacionTypes.AUTORIZADO_SIN_PODERES ])
+	}
+	
+	SearchResult findAllAutorizadosConOSinPoderesByFolio(Long idSustentante){
+		return this.findAllByStatusAutorizacionAndIdSustentante(10, 0, "id", "asc", idSustentante,
+															[ StatusCertificacionTypes.CERTIFICADO ],
+															[ StatusAutorizacionTypes.AUTORIZADO, StatusAutorizacionTypes.AUTORIZADO_SIN_PODERES ])
+	}
+	
+	SearchResult findAllAutorizadosConOSinPoderes(Integer max, Integer offset, String sort, String order,
+											String nom, String ap1, String ap2,
+											Long idfig, Long idvarfig){
+		
+		return this.findAllByStatusAutorizacion(max, offset, sort, order,
+											nom, ap1, ap2, idfig, idvarfig,
+											[ StatusCertificacionTypes.CERTIFICADO ],
+											[ StatusAutorizacionTypes.AUTORIZADO, StatusAutorizacionTypes.AUTORIZADO_SIN_PODERES ])
 	}
 	
 	SearchResult findAllByStatusAutorizacionAndNumeroMatricula(Integer max, Integer offset, String sort, String order, 
@@ -447,12 +476,50 @@ class CertificacionService {
 		finally{
 			sr.count = count
 			sr.list = lc
+			sr.sustentantes = sr.list.collect{ it.sustentante }
 			sr.error = error
 			sr.errorDetails = errorDetails
 		}
 		
 		return sr
 	
+	}
+	
+	SearchResult findAllByStatusAutorizacionAndNumeroMatricula(Integer max, Integer offset, String sort, String order, 
+																Integer numeroMatricula, Collection<Long> idsStCert, Collection<Long> idsStAut){
+		
+		long count = 0
+		List<Certificacion> lc = new ArrayList<Certificacion>()
+		boolean error = false
+		String errorDetails = ""
+		SearchResult sr = new SearchResult()
+		
+		max = this.filterMax(max?:10)
+		offset = this.filterOffset(offset?:0)
+		sort = this.filterSort(sort)
+		order = this.filterOrder(order)
+
+		try{
+			count = Certificacion.executeQuery("select count(c.id) from Certificacion as c where c.sustentante.numeroMatricula = :numeroMatricula and c.statusAutorizacion.id in (:idSA) and c.statusCertificacion.id in (:idSC)",
+										[ numeroMatricula : numeroMatricula , idSA : idsStAut, idSC : idsStCert ])[0]
+			lc = Certificacion.findAll("from Certificacion as c where c.sustentante.numeroMatricula = :numeroMatricula and c.statusAutorizacion.id in (:idSA) and c.statusCertificacion.id in (:idSC) order by " + sort + " " + order,
+										[ numeroMatricula : numeroMatricula , idSA : idsStAut, idSC : idsStCert ],
+										[ max: max, offset: offset ])
+		}
+		catch(Exception e){
+			error = true
+			errorDetails = e.message
+		}
+		finally{
+			sr.count = count
+			sr.list = lc
+			sr.sustentantes = sr.list.collect{ it.sustentante }
+			sr.error = error
+			sr.errorDetails = errorDetails
+		}
+		
+		return sr
+		
 	}
 	
 	SearchResult findAllByStatusAutorizacionAndIdSustentante(Integer max, Integer offset, String sort, String order, 
@@ -483,6 +550,7 @@ class CertificacionService {
 		finally{
 			sr.count = count
 			sr.list = lc
+			sr.sustentantes = sr.list.collect{ it.sustentante }
 			sr.error = error
 			sr.errorDetails = errorDetails
 		}
@@ -491,8 +559,39 @@ class CertificacionService {
 	}
 
 	SearchResult findAllByStatusAutorizacionAndIdSustentante(Integer max, Integer offset, String sort, String order, 
-																Long idSustentante, Long idStatusCertificacion, Long idStatusAutorizacion){
+																Long idSustentante, Collection<Long> idsStCert, Collection<Long> idsStAut){
+													
+		long count = 0
+		List<Certificacion> lc = new ArrayList<Certificacion>()
+		boolean error = false
+		String errorDetails = ""
+		SearchResult sr = new SearchResult()
 		
+		max = this.filterMax(max?:10)
+		offset = this.filterOffset(offset?:0)
+		sort = this.filterSort(sort)
+		order = this.filterOrder(order)
+
+		try{
+			count = Certificacion.executeQuery("select count(c.id) from Certificacion as c where c.sustentante.id = :id and c.statusAutorizacion.id in (:idSA) and c.statusCertificacion.id in (:idSC)",
+										[ id : idSustentante , idSA : idsStAut, idSC : idsStCert ])[0]
+			lc = Certificacion.findAll("from Certificacion as c where c.sustentante.id = :id and c.statusAutorizacion.id in (:idSA) and c.statusCertificacion.id in (:idSC) order by " + sort + " " + order,
+										[ id : idSustentante , idSA : idsStAut, idSC : idsStCert ],
+										[ max: max, offset: offset ])
+		}
+		catch(Exception e){
+			error = true
+			errorDetails = e.message
+		}
+		finally{
+			sr.count = count
+			sr.list = lc
+			sr.sustentantes = sr.list.collect{ it.sustentante }
+			sr.error = error
+			sr.errorDetails = errorDetails
+		}
+		
+		return sr
 	}
 	
 	SearchResult findAllByStatusAutorizacion(Integer max, Integer offset, String sort, String order, 
@@ -576,6 +675,7 @@ class CertificacionService {
 		try{
 			sr.count = Certificacion.executeQuery(strHqlCount.toString(),namedParameters)[0]
 			sr.list = Certificacion.executeQuery(sbHql.toString(),namedParameters,[max: max, offset: offset])
+			sr.sustentantes = sr.list.collect{ it.sustentante }
 		}
 		catch(Exception e){
 			sr.error = true
@@ -665,6 +765,7 @@ class CertificacionService {
 		try{
 			sr.count = Certificacion.executeQuery(strHqlCount.toString(),namedParameters)[0]
 			sr.list = Certificacion.executeQuery(sbHql.toString(),namedParameters,[max: max, offset: offset])
+			sr.sustentantes = sr.list.collect{ it.sustentante }
 		}
 		catch(Exception e){
 			sr.error = true
@@ -712,6 +813,5 @@ class CertificacionService {
 		}
 		return order
 	}
-	
 	
 }
