@@ -1,10 +1,17 @@
 package mx.amib.sistemas.expediente.certificacion.controller.rest
 
+import java.text.DateFormat
+import java.text.SimpleDateFormat
+
 import javax.servlet.http.HttpServletResponse
+
+import org.codehaus.groovy.grails.web.json.JSONObject
 
 import static org.springframework.http.HttpStatus.*
 import mx.amib.sistemas.expediente.certificacion.model.Certificacion
 import mx.amib.sistemas.expediente.persona.model.Sustentante
+import mx.amib.sistemas.expediente.certificacion.model.catalog.StatusAutorizacionTypes
+import mx.amib.sistemas.expediente.certificacion.model.catalog.StatusAutorizacion
 import grails.rest.RestfulController
 import grails.transaction.Transactional
 import grails.converters.JSON
@@ -160,4 +167,34 @@ class CertificacionRestfulController extends RestfulController{
 		respond certificacionService.findAllAutorizadosConOSinPoderes(max, offset, sort, order, nom, ap1, ap2, idfig, idvarfig)
 	}
 	//incluye ambos con o sin poderes
+	
+	def updateDatosParaAprobarDictamen(){
+		
+		def newData = request.JSON
+		Long id = newData.'id'
+		Certificacion cert = Certificacion.get(id)
+		
+		if(cert == null){
+			render status: NOT_FOUND
+		}
+		else{
+			DateFormat df = new SimpleDateFormat("yyyy-MM-dd")
+			
+			cert.fechaObtencion = df.parse(newData.'fechaObtencion'.substring(0,10))
+			
+			cert.statusEntHistorialInforme = newData.'statusEntHistorialInforme'
+			if(!JSONObject.NULL.equals(newData.'obsEntHistorialInforme')) cert.obsEntHistorialInforme = newData.'obsEntHistorialInforme'
+			
+			cert.statusEntCartaRec = newData.'statusEntCartaRec'
+			if(!JSONObject.NULL.equals(newData.'obsEntCartaRec')) cert.obsEntCartaRec = newData.'obsEntCartaRec'
+			
+			cert.statusConstBolVal = newData.'statusConstBolVal'
+			if(!JSONObject.NULL.equals(newData.'obsConstBolVal')) cert.obsConstBolVal = newData.'obsConstBolVal'
+						
+			cert = cert.save(flush: true)
+		}
+		
+		respond cert
+	}
+	
 }

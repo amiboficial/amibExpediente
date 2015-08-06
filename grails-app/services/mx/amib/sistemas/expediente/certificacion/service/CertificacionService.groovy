@@ -799,6 +799,15 @@ class CertificacionService {
 		else if(sort == "idFigura"){
 			sort = "sustentante.varianteFigura.idFigura"
 		}
+		else if(sort == "nombre"){
+			sort = "sustentante.nombre"
+		}
+		else if(sort == "primerApellido"){
+			sort = "sustentante.primerApellido"
+		}
+		else if(sort == "segundoApellido"){
+			sort = "sustentante.segundoApellido"
+		}
 		else if(["id","fechaInicio"].find{ sort == it } == null){
 			sort = "id"
 		}

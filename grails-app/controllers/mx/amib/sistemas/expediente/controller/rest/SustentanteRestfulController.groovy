@@ -3,15 +3,17 @@ package mx.amib.sistemas.expediente.controller.rest
 import static org.springframework.http.HttpStatus.*
 
 import org.apache.commons.io.IOUtils
-
 import org.codehaus.groovy.grails.web.json.JSONObject
 
 import java.text.DateFormat
 import java.text.SimpleDateFormat
+import java.util.Date;
+
 import mx.amib.sistemas.expediente.certificacion.model.catalog.MetodoValidacion;
 import mx.amib.sistemas.expediente.certificacion.model.catalog.StatusAutorizacion;
 import mx.amib.sistemas.expediente.certificacion.model.catalog.StatusCertificacion;
 import mx.amib.sistemas.expediente.certificacion.model.catalog.VarianteFigura;
+import mx.amib.sistemas.expediente.persona.model.Puesto
 import mx.amib.sistemas.expediente.persona.model.Sustentante
 import mx.amib.sistemas.expediente.persona.model.TelefonoSustentante
 import mx.amib.sistemas.expediente.service.SustentanteService
@@ -134,12 +136,8 @@ class SustentanteRestfulController extends RestfulController<Sustentante>{
 			}
 			
 			//borra los telefonos cuyo id no se encuentre en lista e inserta nuevos
-			
 			def oldTels = sustentante.telefonos.collect{ it.id.toString() }
 			def newTels = newData.'telefonos'.collect{ it.'id'.toString() }
-			
-			println "viejos ids: " + oldTels
-			println "nuevos ids: " + newTels
 			
 			oldTels.each{ x ->
 				if(!newTels.contains(x)){
@@ -173,6 +171,84 @@ class SustentanteRestfulController extends RestfulController<Sustentante>{
 				
 			}
 			
+			sustentante.save(failOnError: true, flush:true)
+		}
+		
+		respond sustentante
+	}
+	
+	def updatePuestos(){
+		def newData = request.JSON
+		Long id = newData.'id'
+		Sustentante sustentante = Sustentante.get(id)
+		
+		if(sustentante == null){
+			render status: NOT_FOUND
+		}
+		else{
+			DateFormat df = new SimpleDateFormat("yyyy-MM-dd")
+			
+			//borra los "puestos" cuyo id no se encuentra en la lista e inserta nuevos
+			def oldPues = sustentante.puestos.collect{ it.id.toString() }
+			def newPues = newData.'puestos'.collect{ it.'id'.toString() }
+			
+			oldPues.each{ x ->
+				if(!newPues.contains(x)){
+					Puesto p = Puesto.get(x)
+					sustentante.removeFromPuestos(p)
+					p.delete()
+				}
+			}
+			newData.'puestos'.each { y ->
+				Puesto p = null
+				
+				if( JSONObject.NULL.equals(y.'id') || y.'id' <= 0){
+					
+					p = new Puesto()
+					p.sustentante = sustentante
+					
+					p.idInstitucion = y.'idInstitucion'
+					p.fechaInicio = df.parse(y.'fechaInicio'.substring(0,10))
+					if(!JSONObject.NULL.equals(y.'fechaFin')) p.fechaFin = df.parse(y.'fechaFin'.substring(0,10))
+					else p.fechaFin = null
+					p.nombrePuesto = y.'nombrePuesto'
+					if(JSONObject.NULL.equals(y.'fechaFin')) p.esActual = true
+					else p.esActual = false
+					
+					p.statusEntManifProtesta = y.'statusEntManifProtesta'
+					if(JSONObject.NULL.equals(y.'obsEntManifProtesta')) p.obsEntManifProtesta = y.'obsEntManifProtesta'
+					else p.obsEntManifProtesta = ""
+					p.statusEntCartaInter = y.'statusEntCartaInter'
+					if(JSONObject.NULL.equals(y.'obsEntCartaInter')) p.obsEntCartaInter = y.'obsEntCartaInter'
+					else p.obsEntCartaInter = ""
+					
+					p.fechaCreacion = new Date()
+					p.fechaModificacion = new Date()
+					
+					sustentante.addToPuestos(p)
+				}
+				else{
+					p = Puesto.get(y.'id')
+					
+					p.idInstitucion = y.'idInstitucion'
+					p.fechaInicio = df.parse(y.'fechaInicio'.substring(0,10))
+					if(JSONObject.NULL.equals(y.'fechaFin')) p.fechaFin = df.parse(y.'fechaFin'.substring(0,10))
+					p.nombrePuesto = y.'nombrePuesto'
+					if(JSONObject.NULL.equals(y.'fechaFin')) p.esActual = true
+					else p.esActual = false
+					
+					p.statusEntManifProtesta = y.'statusEntManifProtesta'
+					if(JSONObject.NULL.equals(y.'obsEntManifProtesta')) p.obsEntManifProtesta = y.'obsEntManifProtesta'
+					else p.obsEntManifProtesta = null
+					p.statusEntCartaInter = y.'statusEntCartaInter'
+					if(JSONObject.NULL.equals(y.'obsEntCartaInter')) p.obsEntCartaInter = y.'obsEntCartaInter'
+					else p.obsEntCartaInter = null
+					
+					p.fechaModificacion = new Date()
+				}
+				
+			}
+		
 			sustentante.save(failOnError: true, flush:true)
 		}
 		
