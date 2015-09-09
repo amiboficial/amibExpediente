@@ -135,7 +135,7 @@ class SustentanteService {
 		if(ap2 != null && ap2 != ""){
 			hqlFilters.add("s.segundoApellido like :ap2 ")
 			whereKeywordNeeded = true
-			namedParameters.put("nom",ap2+"%")
+			namedParameters.put("ap2",ap2+"%")
 		}
 
 		strHqlCount.append("select count(s.id) from Sustentante as s ")

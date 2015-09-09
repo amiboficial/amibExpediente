@@ -166,7 +166,16 @@ class CertificacionRestfulController extends RestfulController{
 		
 		respond certificacionService.findAllAutorizadosConOSinPoderes(max, offset, sort, order, nom, ap1, ap2, idfig, idvarfig)
 	}
-	//incluye ambos con o sin poderes
+	
+	def findAllCandidatoActualizacionAutorizacion(){}
+	def findAllCandidatoActualizacionAutorizacionByMatricula(int id){}
+	def findAllCandidatoActualizacionAutorizacionByFolio(long id){}
+	def findAllCandidatoReposicionAutorizacion(){}
+	def findAllCandidatoReposicionAutorizacionByMatricula(int id){}
+	def findAllCandidatoReposicionAutorizacionByFolio(long id){}
+	def findAllCandidatoCambioFigura(){}
+	def findAllCandidatoCambioFiguraByMatricula(int id){}
+	def findAllCandidatoCambioFiguraByFolio(long id){}
 	
 	def updateDatosParaAprobarDictamen(){
 		

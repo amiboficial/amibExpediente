@@ -81,16 +81,30 @@ class CertificacionServiceIntegrationTestSpec extends Specification {
 		then:
 			testResult1.count > 0
 	}*/
-	
+	/*
 	void "Obtener credencializabes"(){
 		given:
 			String nom = ""
 			String ap1 = ""
 			String ap2 = ""
-			Long idfig = null
-			Long idvarfig = null
+			Long idfig = -1
+			Long idvarfig = -1
 		when:
 			testResult1 = certificacionService.findAllAutorizadosConOSinPoderes(10, 0, "id", "asc", nom, ap1, ap2, idfig, idvarfig)
+			println (testResult1 as JSON)
+		then:
+			testResult1.count > 0
+	}*/
+	
+	void "Obtener candidatos a autorizacion"(){
+		given:
+			String nom = ""
+			String ap1 = ""
+			String ap2 = ""
+			long idfig = -1
+			long idvarfig = -1
+		when:
+			testResult1 = certificacionService.findAllCandidatoActualizacionAutorizacion(10, 0, "id", "asc", nom, ap1, ap2, idfig, idvarfig)
 			println (testResult1 as JSON)
 		then:
 			testResult1.count > 0

@@ -315,6 +315,8 @@ class SustentanteRestfulController extends RestfulController<Sustentante>{
 		String sort = params.sort?:"id"
 		String order = params.order?:"desc"
 		
+		println 'El nombre es: ' + nom
+		
 		respond sustentanteService.findAllAdvancedSearch(nom, ap1, ap2, max, offset, sort, order)
 	}
 	

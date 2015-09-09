@@ -600,89 +600,33 @@ class CertificacionService {
 												Long idStatusCertificacion, 
 												Long idStatusAutorizacion){
 		
-		long count = 0
-		List<Certificacion> lc = new ArrayList<Certificacion>()
-		boolean error = false
-		String errorDetails = ""
+		//Variables a ocupar en el método
+		int countParams = 0
 		SearchResult sr = new SearchResult()
-		
+		//Variables para construcción de query HQL dinámico
 		List<String> hqlFilters = new ArrayList<String>();
-		String whereKeyword = "where ";
-		Boolean whereKeywordNeeded = false;
+		boolean whereKeywordNeeded = false;
 		StringBuilder sbHql = new StringBuilder()
 		StringBuilder strHqlCount = new StringBuilder()
 		Map<String,Object> namedParameters = new HashMap<String,Object>()
 		
+		//formación de filtros
 		max = this.filterMax(max?:10)
 		offset = this.filterOffset(offset?:0)
 		sort = this.filterSort(sort)
 		order = this.filterOrder(order)
 		
-		if(nom != null && nom.trim().compareTo("") != 0){
-			hqlFilters.add("c.sustentante.nombre like :nom ")
-			whereKeywordNeeded = true
-			namedParameters.put("nom",nom + '%')
-		}
-		if(ap1 != null && ap1.trim().compareTo("") != 0){
-			hqlFilters.add("c.sustentante.primerApellido like :ap1 ")
-			whereKeywordNeeded = true
-			namedParameters.put("ap1",ap1 + '%')
-		}
-		if(ap2 != null && ap2.trim().compareTo("") != 0){
-			hqlFilters.add("c.sustentante.segundoApellido like :ap2 ")
-			whereKeywordNeeded = true
-			namedParameters.put("ap2",ap2 + '%')
-		}
-		if(idvarfig != null && idvarfig > 0){
-			hqlFilters.add("c.varianteFigura.id = :idVarFigura ")
-			whereKeywordNeeded = true
-			namedParameters.put("idVarFigura",idvarfig)
-		}
-		else if(idfig != null && idfig > 0){
-			hqlFilters.add("c.varianteFigura.idFigura = :idFigura ")
-			whereKeywordNeeded = true
-			namedParameters.put("idFigura",idfig)
-		}
-		if(idStatusCertificacion != null && idStatusCertificacion > 0){
-			hqlFilters.add("c.statusCertificacion.id = :idSc ")
-			whereKeywordNeeded = true
-			namedParameters.put("idSc",idStatusCertificacion)
-		}
-		if(idStatusAutorizacion != null && idStatusAutorizacion > 0){
-			hqlFilters.add("c.statusAutorizacion.id = :idSa ")
-			whereKeywordNeeded = true
-			namedParameters.put("idSa",idStatusAutorizacion)
-		}
+		//preparación de parámetros
+		countParams = this._addHqlFilterAndParams(hqlFilters, namedParameters, -1, -1, nom, ap1, ap2, idfig, idvarfig, idStatusCertificacion, idStatusAutorizacion);
+		//si no hay parametros, entonces el query "va por todos"
+		whereKeywordNeeded = (countParams > 0)
 		
-		strHqlCount.append("select count(c.id) from Certificacion as c ")
-		sbHql.append("from Certificacion as c ")
-		if(whereKeywordNeeded){
-			sbHql.append(whereKeyword)
-			strHqlCount.append(whereKeyword)
-			hqlFilters.each{
-				if(it != hqlFilters.last()){
-					sbHql.append(it).append("and ")
-					strHqlCount.append(it).append("and ")
-				}
-				else{
-					sbHql.append(it)
-					strHqlCount.append(it)
-				}
-			}
-		}
-		sbHql.append("order by c.").append(sort).append(" ").append(order)
+		//prepara los StringBuilder con los querys a ejecutar
+		this._prepareQuery(sbHql, strHqlCount, hqlFilters, whereKeywordNeeded, sort, order)
 		
-		try{
-			sr.count = Certificacion.executeQuery(strHqlCount.toString(),namedParameters)[0]
-			sr.list = Certificacion.executeQuery(sbHql.toString(),namedParameters,[max: max, offset: offset])
-			sr.sustentantes = sr.list.collect{ it.sustentante }
-		}
-		catch(Exception e){
-			sr.error = true
-			sr.errorDetails = e.message
-		}
-		return sr
-							
+		//ejecuta los querys e inserta el resultado en un SearchResult
+		sr = this._execQuery(strHqlCount,sbHql,namedParameters,max,offset)
+		return sr		
 	}
 	
 	SearchResult findAllByStatusAutorizacion(Integer max, Integer offset, String sort, String order, 
@@ -690,87 +634,292 @@ class CertificacionService {
 												Long idfig, Long idvarfig, 
 												Collection<Long> idsStCert, 
 												Collection<Long> idsStAut){
-		long count = 0
-		List<Certificacion> lc = new ArrayList<Certificacion>()
-		boolean error = false
-		String errorDetails = ""
+		//Variables a ocupar en el método
+		int countParams = 0
 		SearchResult sr = new SearchResult()
-		
+		//Variables para construcción de query HQL dinámico
 		List<String> hqlFilters = new ArrayList<String>();
-		String whereKeyword = "where ";
-		Boolean whereKeywordNeeded = false;
+		boolean whereKeywordNeeded = false;
 		StringBuilder sbHql = new StringBuilder()
 		StringBuilder strHqlCount = new StringBuilder()
 		Map<String,Object> namedParameters = new HashMap<String,Object>()
 		
+		//formación de filtros
 		max = this.filterMax(max?:10)
 		offset = this.filterOffset(offset?:0)
 		sort = this.filterSort(sort)
 		order = this.filterOrder(order)
 		
-		if(nom != null && nom.trim().compareTo("") != 0){
-			hqlFilters.add("c.sustentante.nombre like :nom ")
-			whereKeywordNeeded = true
-			namedParameters.put("nom",nom + '%')
-		}
-		if(ap1 != null && ap1.trim().compareTo("") != 0){
-			hqlFilters.add("c.sustentante.primerApellido like :ap1 ")
-			whereKeywordNeeded = true
-			namedParameters.put("ap1",ap1 + '%')
-		}
-		if(ap2 != null && ap2.trim().compareTo("") != 0){
-			hqlFilters.add("c.sustentante.segundoApellido like :ap2 ")
-			whereKeywordNeeded = true
-			namedParameters.put("ap2",ap2 + '%')
-		}
-		if(idvarfig != null && idvarfig > 0){
-			hqlFilters.add("c.varianteFigura.id = :idVarFigura ")
-			whereKeywordNeeded = true
-			namedParameters.put("idVarFigura",idvarfig)
-		}
-		else if(idfig != null && idfig > 0){
-			hqlFilters.add("c.varianteFigura.idFigura = :idFigura ")
-			whereKeywordNeeded = true
-			namedParameters.put("idFigura",idfig)
-		}
-		if(idsStCert != null && idsStCert.size() > 0){
-			hqlFilters.add("c.statusCertificacion.id in (:idSc) ")
-			whereKeywordNeeded = true
-			namedParameters.put("idSc",idsStCert)
-		}
-		if(idsStAut != null && idsStAut.size() > 0){
-			hqlFilters.add("c.statusAutorizacion.id in (:idSa) ")
-			whereKeywordNeeded = true
-			namedParameters.put("idSa",idsStAut)
-		}
+		//preparación de parámetros
+		countParams = this._addHqlFilterAndParams(hqlFilters, namedParameters, -1, -1, nom, ap1, ap2, idfig, idvarfig, idsStCert, idsStAut);
+		//si no hay parametros, entonces el query "va por todos"
+		whereKeywordNeeded = (countParams > 0)
 		
-		strHqlCount.append("select count(c.id) from Certificacion as c ")
-		sbHql.append("from Certificacion as c ")
-		if(whereKeywordNeeded){
-			sbHql.append(whereKeyword)
-			strHqlCount.append(whereKeyword)
-			hqlFilters.each{
-				if(it != hqlFilters.last()){
-					sbHql.append(it).append("and ")
-					strHqlCount.append(it).append("and ")
-				}
-				else{
-					sbHql.append(it)
-					strHqlCount.append(it)
-				}
-			}
-		}
-		sbHql.append("order by c.").append(sort).append(" ").append(order)
+		//prepara los StringBuilder con los querys a ejecutar
+		this._prepareQuery(sbHql, strHqlCount, hqlFilters, whereKeywordNeeded, sort, order)
 		
-		try{
-			sr.count = Certificacion.executeQuery(strHqlCount.toString(),namedParameters)[0]
-			sr.list = Certificacion.executeQuery(sbHql.toString(),namedParameters,[max: max, offset: offset])
-			sr.sustentantes = sr.list.collect{ it.sustentante }
-		}
-		catch(Exception e){
-			sr.error = true
-			sr.errorDetails = e.message
-		}
+		//ejecuta los querys e inserta el resultado en un SearchResult
+		sr = this._execQuery(strHqlCount,sbHql,namedParameters,max,offset)
+		return sr
+	}
+	
+	/* Métodos find para buscar registros "candidatos" a procesos de autorización */
+	//Candidato Actualizacion Autorizacion									
+	SearchResult findAllCandidatoActualizacionAutorizacion(int max, int offset, String sort, String order, String nom, String ap1, String ap2, long idfig, long idvarfig){
+		//Variables a ocupar en el método
+		int countParams = 0
+		SearchResult sr = new SearchResult()
+		//Variables para construcción de query HQL dinámico
+		List<String> hqlFilters = new ArrayList<String>();
+		boolean whereKeywordNeeded = false;
+		StringBuilder sbHql = new StringBuilder()
+		StringBuilder strHqlCount = new StringBuilder()
+		Map<String,Object> namedParameters = new HashMap<String,Object>()
+		
+		//formación de filtros
+		max = this.filterMax(max)
+		offset = this.filterOffset(offset)
+		sort = this.filterSort(sort)
+		order = this.filterOrder(order)
+
+		//preparación de parámetros		
+		countParams = this._addHqlFilterAndParams(hqlFilters, namedParameters, -1, -1, nom, ap1, ap2, idfig, idvarfig, StatusCertificacionTypes.CERTIFICADO, StatusAutorizacionTypes.AUTORIZADO);
+		//si no hay parametrós, entonces el query "va por todos"
+		whereKeywordNeeded = (countParams > 0)
+		
+		//prepara los StringBuilder con los querys a ejecutar
+		this._prepareQuery(sbHql, strHqlCount, hqlFilters, whereKeywordNeeded, sort, order)
+		
+		//ejecuta los querys e inserta el resultado en un SearchResult
+		sr = this._execQuery(strHqlCount,sbHql,namedParameters,max,offset)
+		return sr
+	}
+	SearchResult findAllCandidatoActualizacionAutorizacionByMatricula(int numeroMatricula){
+		//Variables a ocupar en el método
+		int countParams = 0
+		SearchResult sr = new SearchResult()
+		//Variables para construcción de query HQL dinámico
+		List<String> hqlFilters = new ArrayList<String>();
+		boolean whereKeywordNeeded = false;
+		StringBuilder sbHql = new StringBuilder()
+		StringBuilder strHqlCount = new StringBuilder()
+		Map<String,Object> namedParameters = new HashMap<String,Object>()
+		
+		//formación de filtros
+		int max = 10
+		String sort = 'id'
+		String order = 'asc'
+
+		//preparación de parámetros
+		countParams = this._addHqlFilterAndParams(hqlFilters, namedParameters, -1, numeroMatricula, '', '', '', '', '', StatusCertificacionTypes.CERTIFICADO, StatusAutorizacionTypes.AUTORIZADO);
+		//si no hay parametrós, entonces el query "va por todos"
+		whereKeywordNeeded = (countParams > 0)
+		
+		//prepara los StringBuilder con los querys a ejecutar
+		this._prepareQuery(sbHql, strHqlCount, hqlFilters, whereKeywordNeeded, sort, order)
+		
+		//ejecuta los querys e inserta el resultado en un SearchResult
+		sr = this._execQuery(strHqlCount,sbHql,namedParameters,max)
+		return sr
+	}
+	SearchResult findAllCandidatoActualizacionAutorizacionByFolio(int idSustentante){
+		//Variables a ocupar en el método
+		int countParams = 0
+		SearchResult sr = new SearchResult()
+		//Variables para construcción de query HQL dinámico
+		List<String> hqlFilters = new ArrayList<String>();
+		boolean whereKeywordNeeded = false;
+		StringBuilder sbHql = new StringBuilder()
+		StringBuilder strHqlCount = new StringBuilder()
+		Map<String,Object> namedParameters = new HashMap<String,Object>()
+		
+		//formación de filtros
+		int max = 10
+		String sort = 'id'
+		String order = 'asc'
+
+		//preparación de parámetros
+		countParams = this._addHqlFilterAndParams(hqlFilters, namedParameters, idSustentante, -1, '', '', '', '', '', StatusCertificacionTypes.CERTIFICADO, StatusAutorizacionTypes.AUTORIZADO);
+		//si no hay parametros, entonces el query "va por todos"
+		whereKeywordNeeded = (countParams > 0)
+		
+		//prepara los StringBuilder con los querys a ejecutar
+		this._prepareQuery(sbHql, strHqlCount, hqlFilters, whereKeywordNeeded, sort, order)
+		
+		//ejecuta los querys e inserta el resultado en un SearchResult
+		sr = this._execQuery(strHqlCount,sbHql,namedParameters,max)
+		return sr
+	}
+	//Candidato Reposicion Autorizacion
+	SearchResult findAllCandidatoReposicionAutorizacion(int max, int offset, String sort, String order, String nom, String ap1, String ap2, long idfig, long idvarfig){
+		//Variables a ocupar en el método
+		int countParams = 0
+		SearchResult sr = new SearchResult()
+		//Variables para construcción de query HQL dinámico
+		List<String> hqlFilters = new ArrayList<String>();
+		boolean whereKeywordNeeded = false;
+		StringBuilder sbHql = new StringBuilder()
+		StringBuilder strHqlCount = new StringBuilder()
+		Map<String,Object> namedParameters = new HashMap<String,Object>()
+		
+		//formación de filtros
+		max = this.filterMax(max)
+		offset = this.filterOffset(offset)
+		sort = this.filterSort(sort)
+		order = this.filterOrder(order)
+
+		//preparación de parámetros
+		countParams = this._addHqlFilterAndParams(hqlFilters, namedParameters, -1, -1, nom, ap1, ap2, idfig, idvarfig, -1, StatusAutorizacionTypes.NO_AUTORIZADO);
+		//si no hay parametrós, entonces el query "va por todos"
+		whereKeywordNeeded = (countParams > 0)
+		
+		//prepara los StringBuilder con los querys a ejecutar
+		this._prepareQuery(sbHql, strHqlCount, hqlFilters, whereKeywordNeeded, sort, order)
+		
+		//ejecuta los querys e inserta el resultado en un SearchResult
+		sr = this._execQuery(strHqlCount,sbHql,namedParameters,max,offset)
+		return sr
+	}
+	SearchResult findAllCandidatoReposicionAutorizacionByMatricula(int numeroMatricula){
+		//Variables a ocupar en el método
+		int countParams = 0
+		SearchResult sr = new SearchResult()
+		//Variables para construcción de query HQL dinámico
+		List<String> hqlFilters = new ArrayList<String>();
+		boolean whereKeywordNeeded = false;
+		StringBuilder sbHql = new StringBuilder()
+		StringBuilder strHqlCount = new StringBuilder()
+		Map<String,Object> namedParameters = new HashMap<String,Object>()
+		
+		//formación de filtros
+		int max = 10
+		String sort = 'id'
+		String order = 'asc'
+
+		//preparación de parámetros
+		countParams = this._addHqlFilterAndParams(hqlFilters, namedParameters, -1, numeroMatricula, '', '', '', '', '', -1, StatusAutorizacionTypes.NO_AUTORIZADO);
+		//si no hay parametrós, entonces el query "va por todos"
+		whereKeywordNeeded = (countParams > 0)
+		
+		//prepara los StringBuilder con los querys a ejecutar
+		this._prepareQuery(sbHql, strHqlCount, hqlFilters, whereKeywordNeeded, sort, order)
+		
+		//ejecuta los querys e inserta el resultado en un SearchResult
+		sr = this._execQuery(strHqlCount,sbHql,namedParameters,max)
+		return sr
+	}
+	SearchResult findAllCandidatoReposicionAutorizacionByFolio(int idSustentante){
+		//Variables a ocupar en el método
+		int countParams = 0
+		SearchResult sr = new SearchResult()
+		//Variables para construcción de query HQL dinámico
+		List<String> hqlFilters = new ArrayList<String>();
+		boolean whereKeywordNeeded = false;
+		StringBuilder sbHql = new StringBuilder()
+		StringBuilder strHqlCount = new StringBuilder()
+		Map<String,Object> namedParameters = new HashMap<String,Object>()
+		
+		//formación de filtros
+		int max = 10
+		String sort = 'id'
+		String order = 'asc'
+
+		//preparación de parámetros
+		countParams = this._addHqlFilterAndParams(hqlFilters, namedParameters, idSustentante, -1, '', '', '', '', '', -1, StatusAutorizacionTypes.NO_AUTORIZADO);
+		//si no hay parametros, entonces el query "va por todos"
+		whereKeywordNeeded = (countParams > 0)
+		
+		//prepara los StringBuilder con los querys a ejecutar
+		this._prepareQuery(sbHql, strHqlCount, hqlFilters, whereKeywordNeeded, sort, order)
+		
+		//ejecuta los querys e inserta el resultado en un SearchResult
+		sr = this._execQuery(strHqlCount,sbHql,namedParameters,max)
+		return sr
+	}
+	//Candidado Cambio Figura
+	SearchResult findAllCandidatoCambioFigura(int max, int offset, String sort, String order, String nom, String ap1, String ap2, long idfig, long idvarfig){
+		//Variables a ocupar en el método
+		int countParams = 0
+		SearchResult sr = new SearchResult()
+		//Variables para construcción de query HQL dinámico
+		List<String> hqlFilters = new ArrayList<String>();
+		boolean whereKeywordNeeded = false;
+		StringBuilder sbHql = new StringBuilder()
+		StringBuilder strHqlCount = new StringBuilder()
+		Map<String,Object> namedParameters = new HashMap<String,Object>()
+		
+		//formación de filtros
+		max = this.filterMax(max)
+		offset = this.filterOffset(offset)
+		sort = this.filterSort(sort)
+		order = this.filterOrder(order)
+
+		//preparación de parámetros
+		countParams = this._addHqlFilterAndParams(hqlFilters, namedParameters, -1, -1, nom, ap1, ap2, idfig, idvarfig, StatusCertificacionTypes.CERTIFICADO, StatusAutorizacionTypes.AUTORIZADO);
+		//si no hay parametrós, entonces el query "va por todos"
+		whereKeywordNeeded = (countParams > 0)
+		
+		//prepara los StringBuilder con los querys a ejecutar
+		this._prepareQuery(sbHql, strHqlCount, hqlFilters, whereKeywordNeeded, sort, order)
+		
+		//ejecuta los querys e inserta el resultado en un SearchResult
+		sr = this._execQuery(strHqlCount,sbHql,namedParameters,max,offset)
+		return sr
+	}
+	SearchResult findAllCandidatoCambioFiguraByMatricula(int numeroMatricula){
+		//Variables a ocupar en el método
+		int countParams = 0
+		SearchResult sr = new SearchResult()
+		//Variables para construcción de query HQL dinámico
+		List<String> hqlFilters = new ArrayList<String>();
+		boolean whereKeywordNeeded = false;
+		StringBuilder sbHql = new StringBuilder()
+		StringBuilder strHqlCount = new StringBuilder()
+		Map<String,Object> namedParameters = new HashMap<String,Object>()
+		
+		//formación de filtros
+		int max = 10
+		String sort = 'id'
+		String order = 'asc'
+
+		//preparación de parámetros
+		countParams = this._addHqlFilterAndParams(hqlFilters, namedParameters, -1, numeroMatricula, '', '', '', '', '', StatusCertificacionTypes.CERTIFICADO, StatusAutorizacionTypes.AUTORIZADO);
+		//si no hay parametrós, entonces el query "va por todos"
+		whereKeywordNeeded = (countParams > 0)
+		
+		//prepara los StringBuilder con los querys a ejecutar
+		this._prepareQuery(sbHql, strHqlCount, hqlFilters, whereKeywordNeeded, sort, order)
+		
+		//ejecuta los querys e inserta el resultado en un SearchResult
+		sr = this._execQuery(strHqlCount,sbHql,namedParameters,max)
+		return sr
+	}
+	SearchResult findAllCandidatoCambioFiguraByFolio(int idSustentante){
+		//Variables a ocupar en el método
+		int countParams = 0
+		SearchResult sr = new SearchResult()
+		//Variables para construcción de query HQL dinámico
+		List<String> hqlFilters = new ArrayList<String>();
+		boolean whereKeywordNeeded = false;
+		StringBuilder sbHql = new StringBuilder()
+		StringBuilder strHqlCount = new StringBuilder()
+		Map<String,Object> namedParameters = new HashMap<String,Object>()
+		
+		//formación de filtros
+		int max = 10
+		String sort = 'id'
+		String order = 'asc'
+
+		//preparación de parámetros
+		countParams = this._addHqlFilterAndParams(hqlFilters, namedParameters, idSustentante, -1, '', '', '', '', '', StatusCertificacionTypes.CERTIFICADO, StatusAutorizacionTypes.AUTORIZADO);
+		//si no hay parametros, entonces el query "va por todos"
+		whereKeywordNeeded = (countParams > 0)
+		
+		//prepara los StringBuilder con los querys a ejecutar
+		this._prepareQuery(sbHql, strHqlCount, hqlFilters, whereKeywordNeeded, sort, order)
+		
+		//ejecuta los querys e inserta el resultado en un SearchResult
+		sr = this._execQuery(strHqlCount,sbHql,namedParameters,max)
 		return sr
 	}
 	
@@ -823,4 +972,148 @@ class CertificacionService {
 		return order
 	}
 	
+	/**
+	 * 	
+	 * @param hqlFilters
+	 * @param namedParameters
+	 * @return true if "where" keyword is needed to be appended, otherwise false.
+	 */
+	private int _addHqlFilterAndParams(List<String> hqlFilters, Map<String,Object> namedParameters,
+		long idSustentante, long numeroMatricula, String nom, String ap1, String ap2, 
+		long idfig, long idvarfig, Collection<Long> idsStCert, Collection<Long> idsStAut){
+												
+		int count = 0
+		if(nom != null && nom.trim().compareTo("") != 0){
+			hqlFilters.add("c.sustentante.nombre like :nom ")
+			count++
+			namedParameters.put("nom",nom + '%')
+		}
+		if(ap1 != null && ap1.trim().compareTo("") != 0){
+			hqlFilters.add("c.sustentante.primerApellido like :ap1 ")
+			count++
+			namedParameters.put("ap1",ap1 + '%')
+		}
+		if(ap2 != null && ap2.trim().compareTo("") != 0){
+			hqlFilters.add("c.sustentante.segundoApellido like :ap2 ")
+			count++
+			namedParameters.put("ap2",ap2 + '%')
+		}
+		if(idvarfig > 0){
+			hqlFilters.add("c.varianteFigura.id = :idVarFigura ")
+			count++
+			namedParameters.put("idVarFigura",idvarfig)
+		}
+		else if(idfig > 0){
+			hqlFilters.add("c.varianteFigura.idFigura = :idFigura ")
+			count++
+			namedParameters.put("idFigura",idfig)
+		}
+		if(idsStCert != null && idsStCert.size() > 0){
+			hqlFilters.add("c.statusCertificacion.id in (:idSc) ")
+			count++
+			namedParameters.put("idSc",idsStCert)
+		}
+		if(idsStAut != null && idsStAut.size() > 0){
+			hqlFilters.add("c.statusAutorizacion.id in (:idSa) ")
+			count++
+			namedParameters.put("idSa",idsStAut)
+		}
+		return count
+	}
+	
+	/**
+	 *
+	 * @param hqlFilters
+	 * @param namedParameters
+	 * @return true if "where" keyword is needed to be appended, otherwise false.
+	 */
+	private int _addHqlFilterAndParams(List<String> hqlFilters, Map<String,Object> namedParameters,
+		long idSustentante, long numeroMatricula, String nom, String ap1, String ap2,
+		long idfig, long idvarfig, long idStatusCertificacion, long idStatusAutorizacion){
+													
+			int count = 0
+			
+			if(idSustentante > 0){
+				hqlFilters.add("c.sustentante.id = :idSustentante ")
+				namedParameters.put("idSustentante", idSustentante)
+				count++
+			}
+			if(numeroMatricula > 0){
+				hqlFilters.add("c.sustentante.numeroMatricula = :numeroMatricula ")
+				namedParameters.put("numeroMatricula", numeroMatricula)
+				count++
+			}
+			
+			if(nom != null && nom.trim().compareTo("") != 0){
+				hqlFilters.add("c.sustentante.nombre like :nom ")
+				count++
+				namedParameters.put("nom",nom + '%')
+			}
+			if(ap1 != null && ap1.trim().compareTo("") != 0){
+				hqlFilters.add("c.sustentante.primerApellido like :ap1 ")
+				count++
+				namedParameters.put("ap1",ap1 + '%')
+			}
+			if(ap2 != null && ap2.trim().compareTo("") != 0){
+				hqlFilters.add("c.sustentante.segundoApellido like :ap2 ")
+				count++
+				namedParameters.put("ap2",ap2 + '%')
+			}
+			if(idvarfig > 0){
+				hqlFilters.add("c.varianteFigura.id = :idVarFigura ")
+				count++
+				namedParameters.put("idVarFigura",idvarfig)
+			}
+			else if(idfig > 0){
+				hqlFilters.add("c.varianteFigura.idFigura = :idFigura ")
+				count++
+				namedParameters.put("idFigura",idfig)
+			}
+			if(idStatusCertificacion > 0){
+				hqlFilters.add("c.statusCertificacion.id = :idSc ")
+				count++
+				namedParameters.put("idSc",idStatusCertificacion)
+			}
+			if(idStatusAutorizacion > 0){
+				hqlFilters.add("c.statusAutorizacion.id = :idSa ")
+				count++
+				namedParameters.put("idSa",idStatusAutorizacion)
+			}
+			return count
+	}
+				
+	private void _prepareQuery(StringBuilder sbHql, StringBuilder strHqlCount, List<String> hqlFilters, boolean whereKeywordNeeded, String sort, String order){
+		strHqlCount.append('select count(c.id) from Certificacion as c ')
+		sbHql.append('from Certificacion as c ')
+		if(whereKeywordNeeded){
+			sbHql.append('where ')
+			strHqlCount.append('where ')
+			hqlFilters.each{
+				if(it != hqlFilters.last()){
+					sbHql.append(it).append('and ')
+					strHqlCount.append(it).append('and ')
+				}
+				else{
+					sbHql.append(it)
+					strHqlCount.append(it)
+				}
+			}
+		}
+		sbHql.append('order by c.').append(sort).append(' ').append(order)
+	}
+	
+	private SearchResult _execQuery(StringBuilder strHqlCount,StringBuilder sbHql,Map<String,Object> namedParameters,int max,int offset = 0){
+		SearchResult sr = new SearchResult()
+		try{
+			sr.count = Certificacion.executeQuery(strHqlCount.toString(),namedParameters)[0]
+			sr.list = Certificacion.executeQuery(sbHql.toString(),namedParameters,[max: max, offset: offset])
+			sr.sustentantes = sr.list.collect{ it.sustentante }
+		}
+		catch(Exception e){
+			sr.error = true
+			sr.errorDetails = e.message
+		}
+		return sr
+	}
+																												
 }
