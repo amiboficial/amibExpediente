@@ -711,7 +711,7 @@ class CertificacionService {
 		String order = 'asc'
 
 		//preparación de parámetros
-		countParams = this._addHqlFilterAndParams(hqlFilters, namedParameters, -1, numeroMatricula, '', '', '', '', '', StatusCertificacionTypes.CERTIFICADO, StatusAutorizacionTypes.AUTORIZADO);
+		countParams = this._addHqlFilterAndParams(hqlFilters, namedParameters, -1, numeroMatricula, '', '', '', -1, -1, StatusCertificacionTypes.CERTIFICADO, StatusAutorizacionTypes.AUTORIZADO);
 		//si no hay parametrós, entonces el query "va por todos"
 		whereKeywordNeeded = (countParams > 0)
 		
@@ -739,7 +739,7 @@ class CertificacionService {
 		String order = 'asc'
 
 		//preparación de parámetros
-		countParams = this._addHqlFilterAndParams(hqlFilters, namedParameters, idSustentante, -1, '', '', '', '', '', StatusCertificacionTypes.CERTIFICADO, StatusAutorizacionTypes.AUTORIZADO);
+		countParams = this._addHqlFilterAndParams(hqlFilters, namedParameters, idSustentante, -1, '', '', '', -1, -1, StatusCertificacionTypes.CERTIFICADO, StatusAutorizacionTypes.AUTORIZADO);
 		//si no hay parametros, entonces el query "va por todos"
 		whereKeywordNeeded = (countParams > 0)
 		
@@ -797,7 +797,7 @@ class CertificacionService {
 		String order = 'asc'
 
 		//preparación de parámetros
-		countParams = this._addHqlFilterAndParams(hqlFilters, namedParameters, -1, numeroMatricula, '', '', '', '', '', -1, StatusAutorizacionTypes.NO_AUTORIZADO);
+		countParams = this._addHqlFilterAndParams(hqlFilters, namedParameters, -1, numeroMatricula, '', '', '', -1, -1, -1, StatusAutorizacionTypes.NO_AUTORIZADO);
 		//si no hay parametrós, entonces el query "va por todos"
 		whereKeywordNeeded = (countParams > 0)
 		
@@ -825,7 +825,7 @@ class CertificacionService {
 		String order = 'asc'
 
 		//preparación de parámetros
-		countParams = this._addHqlFilterAndParams(hqlFilters, namedParameters, idSustentante, -1, '', '', '', '', '', -1, StatusAutorizacionTypes.NO_AUTORIZADO);
+		countParams = this._addHqlFilterAndParams(hqlFilters, namedParameters, idSustentante, -1, '', '', '', -1, -1, -1, StatusAutorizacionTypes.NO_AUTORIZADO);
 		//si no hay parametros, entonces el query "va por todos"
 		whereKeywordNeeded = (countParams > 0)
 		
@@ -883,7 +883,7 @@ class CertificacionService {
 		String order = 'asc'
 
 		//preparación de parámetros
-		countParams = this._addHqlFilterAndParams(hqlFilters, namedParameters, -1, numeroMatricula, '', '', '', '', '', StatusCertificacionTypes.CERTIFICADO, StatusAutorizacionTypes.AUTORIZADO);
+		countParams = this._addHqlFilterAndParams(hqlFilters, namedParameters, -1, numeroMatricula, '', '', '', -1, -1, StatusCertificacionTypes.CERTIFICADO, StatusAutorizacionTypes.AUTORIZADO);
 		//si no hay parametrós, entonces el query "va por todos"
 		whereKeywordNeeded = (countParams > 0)
 		
@@ -911,7 +911,7 @@ class CertificacionService {
 		String order = 'asc'
 
 		//preparación de parámetros
-		countParams = this._addHqlFilterAndParams(hqlFilters, namedParameters, idSustentante, -1, '', '', '', '', '', StatusCertificacionTypes.CERTIFICADO, StatusAutorizacionTypes.AUTORIZADO);
+		countParams = this._addHqlFilterAndParams(hqlFilters, namedParameters, idSustentante, -1, '', '', '', -1, -1, StatusCertificacionTypes.CERTIFICADO, StatusAutorizacionTypes.AUTORIZADO);
 		//si no hay parametros, entonces el query "va por todos"
 		whereKeywordNeeded = (countParams > 0)
 		
@@ -979,7 +979,7 @@ class CertificacionService {
 	 * @return true if "where" keyword is needed to be appended, otherwise false.
 	 */
 	private int _addHqlFilterAndParams(List<String> hqlFilters, Map<String,Object> namedParameters,
-		long idSustentante, long numeroMatricula, String nom, String ap1, String ap2, 
+		long idSustentante, int numeroMatricula, String nom, String ap1, String ap2, 
 		long idfig, long idvarfig, Collection<Long> idsStCert, Collection<Long> idsStAut){
 												
 		int count = 0
@@ -1028,7 +1028,7 @@ class CertificacionService {
 	 * @return true if "where" keyword is needed to be appended, otherwise false.
 	 */
 	private int _addHqlFilterAndParams(List<String> hqlFilters, Map<String,Object> namedParameters,
-		long idSustentante, long numeroMatricula, String nom, String ap1, String ap2,
+		long idSustentante, int numeroMatricula, String nom, String ap1, String ap2,
 		long idfig, long idvarfig, long idStatusCertificacion, long idStatusAutorizacion){
 													
 			int count = 0
