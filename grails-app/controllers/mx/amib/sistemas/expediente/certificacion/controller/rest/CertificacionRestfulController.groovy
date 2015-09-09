@@ -167,15 +167,72 @@ class CertificacionRestfulController extends RestfulController{
 		respond certificacionService.findAllAutorizadosConOSinPoderes(max, offset, sort, order, nom, ap1, ap2, idfig, idvarfig)
 	}
 	
-	def findAllCandidatoActualizacionAutorizacion(){}
-	def findAllCandidatoActualizacionAutorizacionByMatricula(int id){}
-	def findAllCandidatoActualizacionAutorizacionByFolio(long id){}
-	def findAllCandidatoReposicionAutorizacion(){}
-	def findAllCandidatoReposicionAutorizacionByMatricula(int id){}
-	def findAllCandidatoReposicionAutorizacionByFolio(long id){}
-	def findAllCandidatoCambioFigura(){}
-	def findAllCandidatoCambioFiguraByMatricula(int id){}
-	def findAllCandidatoCambioFiguraByFolio(long id){}
+	def findAllCandidatoActualizacionAutorizacion(){
+		int max = Integer.parseInt(params.max?:"10")
+		int offset = Integer.parseInt(params.offset?:"0")
+		String sort = params.sort?:"id"
+		String order = params.order?:"asc"
+		
+		String nom = params.nom?:""
+		String ap1 = params.ap1?:""
+		String ap2 = params.ap2?:""
+		long idfig = Long.parseLong(params.idfig?:"-1")
+		long idvarfig = Long.parseLong(params.idvarfig?:"-1")
+		
+		respond certificacionService.findAllCandidatoActualizacionAutorizacion(max, offset, sort, order, nom, ap1, ap2, idfig, idvarfig)
+	}
+	def findAllCandidatoActualizacionAutorizacionByMatricula(int id){
+		int numeroMatricula = id
+		respond certificacionService.findAllCandidatoActualizacionAutorizacionByMatricula(numeroMatricula)
+	}
+	def findAllCandidatoActualizacionAutorizacionByFolio(long id){
+		long idSustentante = id
+		respond certificacionService.findAllCandidatoActualizacionAutorizacionByFolio(idSustentante)
+	}
+	def findAllCandidatoReposicionAutorizacion(){
+		int max = Integer.parseInt(params.max?:"10")
+		int offset = Integer.parseInt(params.offset?:"0")
+		String sort = params.sort?:"id"
+		String order = params.order?:"asc"
+		
+		String nom = params.nom?:""
+		String ap1 = params.ap1?:""
+		String ap2 = params.ap2?:""
+		long idfig = Long.parseLong(params.idfig?:"-1")
+		long idvarfig = Long.parseLong(params.idvarfig?:"-1")
+		
+		respond certificacionService.findAllCandidatoReposicionAutorizacion(max, offset, sort, order, nom, ap1, ap2, idfig, idvarfig)
+	}
+	def findAllCandidatoReposicionAutorizacionByMatricula(int id){
+		int numeroMatricula = id
+		respond certificacionService.findAllCandidatoReposicionAutorizacionByMatricula(numeroMatricula)
+	}
+	def findAllCandidatoReposicionAutorizacionByFolio(long id){
+		long idSustentante = id
+		respond certificacionService.findAllCandidatoReposicionAutorizacionByFolio(idSustentante)
+	}
+	def findAllCandidatoCambioFigura(){
+		int max = Integer.parseInt(params.max?:"10")
+		int offset = Integer.parseInt(params.offset?:"0")
+		String sort = params.sort?:"id"
+		String order = params.order?:"asc"
+		
+		String nom = params.nom?:""
+		String ap1 = params.ap1?:""
+		String ap2 = params.ap2?:""
+		long idfig = Long.parseLong(params.idfig?:"-1")
+		long idvarfig = Long.parseLong(params.idvarfig?:"-1")
+		
+		respond certificacionService.findAllCandidatoCambioFigura(max, offset, sort, order, nom, ap1, ap2, idfig, idvarfig)
+	}
+	def findAllCandidatoCambioFiguraByMatricula(int id){
+		int numeroMatricula = id
+		respond certificacionService.findAllCandidatoCambioFiguraByMatricula(numeroMatricula)
+	}
+	def findAllCandidatoCambioFiguraByFolio(long id){
+		long idSustentante = id
+		respond certificacionService.findAllCandidatoCambioFiguraByFolio(idSustentante)
+	}
 	
 	def updateDatosParaAprobarDictamen(){
 		
