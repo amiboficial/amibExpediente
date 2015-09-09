@@ -722,7 +722,7 @@ class CertificacionService {
 		sr = this._execQuery(strHqlCount,sbHql,namedParameters,max)
 		return sr
 	}
-	SearchResult findAllCandidatoActualizacionAutorizacionByFolio(int idSustentante){
+	SearchResult findAllCandidatoActualizacionAutorizacionByFolio(long idSustentante){
 		//Variables a ocupar en el método
 		int countParams = 0
 		SearchResult sr = new SearchResult()
@@ -808,7 +808,7 @@ class CertificacionService {
 		sr = this._execQuery(strHqlCount,sbHql,namedParameters,max)
 		return sr
 	}
-	SearchResult findAllCandidatoReposicionAutorizacionByFolio(int idSustentante){
+	SearchResult findAllCandidatoReposicionAutorizacionByFolio(long idSustentante){
 		//Variables a ocupar en el método
 		int countParams = 0
 		SearchResult sr = new SearchResult()
