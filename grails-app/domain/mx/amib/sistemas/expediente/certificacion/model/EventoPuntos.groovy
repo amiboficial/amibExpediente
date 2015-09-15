@@ -28,6 +28,7 @@ class EventoPuntos {
 		version false
 	}
     static constraints = {
-		
+		idEvento nullable:true
+		puntaje nullable:true
     }
 }

@@ -2,6 +2,7 @@ package mx.amib.sistemas.expediente.certificacion.controller.rest
 
 import java.text.DateFormat
 import java.text.SimpleDateFormat
+import java.util.Date;
 
 import javax.servlet.http.HttpServletResponse
 
@@ -9,9 +10,10 @@ import org.codehaus.groovy.grails.web.json.JSONObject
 
 import static org.springframework.http.HttpStatus.*
 import mx.amib.sistemas.expediente.certificacion.model.Certificacion
+import mx.amib.sistemas.expediente.certificacion.model.EventoPuntos
+import mx.amib.sistemas.expediente.certificacion.model.Validacion
 import mx.amib.sistemas.expediente.persona.model.Sustentante
-import mx.amib.sistemas.expediente.certificacion.model.catalog.StatusAutorizacionTypes
-import mx.amib.sistemas.expediente.certificacion.model.catalog.StatusAutorizacion
+import mx.amib.sistemas.expediente.certificacion.model.catalog.*
 import grails.rest.RestfulController
 import grails.transaction.Transactional
 import grails.converters.JSON
@@ -247,6 +249,8 @@ class CertificacionRestfulController extends RestfulController{
 			DateFormat df = new SimpleDateFormat("yyyy-MM-dd")
 			
 			cert.fechaObtencion = df.parse(newData.'fechaObtencion'.substring(0,10))
+			cert.fechaInicio = df.parse(newData.'fechaInicio'.substring(0,10))
+			cert.fechaFin = df.parse(newData.'fechaFin'.substring(0,10))
 			
 			cert.statusEntHistorialInforme = newData.'statusEntHistorialInforme'
 			if(!JSONObject.NULL.equals(newData.'obsEntHistorialInforme')) cert.obsEntHistorialInforme = newData.'obsEntHistorialInforme'
@@ -258,6 +262,71 @@ class CertificacionRestfulController extends RestfulController{
 			if(!JSONObject.NULL.equals(newData.'obsConstBolVal')) cert.obsConstBolVal = newData.'obsConstBolVal'
 						
 			cert = cert.save(flush: true)
+		}
+		
+		respond cert
+	}
+	def updateDatosParaActualizarAutorizacion(){
+		def newData = request.JSON
+		long id = newData.'certificacion'.'id'
+		def certJson = newData.'certificacion'
+		def valiJson = newData.'validacion'
+		long metodoVali = -1
+		
+		Certificacion cert = Certificacion.get(id)
+		Validacion val = new Validacion()
+		
+		if(cert == null){
+			render status: NOT_FOUND
+		}
+		else{
+			DateFormat df = new SimpleDateFormat("yyyy-MM-dd")
+			
+			cert.fechaObtencion = df.parse(certJson.'fechaObtencion'.substring(0,10))
+			cert.fechaInicio = df.parse(certJson.'fechaInicio'.substring(0,10))
+			cert.fechaFin = df.parse(certJson.'fechaFin'.substring(0,10))
+			
+			cert.statusEntHistorialInforme = certJson.'statusEntHistorialInforme'
+			if(!JSONObject.NULL.equals(certJson.'obsEntHistorialInforme')) cert.obsEntHistorialInforme = certJson.'obsEntHistorialInforme'
+			
+			cert.statusEntCartaRec = certJson.'statusEntCartaRec'
+			if(!JSONObject.NULL.equals(certJson.'obsEntCartaRec')) cert.obsEntCartaRec = certJson.'obsEntCartaRec'
+			
+			cert.statusConstBolVal = certJson.'statusConstBolVal'
+			if(!JSONObject.NULL.equals(certJson.'obsConstBolVal')) cert.obsConstBolVal = certJson.'obsConstBolVal'
+			
+			if(!JSONObject.NULL.equals(valiJson.'fechaAplicacion')) val.fechaAplicacion = df.parse(valiJson.'fechaAplicacion'.substring(0,10))
+			if(!JSONObject.NULL.equals(valiJson.'fechaInicio')) val.fechaInicio = df.parse(valiJson.'fechaInicio'.substring(0,10))
+			if(!JSONObject.NULL.equals(valiJson.'fechaFin')) val.fechaFin = df.parse(valiJson.'fechaFin'.substring(0,10))
+			
+			val.autorizadoPorUsuario = valiJson.'autorizadoPorUsuario'
+			
+			val.fechaCreacion = new Date()
+			val.fechaModificacion = new Date()
+			
+			metodoVali = Long.parseLong(valiJson.'idMetodoValidacion'.toString())
+			val.metodoValidacion = MetodoValidacion.get( metodoVali )
+			if(val.metodoValidacion.descripcion == "Exámen"){
+				//aquí se passa el id de la reservación de examen
+			}
+			else if(val.metodoValidacion.descripcion == "Puntos"){
+				val.eventosPuntos = new ArrayList<EventoPuntos>()
+				valiJson.'eventosPuntos'.each{ x ->
+					EventoPuntos ep = new EventoPuntos()
+					ep.puntaje = x.'puntaje'
+					
+					ep.fechaCreacion = new Date()
+					ep.fechaModificacion = new Date()
+					
+					ep.validacion = val
+					val.eventosPuntos.add(ep)
+				}
+			}
+			
+			val.certificacion = cert
+			cert.validaciones.add(val)
+			
+			cert = cert.save(flush: true, failOnError : true)
 		}
 		
 		respond cert
