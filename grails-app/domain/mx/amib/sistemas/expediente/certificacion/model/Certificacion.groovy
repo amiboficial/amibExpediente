@@ -1,12 +1,14 @@
 package mx.amib.sistemas.expediente.certificacion.model
 
 import java.util.Date
+import groovy.transform.AutoClone
 import mx.amib.sistemas.expediente.certificacion.model.catalog.VarianteFigura
 import mx.amib.sistemas.expediente.certificacion.model.catalog.StatusAutorizacion
 import mx.amib.sistemas.expediente.certificacion.model.catalog.StatusCertificacion
 import mx.amib.sistemas.expediente.certificacion.model.catalog.MetodoValidacion
 import mx.amib.sistemas.expediente.persona.model.Sustentante
 
+@AutoClone
 class Certificacion {
 	
 	Date fechaInicio

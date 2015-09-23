@@ -769,7 +769,7 @@ class CertificacionService {
 		order = this.filterOrder(order)
 
 		//preparación de parámetros
-		countParams = this._addHqlFilterAndParams(hqlFilters, namedParameters, -1, -1, nom, ap1, ap2, idfig, idvarfig, -1, StatusAutorizacionTypes.NO_AUTORIZADO);
+		countParams = this._addHqlFilterAndParams(hqlFilters, namedParameters, -1, -1, nom, ap1, ap2, idfig, idvarfig, -1, StatusAutorizacionTypes.VENCIDA);
 		//si no hay parametrós, entonces el query "va por todos"
 		whereKeywordNeeded = (countParams > 0)
 		
@@ -797,7 +797,7 @@ class CertificacionService {
 		String order = 'asc'
 
 		//preparación de parámetros
-		countParams = this._addHqlFilterAndParams(hqlFilters, namedParameters, -1, numeroMatricula, '', '', '', -1, -1, -1, StatusAutorizacionTypes.NO_AUTORIZADO);
+		countParams = this._addHqlFilterAndParams(hqlFilters, namedParameters, -1, numeroMatricula, '', '', '', -1, -1, -1, StatusAutorizacionTypes.VENCIDA);
 		//si no hay parametrós, entonces el query "va por todos"
 		whereKeywordNeeded = (countParams > 0)
 		
@@ -825,7 +825,7 @@ class CertificacionService {
 		String order = 'asc'
 
 		//preparación de parámetros
-		countParams = this._addHqlFilterAndParams(hqlFilters, namedParameters, idSustentante, -1, '', '', '', -1, -1, -1, StatusAutorizacionTypes.NO_AUTORIZADO);
+		countParams = this._addHqlFilterAndParams(hqlFilters, namedParameters, idSustentante, -1, '', '', '', -1, -1, -1, StatusAutorizacionTypes.VENCIDA);
 		//si no hay parametros, entonces el query "va por todos"
 		whereKeywordNeeded = (countParams > 0)
 		
@@ -980,7 +980,7 @@ class CertificacionService {
 	 */
 	private int _addHqlFilterAndParams(List<String> hqlFilters, Map<String,Object> namedParameters,
 		long idSustentante, int numeroMatricula, String nom, String ap1, String ap2, 
-		long idfig, long idvarfig, Collection<Long> idsStCert, Collection<Long> idsStAut){
+		long idfig, long idvarfig, Collection<Long> idsStCert, Collection<Long> idsStAut, boolean soloUltimas = true){
 												
 		int count = 0
 		if(nom != null && nom.trim().compareTo("") != 0){
@@ -1018,6 +1018,12 @@ class CertificacionService {
 			count++
 			namedParameters.put("idSa",idsStAut)
 		}
+		
+		if(soloUltimas == true){
+			hqlFilters.add("c.isUltima = true ")
+			count++
+		}
+		
 		return count
 	}
 	
@@ -1029,7 +1035,7 @@ class CertificacionService {
 	 */
 	private int _addHqlFilterAndParams(List<String> hqlFilters, Map<String,Object> namedParameters,
 		long idSustentante, int numeroMatricula, String nom, String ap1, String ap2,
-		long idfig, long idvarfig, long idStatusCertificacion, long idStatusAutorizacion){
+		long idfig, long idvarfig, long idStatusCertificacion, long idStatusAutorizacion, boolean soloUltimas = true){
 													
 			int count = 0
 			
@@ -1079,9 +1085,15 @@ class CertificacionService {
 				count++
 				namedParameters.put("idSa",idStatusAutorizacion)
 			}
+			
+			if(soloUltimas == true){
+				hqlFilters.add("c.isUltima = true ")
+				count++
+			}
+			
 			return count
 	}
-				
+					
 	private void _prepareQuery(StringBuilder sbHql, StringBuilder strHqlCount, List<String> hqlFilters, boolean whereKeywordNeeded, String sort, String order){
 		strHqlCount.append('select count(c.id) from Certificacion as c ')
 		sbHql.append('from Certificacion as c ')

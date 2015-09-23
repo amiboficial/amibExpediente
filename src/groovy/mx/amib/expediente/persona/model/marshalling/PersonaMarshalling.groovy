@@ -77,7 +77,8 @@ class DocumentoSustentanteMarshalling {
 				uuid: obj.uuid,
 				vigente: obj.vigente,
 				
-				tipoDocumentoSustentate: obj.tipoDocumentoSustentate
+				tipoDocumentoSustentate: obj.tipoDocumentoSustentate,
+				idTipoDocumentoSustentate: obj.tipoDocumentoSustentate.id
 			]
 		}
 	}

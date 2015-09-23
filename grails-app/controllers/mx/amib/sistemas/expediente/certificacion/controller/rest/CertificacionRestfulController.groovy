@@ -307,7 +307,7 @@ class CertificacionRestfulController extends RestfulController{
 			metodoVali = Long.parseLong(valiJson.'idMetodoValidacion'.toString())
 			val.metodoValidacion = MetodoValidacion.get( metodoVali )
 			if(val.metodoValidacion.descripcion == "Exámen"){
-				//aquí se passa el id de la reservación de examen
+				//TODO: PASAR ID DE RESERVACION DE EXAMEN
 			}
 			else if(val.metodoValidacion.descripcion == "Puntos"){
 				val.eventosPuntos = new ArrayList<EventoPuntos>()
@@ -324,6 +324,140 @@ class CertificacionRestfulController extends RestfulController{
 			}
 			
 			val.certificacion = cert
+			cert.validaciones.add(val)
+			
+			cert = cert.save(flush: true, failOnError : true)
+		}
+		
+		respond cert
+	}
+	def createReponerAutorizacion(){
+		def newData = request.JSON
+		long id = newData.'certificacion'.'id'
+		def certJson = newData.'certificacion'
+		def valiJson = newData.'validacion'
+		long metodoVali = -1
+		
+		Certificacion cert = Certificacion.get(id)
+		Validacion val = new Validacion()
+		
+		if(cert == null){
+			render status: NOT_FOUND
+		}
+		else{
+			DateFormat df = new SimpleDateFormat("yyyy-MM-dd")
+			
+			//Setea parametros de certificación sobre la cual se "repondrá" la autorización
+			//al "reponerse" una autorización se crea una nueva instancia de certificación
+			//dado que el sustentante se "re-certifica".
+			cert.isUltima = false
+			cert.statusAutorizacion = StatusAutorizacion.get( StatusAutorizacionTypes.VENCIDA )
+			cert.statusCertificacion = StatusCertificacion.get( StatusCertificacionTypes.CERTIFICADO_VENCIDO )
+			cert.save(flush: true, failOnError : true)
+			
+			cert = cert.clone()
+			//Se creará una nueva instancia (ya que se está obteniendo una nueva certificación)
+			cert.id = null 
+			
+			cert.fechaObtencion = df.parse(certJson.'fechaObtencion'.substring(0,10))
+			cert.fechaInicio = df.parse(certJson.'fechaInicio'.substring(0,10))
+			cert.fechaFin = df.parse(certJson.'fechaFin'.substring(0,10))
+			
+			cert.isUltima = true
+			cert.statusAutorizacion = StatusAutorizacion.get( StatusAutorizacionTypes.DICTAMEN_PREVIO )
+			cert.statusCertificacion = StatusCertificacion.get( StatusCertificacionTypes.CERTIFICADO )
+			
+			cert.statusEntHistorialInforme = certJson.'statusEntHistorialInforme'
+			if(!JSONObject.NULL.equals(certJson.'obsEntHistorialInforme')) cert.obsEntHistorialInforme = certJson.'obsEntHistorialInforme'
+			
+			cert.statusEntCartaRec = certJson.'statusEntCartaRec'
+			if(!JSONObject.NULL.equals(certJson.'obsEntCartaRec')) cert.obsEntCartaRec = certJson.'obsEntCartaRec'
+			
+			cert.statusConstBolVal = certJson.'statusConstBolVal'
+			if(!JSONObject.NULL.equals(certJson.'obsConstBolVal')) cert.obsConstBolVal = certJson.'obsConstBolVal'
+			
+			if(!JSONObject.NULL.equals(valiJson.'fechaAplicacion')) val.fechaAplicacion = df.parse(valiJson.'fechaAplicacion'.substring(0,10))
+			if(!JSONObject.NULL.equals(valiJson.'fechaInicio')) val.fechaInicio = df.parse(valiJson.'fechaInicio'.substring(0,10))
+			if(!JSONObject.NULL.equals(valiJson.'fechaFin')) val.fechaFin = df.parse(valiJson.'fechaFin'.substring(0,10))
+			
+			val.autorizadoPorUsuario = valiJson.'autorizadoPorUsuario'
+			
+			val.fechaCreacion = new Date()
+			val.fechaModificacion = new Date()
+			
+			val.metodoValidacion = MetodoValidacion.get( MetodosValidacionTypes.EXAMEN )
+			//TODO: PASAR ID DE RESERVACION DE EXAMEN
+			
+			val.certificacion = cert
+			cert.validaciones = new HashSet<Validacion>()
+			cert.validaciones.add(val)
+			
+			cert = cert.save(flush: true, failOnError : true)
+		}
+		
+		respond cert
+	}
+	def createCambioFigura(){
+		def newData = request.JSON
+		long id = newData.'certificacion'.'id'
+		def certJson = newData.'certificacion'
+		def valiJson = newData.'validacion'
+		long metodoVali = -1
+		
+		Certificacion cert = Certificacion.get(id)
+		Validacion val = new Validacion()
+		
+		if(cert == null){
+			render status: NOT_FOUND
+		}
+		else{
+			DateFormat df = new SimpleDateFormat("yyyy-MM-dd")
+			
+			//Setea parametros de certificación sobre la cual se "repondrá" la autorización
+			//al "reponerse" una autorización se crea una nueva instancia de certificación
+			//dado que el sustentante se "re-certifica".
+			cert.isUltima = false
+			cert.statusAutorizacion = StatusAutorizacion.get( StatusAutorizacionTypes.VENCIDA )
+			cert.statusCertificacion = StatusCertificacion.get( StatusCertificacionTypes.CERTIFICADO_VENCIDO )
+			cert.save(flush: true, failOnError : true)
+			
+			cert = cert.clone()
+			//Se creará una nueva instancia (ya que se está obteniendo una nueva certificación)
+			cert.id = null
+			
+			cert.varianteFigura = VarianteFigura.get( certJson.'idVarianteFigura' )
+			
+			cert.fechaObtencion = df.parse(certJson.'fechaObtencion'.substring(0,10))
+			cert.fechaInicio = df.parse(certJson.'fechaInicio'.substring(0,10))
+			cert.fechaFin = df.parse(certJson.'fechaFin'.substring(0,10))
+			
+			cert.isUltima = true
+			cert.statusAutorizacion = StatusAutorizacion.get( StatusAutorizacionTypes.DICTAMEN_PREVIO )
+			cert.statusCertificacion = StatusCertificacion.get( StatusCertificacionTypes.CERTIFICADO )
+			
+			cert.statusEntHistorialInforme = certJson.'statusEntHistorialInforme'
+			if(!JSONObject.NULL.equals(certJson.'obsEntHistorialInforme')) cert.obsEntHistorialInforme = certJson.'obsEntHistorialInforme'
+			
+			cert.statusEntCartaRec = certJson.'statusEntCartaRec'
+			if(!JSONObject.NULL.equals(certJson.'obsEntCartaRec')) cert.obsEntCartaRec = certJson.'obsEntCartaRec'
+			
+			cert.statusConstBolVal = certJson.'statusConstBolVal'
+			if(!JSONObject.NULL.equals(certJson.'obsConstBolVal')) cert.obsConstBolVal = certJson.'obsConstBolVal'
+			
+			if(!JSONObject.NULL.equals(valiJson.'fechaAplicacion')) val.fechaAplicacion = df.parse(valiJson.'fechaAplicacion'.substring(0,10))
+			if(!JSONObject.NULL.equals(valiJson.'fechaInicio')) val.fechaInicio = df.parse(valiJson.'fechaInicio'.substring(0,10))
+			if(!JSONObject.NULL.equals(valiJson.'fechaFin')) val.fechaFin = df.parse(valiJson.'fechaFin'.substring(0,10))
+			
+			val.autorizadoPorUsuario = valiJson.'autorizadoPorUsuario'
+			
+			val.fechaCreacion = new Date()
+			val.fechaModificacion = new Date()
+			
+			val.metodoValidacion = MetodoValidacion.get( MetodosValidacionTypes.EXAMEN )
+			//TODO: PASAR ID DE RESERVACION DE EXAMEN
+			
+			val.certificacion = cert
+			cert.validaciones = new HashSet<Validacion>()
 			cert.validaciones.add(val)
 			
 			cert = cert.save(flush: true, failOnError : true)

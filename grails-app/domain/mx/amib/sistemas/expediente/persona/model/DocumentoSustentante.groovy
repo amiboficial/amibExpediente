@@ -10,6 +10,9 @@ class DocumentoSustentante {
 	Sustentante sustentante
 	
 	TipoDocumentoSustentante tipoDocumentoSustentate
+	long idTipoDocumentoSustentate
+	
+	static transients = ['idTipoDocumentoSustentate']
 	
 	static belongsTo = [Sustentante]
 	
