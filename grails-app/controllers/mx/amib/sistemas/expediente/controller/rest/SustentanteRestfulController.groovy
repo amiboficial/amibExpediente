@@ -18,6 +18,7 @@ import mx.amib.sistemas.expediente.persona.model.Sustentante
 import mx.amib.sistemas.expediente.persona.model.TelefonoSustentante
 import mx.amib.sistemas.expediente.service.SustentanteService
 import mx.amib.sistemas.expediente.persona.model.catalog.*
+import mx.amib.sistemas.expediente.certificacion.model.*
 import grails.rest.RestfulController
 import grails.transaction.Transactional
 import groovy.json.JsonParser
@@ -286,6 +287,18 @@ class SustentanteRestfulController extends RestfulController<Sustentante>{
 		def onList = Sustentante.findAllByNumeroMatriculaInList(matriculas).collect{ it.numeroMatricula }
 		def matriculasNotIn = matriculas.findAll{ !onList.contains(it)  }
 		respond matriculasNotIn
+	}
+	
+	//POST AS JSON
+	def findAllByIdCertificacionIn(){
+		def idsCertificacion = request.JSON
+		List<Long> idsCertificaionList = new ArrayList<Long>()
+		
+		idsCertificacion.each{ x ->
+			idsCertificaionList.add( (long)x )
+		}
+		
+		respond Certificacion.getAll( idsCertificaionList ).collect{ it.sustentante }
 	}
 	
 	def findAllByIds(){
