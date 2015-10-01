@@ -298,7 +298,7 @@ class SustentanteRestfulController extends RestfulController<Sustentante>{
 			idsCertificaionList.add( (long)x )
 		}
 		
-		respond Certificacion.getAll( idsCertificaionList ).collect{ it.sustentante }
+		respond Certificacion.findAllByIdInList( idsCertificaionList ).collect{ it.sustentante }
 	}
 	
 	def findAllByIds(){
