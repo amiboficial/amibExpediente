@@ -236,6 +236,29 @@ class CertificacionRestfulController extends RestfulController{
 		respond certificacionService.findAllCandidatoCambioFiguraByFolio(idSustentante)
 	}
 	
+	def findAllCandidatoCredencial(){
+		int max = Integer.parseInt(params.max?:"10")
+		int offset = Integer.parseInt(params.offset?:"0")
+		String sort = params.sort?:"id"
+		String order = params.order?:"asc"
+		
+		String nom = params.nom?:""
+		String ap1 = params.ap1?:""
+		String ap2 = params.ap2?:""
+		long idfig = Long.parseLong(params.idfig?:"-1")
+		long idvarfig = Long.parseLong(params.idvarfig?:"-1")
+		
+		respond certificacionService.findAllCandidatoCredencial(max, offset, sort, order, nom, ap1, ap2, idfig, idvarfig)
+	}
+	def findAllCandidatoCredencialByMatricula(int id){
+		int numeroMatricula = id
+		respond certificacionService.findAllCandidatoCredencialByMatricula(numeroMatricula)
+	}
+	def findAllCandidatoCredencialByFolio(long id){
+		long idSustentante = id
+		respond certificacionService.findAllCandidatoCredencialByFolio(idSustentante)
+	}
+	
 	def updateDatosParaAprobarDictamen(){
 		
 		def newData = request.JSON

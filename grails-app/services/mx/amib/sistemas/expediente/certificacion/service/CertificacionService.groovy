@@ -922,7 +922,92 @@ class CertificacionService {
 		sr = this._execQuery(strHqlCount,sbHql,namedParameters,max)
 		return sr
 	}
-	
+	//Candidato Credencializable
+	SearchResult findAllCandidatoCredencial(int max, int offset, String sort, String order, String nom, String ap1, String ap2, long idfig, long idvarfig){
+		//Variables a ocupar en el método
+		int countParams = 0
+		SearchResult sr = new SearchResult()
+		//Variables para construcción de query HQL dinámico
+		List<String> hqlFilters = new ArrayList<String>();
+		boolean whereKeywordNeeded = false;
+		StringBuilder sbHql = new StringBuilder()
+		StringBuilder strHqlCount = new StringBuilder()
+		Map<String,Object> namedParameters = new HashMap<String,Object>()
+		
+		//formación de filtros
+		max = this.filterMax(max)
+		offset = this.filterOffset(offset)
+		sort = this.filterSort(sort)
+		order = this.filterOrder(order)
+
+		//preparación de parámetros
+		countParams = this._addHqlFilterAndParams(hqlFilters, namedParameters, -1, -1, nom, ap1, ap2, idfig, idvarfig, StatusCertificacionTypes.CERTIFICADO, StatusAutorizacionTypes.AUTORIZADO);
+		//si no hay parametrós, entonces el query "va por todos"
+		whereKeywordNeeded = (countParams > 0)
+		
+		//prepara los StringBuilder con los querys a ejecutar
+		this._prepareQuery(sbHql, strHqlCount, hqlFilters, whereKeywordNeeded, sort, order)
+		
+		//ejecuta los querys e inserta el resultado en un SearchResult
+		sr = this._execQuery(strHqlCount,sbHql,namedParameters,max,offset)
+		return sr
+	}
+	SearchResult findAllCandidatoCredencialByMatricula(int numeroMatricula){
+		//Variables a ocupar en el método
+		int countParams = 0
+		SearchResult sr = new SearchResult()
+		//Variables para construcción de query HQL dinámico
+		List<String> hqlFilters = new ArrayList<String>();
+		boolean whereKeywordNeeded = false;
+		StringBuilder sbHql = new StringBuilder()
+		StringBuilder strHqlCount = new StringBuilder()
+		Map<String,Object> namedParameters = new HashMap<String,Object>()
+		
+		//formación de filtros
+		int max = 10
+		String sort = 'id'
+		String order = 'asc'
+
+		//preparación de parámetros
+		countParams = this._addHqlFilterAndParams(hqlFilters, namedParameters, -1, numeroMatricula, '', '', '', -1, -1, StatusCertificacionTypes.CERTIFICADO, StatusAutorizacionTypes.AUTORIZADO);
+		//si no hay parametrós, entonces el query "va por todos"
+		whereKeywordNeeded = (countParams > 0)
+		
+		//prepara los StringBuilder con los querys a ejecutar
+		this._prepareQuery(sbHql, strHqlCount, hqlFilters, whereKeywordNeeded, sort, order)
+		
+		//ejecuta los querys e inserta el resultado en un SearchResult
+		sr = this._execQuery(strHqlCount,sbHql,namedParameters,max)
+		return sr
+	}
+	SearchResult findAllCandidatoCredencialByFolio(long idSustentante){
+		//Variables a ocupar en el método
+		int countParams = 0
+		SearchResult sr = new SearchResult()
+		//Variables para construcción de query HQL dinámico
+		List<String> hqlFilters = new ArrayList<String>();
+		boolean whereKeywordNeeded = false;
+		StringBuilder sbHql = new StringBuilder()
+		StringBuilder strHqlCount = new StringBuilder()
+		Map<String,Object> namedParameters = new HashMap<String,Object>()
+		
+		//formación de filtros
+		int max = 10
+		String sort = 'id'
+		String order = 'asc'
+
+		//preparación de parámetros
+		countParams = this._addHqlFilterAndParams(hqlFilters, namedParameters, idSustentante, -1, '', '', '', -1, -1, StatusCertificacionTypes.CERTIFICADO, StatusAutorizacionTypes.AUTORIZADO);
+		//si no hay parametros, entonces el query "va por todos"
+		whereKeywordNeeded = (countParams > 0)
+		
+		//prepara los StringBuilder con los querys a ejecutar
+		this._prepareQuery(sbHql, strHqlCount, hqlFilters, whereKeywordNeeded, sort, order)
+		
+		//ejecuta los querys e inserta el resultado en un SearchResult
+		sr = this._execQuery(strHqlCount,sbHql,namedParameters,max)
+		return sr
+	}
 	private int filterMax(int max){
 		if(max <= 0){
 			max = 10
