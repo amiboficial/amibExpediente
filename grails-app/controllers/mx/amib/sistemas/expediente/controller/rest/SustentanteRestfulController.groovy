@@ -351,6 +351,48 @@ class SustentanteRestfulController extends RestfulController<Sustentante>{
 		respond sustentanteService.findAllAdvancedSearchWithCertificacion(nom, ap1, ap2, idfig, idvarfig, stcert, staut, max, offset, sort, order)
 	}
 	
+	//busquedas con grupo financiero e institucion 
+	def findAllAdvancedSearchAndIns(){
+		String nom = params.nom?:""
+		String ap1 = params.ap1?:""
+		String ap2 = params.ap2?:""
+		
+		Integer max = Math.min(Integer.parseInt(params.max?:'10'), 100)
+		Integer offset = Integer.parseInt(params.offset?:'0')
+		String sort = params.sort?:"id"
+		String order = params.order?:"desc"
+		//ids de grupo financiero e institución financiera
+		Long idgrup = Long.parseLong(params.idgrup?:"-1")
+		Long idfina = Long.parseLong(params.idfina?:"-1")
+		
+		println 'El nombre es: ' + nom
+		
+		respond sustentanteService.findAllAdvancedSearchAndIns(nom, ap1, ap2, max, offset, sort, order, idgrup, idfina)
+	}
+	
+	def findAllAdvancedSearchWithCertificacionAndIns(){
+		println("entro a advancedSearch with certifications andins")
+		String nom = params.nom?:""
+		String ap1 = params.ap1?:""
+		String ap2 = params.ap2?:""
+		Long idfig = Long.parseLong(params.idfig?:"-1")		
+		Long idvarfig = Long.parseLong(params.idvarfig?:"-1")
+		Long stcert = Long.parseLong(params.stcert?:"-1")
+		Long staut = Long.parseLong(params.staut?:"-1")
+		
+		Integer max = Math.min(Integer.parseInt(params.max?:'10'), 100)
+		Integer offset = Integer.parseInt(params.offset?:'0')
+		String sort = params.sort?:"id"
+		String order = params.order?:"desc"
+		//ids de grupo financiero e institución financiera
+		Long idgrup = Long.parseLong(params.idgrup?:"-1")
+		Long idfina = Long.parseLong(params.idfina?:"-1")
+		
+//		respond sustentanteService.findAllAdvancedSearchWithCertificacion(nom, ap1, ap2, idfig, idvarfig, stcert, staut, max, offset, sort, order)
+		respond sustentanteService.findAllAdvancedSearchWithCertificacionAndIns(nom, ap1, ap2, idfig, idvarfig, stcert, staut, max, offset, sort, order, idgrup, idfina)
+	}
+	//END busquedas con grupo financiero e institucion
+	
 	def findAll(){
 		Integer max = Math.min(Integer.parseInt(params.max?:'10'), 100)
 		Integer offset = Integer.parseInt(params.offset?:'0')
