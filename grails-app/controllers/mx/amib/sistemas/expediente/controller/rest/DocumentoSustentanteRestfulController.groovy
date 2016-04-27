@@ -20,6 +20,9 @@ class DocumentoSustentanteRestfulController extends RestfulController<DocumentoS
 		List<DocumentoSustentante> currentlistDocs = new ArrayList<DocumentoSustentante>()
 		def documentos = request.JSON
 		
+		println("request.JSON")
+		printn(request.JSON)
+		
 		documentos.each{ x ->
 			DocumentoSustentante ds = new DocumentoSustentante()
 			ds.uuid = x.'uuid'

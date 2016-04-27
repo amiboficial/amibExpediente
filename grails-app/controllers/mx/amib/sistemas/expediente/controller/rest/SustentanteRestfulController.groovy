@@ -93,6 +93,9 @@ class SustentanteRestfulController extends RestfulController<Sustentante>{
 	}
 	
 	def updateDatosPersonales(){
+		println("entro a updatedatospersonales de expediente")
+		println("request")
+		println(request.JSON	)
 		def newData = request.JSON
 		Long id = newData.'id'
 		Sustentante sustentante = Sustentante.get(id)
@@ -101,6 +104,7 @@ class SustentanteRestfulController extends RestfulController<Sustentante>{
 			render status: NOT_FOUND
 		}
 		else{
+			try {
 			DateFormat df = new SimpleDateFormat("yyyy-MM-dd")
 			
 			sustentante.nombre = newData.'nombre'
@@ -120,12 +124,21 @@ class SustentanteRestfulController extends RestfulController<Sustentante>{
 			else sustentante.numeroExterior = newData.'numeroExterior'
 			if(JSONObject.NULL.equals(newData.'numeroExterior')) sustentante.numeroInterior = null
 			else sustentante.numeroInterior = newData.'numeroInterior'
-			sustentante.idSepomex = newData.'idSepomex'
 			
+			println("hasta numero interior")
+			if(!JSONObject.NULL.equals(newData.'idSepomex'))
+			sustentante.idSepomex = newData.'idSepomex'
+			println("idSepomex")
 			sustentante.fechaModificacion = new Date()
+			if(!JSONObject.NULL.equals(newData.'idNacionalidad'))
 			sustentante.idNacionalidad = newData.'idNacionalidad'
+			println("idNacionalidad")
+			if(!JSONObject.NULL.equals(newData.'idNivelEstudios'))
 			sustentante.idNivelEstudios = newData.'idNivelEstudios'
+			println("idNivelEstudios")
+			if(!JSONObject.NULL.equals(newData.'idEstadoCivil'))
 			sustentante.idEstadoCivil = newData.'idEstadoCivil'
+			println("idEstadoCivil")
 			if(sustentante.idNacionalidad != null && sustentante.idNacionalidad > 0){
 				sustentante.nacionalidad = Nacionalidad.get(sustentante.idNacionalidad)
 			}
@@ -172,7 +185,12 @@ class SustentanteRestfulController extends RestfulController<Sustentante>{
 				
 			}
 			
-			sustentante.save(failOnError: true, flush:true)
+				sustentante.save(failOnError: true, flush:true)
+			} catch (Exception e) {
+			println("exception explained")
+				println(e?.message)
+			}
+			
 		}
 		
 		respond sustentante
@@ -187,6 +205,7 @@ class SustentanteRestfulController extends RestfulController<Sustentante>{
 			render status: NOT_FOUND
 		}
 		else{
+			try {
 			DateFormat df = new SimpleDateFormat("yyyy-MM-dd")
 			
 			//borra los "puestos" cuyo id no se encuentra en la lista e inserta nuevos
@@ -251,6 +270,10 @@ class SustentanteRestfulController extends RestfulController<Sustentante>{
 			}
 		
 			sustentante.save(failOnError: true, flush:true)
+		} catch (Exception e) {
+		println("exception explained 222222")
+			println(e?.message)
+		}
 		}
 		
 		respond sustentante

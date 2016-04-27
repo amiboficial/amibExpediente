@@ -290,6 +290,9 @@ class CertificacionRestfulController extends RestfulController{
 		respond cert
 	}
 	def updateDatosParaActualizarAutorizacion(){
+		println("entro a updateDatosParaActualizarAutorizacion de certificacion")
+		println("request")
+		println(request.JSON	)
 		def newData = request.JSON
 		long id = newData.'certificacion'.'id'
 		def certJson = newData.'certificacion'
@@ -303,6 +306,7 @@ class CertificacionRestfulController extends RestfulController{
 			render status: NOT_FOUND
 		}
 		else{
+			try {
 			DateFormat df = new SimpleDateFormat("yyyy-MM-dd")
 			
 			cert.fechaObtencion = df.parse(certJson.'fechaObtencion'.substring(0,10))
@@ -318,7 +322,11 @@ class CertificacionRestfulController extends RestfulController{
 			cert.statusConstBolVal = certJson.'statusConstBolVal'
 			if(!JSONObject.NULL.equals(certJson.'obsConstBolVal')) cert.obsConstBolVal = certJson.'obsConstBolVal'
 			
-			if(!JSONObject.NULL.equals(valiJson.'fechaAplicacion')) val.fechaAplicacion = df.parse(valiJson.'fechaAplicacion'.substring(0,10))
+			if(!JSONObject.NULL.equals(valiJson.'fechaAplicacion')){ 
+				val.fechaAplicacion = df.parse(valiJson.'fechaAplicacion'.substring(0,10))
+			}else{
+			val.fechaAplicacion = new Date()
+			}
 			if(!JSONObject.NULL.equals(valiJson.'fechaInicio')) val.fechaInicio = df.parse(valiJson.'fechaInicio'.substring(0,10))
 			if(!JSONObject.NULL.equals(valiJson.'fechaFin')) val.fechaFin = df.parse(valiJson.'fechaFin'.substring(0,10))
 			
@@ -350,6 +358,10 @@ class CertificacionRestfulController extends RestfulController{
 			cert.validaciones.add(val)
 			
 			cert = cert.save(flush: true, failOnError : true)
+		} catch (Exception e) {
+		println("exception explained 333333")
+			println(e?.message)
+		}
 		}
 		
 		respond cert
