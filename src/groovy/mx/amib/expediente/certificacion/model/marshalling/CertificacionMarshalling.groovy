@@ -42,6 +42,9 @@ class CertificacionMarshalling {
 				validaciones: obj.validaciones,
 								
 				idSustentante: obj.sustentante?.id
+				
+				,fechaAutorizacionInicio: obj.fechaAutorizacionInicio
+				,fechaAutorizacionFin: obj.fechaAutorizacionFin
 			]
 		}
 	}

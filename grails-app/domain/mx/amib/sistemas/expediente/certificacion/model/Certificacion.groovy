@@ -11,6 +11,8 @@ import mx.amib.sistemas.expediente.persona.model.Sustentante
 @AutoClone
 class Certificacion {
 	
+	
+	
 	Date fechaInicio
 	Date fechaFin
 	Date fechaObtencion
@@ -36,6 +38,9 @@ class Certificacion {
 	Long idStatusCertificacion
 	
 	Sustentante sustentante
+	
+	Date fechaAutorizacionInicio
+	Date fechaAutorizacionFin
 	
 	Set validaciones = []
 	
@@ -73,6 +78,9 @@ class Certificacion {
 		statusAutorizacion column:'id_205_stautorizacion'
 		
 		sustentante column:'id_101_sustentante'
+		
+		fechaAutorizacionInicio column:'fh_autinicio'
+		fechaAutorizacionFin column:'fh_autfin'
 		
 		version false
 	}

@@ -35,6 +35,8 @@ class CertificacionRestfulController extends RestfulController{
 		
 		try{
 			Certificacion resultCertificacion = certificacionService.get(id)
+			println("getwithsustentante lololo")
+			println(resultCertificacion as JSON)
 			Sustentante resultSustentante = resultCertificacion.sustentante
 			resultMap.put("certificacion", resultCertificacion)
 			resultMap.put("sustentante", resultSustentante)
@@ -313,6 +315,10 @@ class CertificacionRestfulController extends RestfulController{
 			cert.fechaInicio = df.parse(certJson.'fechaInicio'.substring(0,10))
 			cert.fechaFin = df.parse(certJson.'fechaFin'.substring(0,10))
 			
+			//para la actualizacion de la autorizacion
+			cert.fechaAutorizacionInicio = df.parse(certJson.'fechaAutorizacionInicio'.substring(0,10))
+			cert.fechaAutorizacionFin = df.parse(certJson.'fechaAutorizacionFin'.substring(0,10))
+			
 			cert.statusEntHistorialInforme = certJson.'statusEntHistorialInforme'
 			if(!JSONObject.NULL.equals(certJson.'obsEntHistorialInforme')) cert.obsEntHistorialInforme = certJson.'obsEntHistorialInforme'
 			
@@ -371,6 +377,8 @@ class CertificacionRestfulController extends RestfulController{
 		long id = newData.'certificacion'.'id'
 		def certJson = newData.'certificacion'
 		def valiJson = newData.'validacion'
+		println("valiJson")
+		println(valiJson)
 		long metodoVali = -1
 		
 		Certificacion cert = Certificacion.get(id)
