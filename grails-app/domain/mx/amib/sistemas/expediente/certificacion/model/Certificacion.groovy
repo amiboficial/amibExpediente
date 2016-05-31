@@ -93,5 +93,7 @@ class Certificacion {
 		obsEntHistorialInforme nullable: true
 		obsEntCartaRec nullable: true
 		obsConstBolVal nullable: true
+		fechaAutorizacionInicio nullable :true
+		fechaAutorizacionFin nullable:true
     }
 }
