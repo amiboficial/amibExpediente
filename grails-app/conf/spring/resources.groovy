@@ -66,6 +66,7 @@ beans = {
 			new mx.amib.expediente.persona.model.marshalling.TipoTelefonoSustentanteMarshalling(),
 			new mx.amib.expediente.certificacion.model.marshalling.CertificacionMarshalling(),
 			new mx.amib.expediente.certificacion.model.marshalling.ValidacionMarshalling(),
+			new mx.amib.expediente.certificacion.model.marshalling.MetodoValidacionMarshalling(),
 			new mx.amib.expediente.certificacion.model.marshalling.EventoPuntosMarshalling(),
 			new mx.amib.expediente.certificacion.model.marshalling.VarianteFiguraMarshalling()
 		]

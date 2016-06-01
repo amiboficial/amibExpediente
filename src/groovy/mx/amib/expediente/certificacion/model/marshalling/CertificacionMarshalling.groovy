@@ -62,8 +62,23 @@ class ValidacionMarshalling{
 				autorizadoPorUsuario: obj.autorizadoPorUsuario,
 				eventosPuntos: obj.eventosPuntos,
 				metodoValidacion: obj.metodoValidacion,
+				idMetodoValidacion: obj.idMetodoValidacion,
+				fechaModificacion: obj.fechaModificacion,
 				
 				idCertificacion: obj.certificacion?.id
+			]
+		}
+	}
+}
+
+
+class MetodoValidacionMarshalling{
+	void register(){
+		JSON.registerObjectMarshaller(MetodoValidacion){ MetodoValidacion obj ->
+			return [
+				id: obj.id,
+				descripcion: obj.descripcion,
+				vigente: obj.vigente
 			]
 		}
 	}
