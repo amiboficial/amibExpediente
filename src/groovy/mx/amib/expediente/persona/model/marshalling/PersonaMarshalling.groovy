@@ -45,8 +45,8 @@ class SustentanteMarshalling {
 				telefonos:obj.telefonos, 
 				documentos:obj.documentos, 
 				puestos:obj.puestos, 
-				certificaciones:obj.certificaciones
-				, asentamientoOtro: obj.asentamientoOtro
+				certificaciones:obj.certificaciones,
+				asentamientoOtro: obj.asentamientoOtro
 			]
 		}
 	}
@@ -63,7 +63,7 @@ class TelefonoSustentanteMarshalling {
 				extension: obj.extension,
 			
 				tipoTelefonoSustentante: obj.tipoTelefonoSustentante,
-				idTipoTelefonoSustentante: obj.tipoTelefonoSustentante?.id,
+				idTipoTelefonoSustentante: obj.tipoTelefonoSustentante?.id
 			]
 		}
 	}
