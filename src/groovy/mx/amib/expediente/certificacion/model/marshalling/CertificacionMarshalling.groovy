@@ -45,6 +45,10 @@ class CertificacionMarshalling {
 				
 				,fechaAutorizacionInicio: obj.fechaAutorizacionInicio
 				,fechaAutorizacionFin: obj.fechaAutorizacionFin
+				
+				
+				,fechaEntregaRecepcion: obj.fechaEntregaRecepcion
+				,fechaEnvioComision: obj.fechaEnvioComision
 			]
 		}
 	}

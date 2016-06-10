@@ -46,6 +46,7 @@ class SustentanteMarshalling {
 				documentos:obj.documentos, 
 				puestos:obj.puestos, 
 				certificaciones:obj.certificaciones
+				, asentamientoOtro: obj.asentamientoOtro
 			]
 		}
 	}

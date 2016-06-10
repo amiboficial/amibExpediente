@@ -125,6 +125,10 @@ class SustentanteRestfulController extends RestfulController<Sustentante>{
 			if(JSONObject.NULL.equals(newData.'numeroExterior')) sustentante.numeroInterior = null
 			else sustentante.numeroInterior = newData.'numeroInterior'
 			
+			if(JSONObject.NULL.equals(newData.'asentamientoOtro')) sustentante.asentamientoOtro = null
+			else sustentante.asentamientoOtro = newData.'asentamientoOtro'
+			
+			
 			println("hasta numero interior")
 			if(!JSONObject.NULL.equals(newData.'idSepomex'))
 			sustentante.idSepomex = newData.'idSepomex'

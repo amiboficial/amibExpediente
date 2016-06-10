@@ -42,6 +42,9 @@ class Certificacion {
 	Date fechaAutorizacionInicio
 	Date fechaAutorizacionFin
 	
+	Date fechaEntregaRecepcion	
+	Date fechaEnvioComision
+	
 	Set validaciones = []
 	
 	static belongsTo = [Sustentante]
@@ -82,6 +85,9 @@ class Certificacion {
 		fechaAutorizacionInicio column:'fh_autinicio'
 		fechaAutorizacionFin column:'fh_autfin'
 		
+		fechaEntregaRecepcion column:'fh_entrega'
+		fechaEnvioComision column:'fh_envio'
+		
 		version false
 	}
 	
@@ -95,5 +101,7 @@ class Certificacion {
 		obsConstBolVal nullable: true
 		fechaAutorizacionInicio nullable :true
 		fechaAutorizacionFin nullable:true
+		fechaEntregaRecepcion nullable :true
+		fechaEnvioComision nullable:true
     }
 }

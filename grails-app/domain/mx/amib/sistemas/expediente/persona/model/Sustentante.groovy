@@ -22,6 +22,7 @@ class Sustentante {
 	String numeroExterior
 	String numeroInterior
 	Long idSepomex
+	String asentamientoOtro
 
 	Date fechaCreacion
 	Date fechaModificacion
@@ -62,6 +63,7 @@ class Sustentante {
 		numeroExterior column:'tx_numext'
 		numeroInterior column:'tx_numint'
 		idSepomex column:'id_f_sepomex'
+		asentamientoOtro column:'tx_asen_otro'
 		
 		fechaCreacion column:'fh_creacion'
 		fechaModificacion column:'fh_modificacion'
@@ -98,5 +100,7 @@ class Sustentante {
 		
 		fechaCreacion nullable: true
 		fechaModificacion nullable: true
+		
+		asentamientoOtro nullable: true
     }
 }
