@@ -277,6 +277,14 @@ class CertificacionRestfulController extends RestfulController{
 			cert.fechaInicio = df.parse(newData.'fechaInicio'.substring(0,10))
 			cert.fechaFin = df.parse(newData.'fechaFin'.substring(0,10))
 			
+			//para la actualizacion de la autorizacion
+			if(!JSONObject.NULL.equals(newData.'fechaAutorizacionInicio')) cert.fechaAutorizacionInicio = df.parse(newData.'fechaAutorizacionInicio'.substring(0,10))
+			if(!JSONObject.NULL.equals(newData.'fechaAutorizacionFin')) cert.fechaAutorizacionFin = df.parse(newData.'fechaAutorizacionFin'.substring(0,10))
+			
+			//para el plazo de atencion del tramite
+			if(!JSONObject.NULL.equals(newData.'fechaEntregaRecepcion')) cert.fechaEntregaRecepcion = df.parse(newData.'fechaEntregaRecepcion'.substring(0,10))
+			if(!JSONObject.NULL.equals(newData.'fechaEnvioComision')) cert.fechaEnvioComision = df.parse(newData.'fechaEnvioComision'.substring(0,10))
+			
 			cert.statusEntHistorialInforme = newData.'statusEntHistorialInforme'
 			if(!JSONObject.NULL.equals(newData.'obsEntHistorialInforme')) cert.obsEntHistorialInforme = newData.'obsEntHistorialInforme'
 			
