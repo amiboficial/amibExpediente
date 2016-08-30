@@ -193,6 +193,7 @@ class SustentanteRestfulController extends RestfulController<Sustentante>{
 			} catch (Exception e) {
 			println("exception explained")
 				println(e?.message)
+			render(status: 500, text: e?.message)
 			}
 			
 		}
@@ -225,19 +226,24 @@ class SustentanteRestfulController extends RestfulController<Sustentante>{
 			}
 			newData.'puestos'.each { y ->
 				Puesto p = null
-				
-				if( JSONObject.NULL.equals(y.'id') || y.'id' <= 0){
+				println("fechasssssssssssssssss")
+				println (y.'fechaInicio')
+				println (y.'fechaFin')
+				if( y.'id'==null || JSONObject.NULL.equals(y.'id') || y.'id' <= 0){
 					
 					p = new Puesto()
 					p.sustentante = sustentante
 					
 					p.idInstitucion = y.'idInstitucion'
-					p.fechaInicio = df.parse(y.'fechaInicio'.substring(0,10))
-					if(!JSONObject.NULL.equals(y.'fechaFin')) p.fechaFin = df.parse(y.'fechaFin'.substring(0,10))
+					if(!JSONObject.NULL.equals(y.'fechaInicio')) p.fechaInicio = df.parse(y.'fechaInicio'.toString().substring(0,10))
+					if(!JSONObject.NULL.equals(y.'fechaFin')) p.fechaFin = df.parse(y.'fechaFin'.toString().substring(0,10))
 					else p.fechaFin = null
 					p.nombrePuesto = y.'nombrePuesto'
-					if(JSONObject.NULL.equals(y.'fechaFin')) p.esActual = true
-					else p.esActual = false
+					if(JSONObject.NULL.equals(y.'fechaFin')&&JSONObject.NULL.equals(y.'esActual')) {
+						p.esActual = false
+					}else{
+						p.esActual = (Boolean)y.'esActual'
+					}
 					
 					p.statusEntManifProtesta = y.'statusEntManifProtesta'
 					if(JSONObject.NULL.equals(y.'obsEntManifProtesta')) p.obsEntManifProtesta = y.'obsEntManifProtesta'
@@ -255,11 +261,15 @@ class SustentanteRestfulController extends RestfulController<Sustentante>{
 					p = Puesto.get(y.'id')
 					
 					p.idInstitucion = y.'idInstitucion'
-					p.fechaInicio = df.parse(y.'fechaInicio'.substring(0,10))
-					if(JSONObject.NULL.equals(y.'fechaFin')) p.fechaFin = df.parse(y.'fechaFin'.substring(0,10))
+					if(!JSONObject.NULL.equals(y.'fechaInicio')) p.fechaInicio = df.parse(y.'fechaInicio'.toString().substring(0,10))
+					if(!JSONObject.NULL.equals(y.'fechaFin')) p.fechaFin = df.parse(y.'fechaFin'.toString().substring(0,10))
 					p.nombrePuesto = y.'nombrePuesto'
-					if(JSONObject.NULL.equals(y.'fechaFin')) p.esActual = true
-					else p.esActual = false
+					
+					if(JSONObject.NULL.equals(y.'fechaFin')&&JSONObject.NULL.equals(y.'esActual')) {
+						p.esActual = false
+					}else{
+						p.esActual = (Boolean)y.'esActual'
+					}
 					
 					p.statusEntManifProtesta = y.'statusEntManifProtesta'
 					if(JSONObject.NULL.equals(y.'obsEntManifProtesta')) p.obsEntManifProtesta = y.'obsEntManifProtesta'
@@ -276,7 +286,9 @@ class SustentanteRestfulController extends RestfulController<Sustentante>{
 			sustentante.save(failOnError: true, flush:true)
 		} catch (Exception e) {
 		println("exception explained 222222")
+		e.printStackTrace()
 			println(e?.message)
+			render(status: 500, text: e?.message)
 		}
 		}
 		
