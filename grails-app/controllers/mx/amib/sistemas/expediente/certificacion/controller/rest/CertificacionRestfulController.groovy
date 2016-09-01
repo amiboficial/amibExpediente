@@ -134,7 +134,40 @@ class CertificacionRestfulController extends RestfulController{
 		Long idfig = Long.parseLong(params.idfig?:"-1")
 		Long idvarfig = Long.parseLong(params.idvarfig?:"-1")
 		
-		respond certificacionService.findAllEnAutorizacion(max, offset, sort, order, nom, ap1, ap2, idfig, idvarfig)
+		String fhEntregaLow = params.fhEl?:""
+		String fhEntregaTop = params.fhEt?:""
+		String fhEnvioLow = params.fhVl?:""
+		String fhEnvioTop = params.fhVt?:""
+		if(!fhEntregaLow.equals("")||!fhEnvioLow.equals("")){
+			DateFormat df = new SimpleDateFormat("yyyy-MM-dd")
+			Date entregaLow = null
+			if(!fhEntregaLow.equals("")){
+				entregaLow = df.parse(fhEntregaLow.substring(0,10))
+			}
+			Date entregaTop = null
+			if(!fhEntregaTop.equals("")){
+				entregaTop = df.parse(fhEntregaTop.substring(0,10))
+			}
+			Date envioLow = null
+			if(!fhEnvioLow.equals("")){
+				envioLow = df.parse(fhEnvioLow.substring(0,10))
+			}
+			Date envioTop = null
+			if(!fhEnvioTop.equals("")){
+				envioTop = df.parse(fhEnvioTop.substring(0,10))
+			}
+			if(entregaLow!=null&&entregaTop==null){
+				entregaTop = entregaLow
+			}
+			if(envioLow!=null&&envioTop==null){
+				envioTop = envioLow
+			}
+			respond certificacionService.findAllEnAutorizacionFechas(max, offset, sort, order, nom, ap1, ap2, idfig, idvarfig,
+				 entregaLow, entregaTop, envioLow, envioTop)
+		}
+		else{
+			respond certificacionService.findAllEnAutorizacion(max, offset, sort, order, nom, ap1, ap2, idfig, idvarfig)
+		}
 	}
 	def findAllAutorizadosConOSinPoderesByMatricula(Integer id){
 		int max = Integer.parseInt(params.max?:"10")
@@ -384,6 +417,7 @@ class CertificacionRestfulController extends RestfulController{
 		
 		respond cert
 	}
+	
 	def createReponerAutorizacion(){
 		def newData = request.JSON
 		long id = newData.'certificacion'.'id'
@@ -393,10 +427,11 @@ class CertificacionRestfulController extends RestfulController{
 		println(valiJson)
 		long metodoVali = -1
 		
-		Certificacion cert = Certificacion.get(id)
+		Certificacion cert = new Certificacion()
+		Certificacion cert2 = Certificacion.get(id)
 		Validacion val = new Validacion()
 		
-		if(cert == null){
+		if(cert2 == null){
 			render status: NOT_FOUND
 		}
 		else{
@@ -405,12 +440,18 @@ class CertificacionRestfulController extends RestfulController{
 			//Setea parametros de certificación sobre la cual se "repondrá" la autorización
 			//al "reponerse" una autorización se crea una nueva instancia de certificación
 			//dado que el sustentante se "re-certifica".
-			cert.isUltima = false
-			cert.statusAutorizacion = StatusAutorizacion.get( StatusAutorizacionTypes.VENCIDA )
-			cert.statusCertificacion = StatusCertificacion.get( StatusCertificacionTypes.CERTIFICADO_VENCIDO )
-			cert.save(flush: true, failOnError : true)
+			cert2.isUltima = false
+			cert2.statusAutorizacion = StatusAutorizacion.get( StatusAutorizacionTypes.VENCIDA )
+			cert2.statusCertificacion = StatusCertificacion.get( StatusCertificacionTypes.CERTIFICADO_VENCIDO )
+			if(cert2.fechaCreacion == null){
+				cert2.fechaCreacion = new Date()
+			}
+			if(cert2.fechaModificacion == null){
+				cert2.fechaModificacion = new Date()
+			}
+			cert2.save(flush: true, failOnError : true)
 			
-			cert = cert.clone()
+			cert = cert2.clone()
 			//Se creará una nueva instancia (ya que se está obteniendo una nueva certificación)
 			cert.id = null 
 			
@@ -444,6 +485,11 @@ class CertificacionRestfulController extends RestfulController{
 			if(!JSONObject.NULL.equals(valiJson.'fechaAplicacion')) val.fechaAplicacion = df.parse(valiJson.'fechaAplicacion'.substring(0,10))
 			if(!JSONObject.NULL.equals(valiJson.'fechaInicio')) val.fechaInicio = df.parse(valiJson.'fechaInicio'.substring(0,10))
 			if(!JSONObject.NULL.equals(valiJson.'fechaFin')) val.fechaFin = df.parse(valiJson.'fechaFin'.substring(0,10))
+			
+			cert.idVarianteFigura = certJson.'idVarianteFigura'
+			cert.varianteFigura = VarianteFigura.get( certJson.'idVarianteFigura' )
+			println("cert.varianteFigura.idFigura")
+			println(cert.varianteFigura.idFigura)
 			
 			val.autorizadoPorUsuario = valiJson.'autorizadoPorUsuario'
 			
