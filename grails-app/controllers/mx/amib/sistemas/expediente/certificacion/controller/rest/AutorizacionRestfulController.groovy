@@ -1,6 +1,11 @@
 package mx.amib.sistemas.expediente.certificacion.controller.rest
 
 import javax.servlet.http.HttpServletResponse
+import groovy.json.JsonSlurper
+
+import java.text.DateFormat
+import java.text.SimpleDateFormat
+
 
 class AutorizacionRestfulController {
 
@@ -26,12 +31,38 @@ class AutorizacionRestfulController {
 	def autorizar() {
 		List<Long> idCertificacionList = null
 		List<Long> idCertificacionListMod = null
-		
 		try{
 			idCertificacionList = new ArrayList<Long>(request.JSON)
 			idCertificacionListMod = autorizacionService.autorizar(idCertificacionList)
 		}
 		catch(Exception e){
+			response.sendError(HttpServletResponse.SC_BAD_REQUEST)
+		}
+		
+		respond idCertificacionListMod
+	}
+	
+	def autorizarAltaOficio() {
+		List<Long> idCertificacionList = null
+		Date oficioDate = null
+		List<Long> idCertificacionListMod = null
+		try{
+			println("autorizarAltaOficio"+request.JSON)
+			
+			def parseddat = request.JSON
+			DateFormat df = new SimpleDateFormat("yyyy-MM-dd")
+			
+			if(parseddat.alta.dateOficio!=null) oficioDate = df.parse(parseddat.alta.dateOficio.substring(0,10))
+			idCertificacionList = (List<Long>) parseddat.alta.ids
+			println("oficioDate")
+			println(oficioDate)
+			
+			println("idCertificacionList")
+			println(idCertificacionList)
+			idCertificacionListMod = autorizacionService.autorizarNuevoOficio(idCertificacionList, oficioDate)
+		}
+		catch(Exception e){
+			e.printStackTrace()
 			response.sendError(HttpServletResponse.SC_BAD_REQUEST)
 		}
 		
