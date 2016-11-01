@@ -906,7 +906,7 @@ class CertificacionService {
 		sr = this._execQuery(strHqlCount,sbHql,namedParameters,max)
 		return sr
 	}
-	SearchResult findAllCandidatoCambioFiguraByFolio(int idSustentante){
+	SearchResult findAllCandidatoCambioFiguraByFolio(long idSustentante){
 		//Variables a ocupar en el método
 		int countParams = 0
 		SearchResult sr = new SearchResult()
@@ -1192,7 +1192,7 @@ class CertificacionService {
 	}
 		
 		/**
-		 *
+		 * se agrego para tener la opcion de 1 estatus de certificación y multiples estatus de autorización
 		 * @param hqlFilters
 		 * @param namedParameters
 		 * @return true if "where" keyword is needed to be appended, otherwise false.
@@ -1257,6 +1257,90 @@ class CertificacionService {
 				
 				return count
 		}
+			
+			/**
+			 *
+			 * @param hqlFilters
+			 * @param namedParameters
+			 * @return true if "where" keyword is needed to be appended, otherwise false.
+			 */
+			private int _addHqlFilterAndParams3(List<String> hqlFilters, Map<String,Object> namedParameters,
+				long idSustentante, int numeroMatricula, String nom, String ap1, String ap2,
+				long idfig, long idvarfig, long idStatusCertificacion, long idStatusAutorizacion, 
+											Date entregaLow,  Date entregaTop, Date envioLow, Date envioTop
+											, boolean soloUltimas = true){
+															
+					int count = 0
+					
+					if(idSustentante > 0){
+						hqlFilters.add("c.sustentante.id = :idSustentante ")
+						namedParameters.put("idSustentante", idSustentante)
+						count++
+					}
+					if(numeroMatricula > 0){
+						hqlFilters.add("c.sustentante.numeroMatricula = :numeroMatricula ")
+						namedParameters.put("numeroMatricula", numeroMatricula)
+						count++
+					}
+					
+					if(nom != null && nom.trim().compareTo("") != 0){
+						hqlFilters.add("c.sustentante.nombre like :nom ")
+						count++
+						namedParameters.put("nom",nom + '%')
+					}
+					if(ap1 != null && ap1.trim().compareTo("") != 0){
+						hqlFilters.add("c.sustentante.primerApellido like :ap1 ")
+						count++
+						namedParameters.put("ap1",ap1 + '%')
+					}
+					if(ap2 != null && ap2.trim().compareTo("") != 0){
+						hqlFilters.add("c.sustentante.segundoApellido like :ap2 ")
+						count++
+						namedParameters.put("ap2",ap2 + '%')
+					}
+					if(idvarfig > 0){
+						hqlFilters.add("c.varianteFigura.id = :idVarFigura ")
+						count++
+						namedParameters.put("idVarFigura",idvarfig)
+					}
+					else if(idfig > 0){
+						hqlFilters.add("c.varianteFigura.idFigura = :idFigura ")
+						count++
+						namedParameters.put("idFigura",idfig)
+					}
+					if(idStatusCertificacion > 0){
+						hqlFilters.add("c.statusCertificacion.id = :idSc ")
+						count++
+						namedParameters.put("idSc",idStatusCertificacion)
+					}
+					if(idStatusAutorizacion > 0){
+						hqlFilters.add("c.statusAutorizacion.id = :idSa ")
+						count++
+						namedParameters.put("idSa",idStatusAutorizacion)
+					}
+					
+					//para fechas 
+					if(entregaLow != null && entregaTop!= null){
+						hqlFilters.add("c.fechaEntregaRecepcion BETWEEN :entregaLow AND :entregaTop ")
+						count++
+						namedParameters.put("entregaLow",entregaLow)
+						namedParameters.put("entregaTop",entregaTop)
+					}
+					if(envioLow != null && envioTop!= null){
+						hqlFilters.add("c.fechaEnvioComision BETWEEN :envioLow AND :envioTop ")
+						count++
+						namedParameters.put("envioLow",envioLow)
+						namedParameters.put("envioTop",envioTop)
+					}
+					//end fechas
+					
+					if(soloUltimas == true){
+						hqlFilters.add("c.isUltima = true ")
+						count++
+					}
+					
+					return count
+			}
 					
 	private void _prepareQuery(StringBuilder sbHql, StringBuilder strHqlCount, List<String> hqlFilters, boolean whereKeywordNeeded, String sort, String order){
 		strHqlCount.append('select count(c.id) from Certificacion as c ')
