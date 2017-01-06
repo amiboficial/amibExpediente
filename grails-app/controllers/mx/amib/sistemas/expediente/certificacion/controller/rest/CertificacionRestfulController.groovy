@@ -336,7 +336,10 @@ class CertificacionRestfulController extends RestfulController{
 		println("entro a updateDatosParaActualizarAutorizacion de certificacion")
 		println("request")
 		println(request.JSON	)
+		println("params")
+		println(params)
 		def newData = request.JSON
+		
 		long id = newData.'certificacion'.'id'
 		def certJson = newData.'certificacion'
 		def valiJson = newData.'validacion'
@@ -344,7 +347,8 @@ class CertificacionRestfulController extends RestfulController{
 		
 		Certificacion cert = Certificacion.get(id)
 		Validacion val = new Validacion()
-		
+		println("cert")
+		println(cert)
 		if(cert == null){
 			render status: NOT_FOUND
 		}
@@ -355,6 +359,19 @@ class CertificacionRestfulController extends RestfulController{
 			cert.fechaObtencion = df.parse(certJson.'fechaObtencion'.substring(0,10))
 			cert.fechaInicio = df.parse(certJson.'fechaInicio'.substring(0,10))
 			cert.fechaFin = df.parse(certJson.'fechaFin'.substring(0,10))
+			
+			
+			//para la actualizacion de la autorizacion
+			if(!JSONObject.NULL.equals(certJson.'fechaCreacion')){
+				 cert.fechaCreacion = df.parse(certJson.'fechaCreacion'.substring(0,10))
+			}else{
+				cert.fechaCreacion = new Date()
+			}
+			if(!JSONObject.NULL.equals(certJson.'fechaModificacion')){
+				 cert.fechaModificacion = df.parse(certJson.'fechaModificacion'.substring(0,10))
+			}else{
+				cert.fechaModificacion = new Date()
+			}
 			
 			//para la actualizacion de la autorizacion
 			if(!JSONObject.NULL.equals(certJson.'fechaAutorizacionInicio')) cert.fechaAutorizacionInicio = df.parse(certJson.'fechaAutorizacionInicio'.substring(0,10))
