@@ -786,7 +786,7 @@ class CertificacionService {
 		order = this.filterOrder(order)
 
 		//preparación de parámetros
-		countParams = this._addHqlFilterAndParams2(hqlFilters, namedParameters, -1, -1, nom, ap1, ap2, idfig, idvarfig, -1, [StatusAutorizacionTypes.VENCIDA, StatusAutorizacionTypes.REVOCADA ]);
+		countParams = this._addHqlFilterAndParams2(hqlFilters, namedParameters, -1, -1, nom, ap1, ap2, idfig, idvarfig, -1, [StatusAutorizacionTypes.VENCIDA, StatusAutorizacionTypes.REVOCADA, StatusAutorizacionTypes.AUTORIZADO_SIN_PODERES ]);
 		//si no hay parametrós, entonces el query "va por todos"
 		whereKeywordNeeded = (countParams > 0)
 		
@@ -814,7 +814,7 @@ class CertificacionService {
 		String order = 'asc'
 
 		//preparación de parámetros
-		countParams = this._addHqlFilterAndParams2(hqlFilters, namedParameters, -1, numeroMatricula, '', '', '', -1, -1, -1, [StatusAutorizacionTypes.VENCIDA, StatusAutorizacionTypes.REVOCADA ]);
+		countParams = this._addHqlFilterAndParams2(hqlFilters, namedParameters, -1, numeroMatricula, '', '', '', -1, -1, -1, [StatusAutorizacionTypes.VENCIDA, StatusAutorizacionTypes.REVOCADA, StatusAutorizacionTypes.AUTORIZADO_SIN_PODERES ]);
 		//si no hay parametrós, entonces el query "va por todos"
 		whereKeywordNeeded = (countParams > 0)
 		
@@ -842,7 +842,7 @@ class CertificacionService {
 		String order = 'asc'
 
 		//preparación de parámetros
-		countParams = this._addHqlFilterAndParams2(hqlFilters, namedParameters, idSustentante, -1, '', '', '', -1, -1, -1, [StatusAutorizacionTypes.VENCIDA, StatusAutorizacionTypes.REVOCADA ]);
+		countParams = this._addHqlFilterAndParams2(hqlFilters, namedParameters, idSustentante, -1, '', '', '', -1, -1, -1, [StatusAutorizacionTypes.VENCIDA, StatusAutorizacionTypes.REVOCADA, StatusAutorizacionTypes.AUTORIZADO_SIN_PODERES ]);
 		//si no hay parametros, entonces el query "va por todos"
 		whereKeywordNeeded = (countParams > 0)
 		
