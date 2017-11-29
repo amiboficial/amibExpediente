@@ -45,6 +45,9 @@ class Certificacion {
 	Date fechaEntregaRecepcion	
 	Date fechaEnvioComision
 	
+	String usuarioCreacion
+	String usuarioModificacion
+	
 	Set validaciones = []
 	
 	static belongsTo = [Sustentante]
@@ -88,6 +91,9 @@ class Certificacion {
 		fechaEntregaRecepcion column:'fh_entrega'
 		fechaEnvioComision column:'fh_envio'
 		
+		usuarioCreacion column:'tx_usuario'
+		usuarioModificacion column:'tx_ultusuariomod'
+		
 		version false
 	}
 	
@@ -103,5 +109,7 @@ class Certificacion {
 		fechaAutorizacionFin nullable:true
 		fechaEntregaRecepcion nullable :true
 		fechaEnvioComision nullable:true
+		usuarioCreacion nullable :true
+		usuarioModificacion nullable:true
     }
 }

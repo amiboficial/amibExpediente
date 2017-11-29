@@ -310,6 +310,10 @@ class CertificacionRestfulController extends RestfulController{
 			cert.fechaInicio = df.parse(newData.'fechaInicio'.substring(0,10))
 			cert.fechaFin = df.parse(newData.'fechaFin'.substring(0,10))
 			
+			
+			cert.fechaModificacion = new Date()
+			cert.usuarioModificacion = newData.'usuarioModificacion'
+			
 			//para la actualizacion de la autorizacion
 			if(!JSONObject.NULL.equals(newData.'fechaAutorizacionInicio')) cert.fechaAutorizacionInicio = df.parse(newData.'fechaAutorizacionInicio'.substring(0,10))
 			if(!JSONObject.NULL.equals(newData.'fechaAutorizacionFin')) cert.fechaAutorizacionFin = df.parse(newData.'fechaAutorizacionFin'.substring(0,10))
@@ -399,6 +403,7 @@ class CertificacionRestfulController extends RestfulController{
 			if(!JSONObject.NULL.equals(valiJson.'fechaFin')) val.fechaFin = df.parse(valiJson.'fechaFin'.substring(0,10))
 			
 			val.autorizadoPorUsuario = valiJson.'autorizadoPorUsuario'
+			cert.usuarioModificacion = valiJson.'autorizadoPorUsuario'
 			
 			val.fechaCreacion = new Date()
 			val.fechaModificacion = new Date()
@@ -505,14 +510,20 @@ class CertificacionRestfulController extends RestfulController{
 			
 			cert.idVarianteFigura = certJson.'idVarianteFigura'
 			cert.varianteFigura = VarianteFigura.get( certJson.'idVarianteFigura' )
+			
+			
+			val.autorizadoPorUsuario = valiJson.'autorizadoPorUsuario'
+			cert.usuarioModificacion = valiJson.'autorizadoPorUsuario'
+			cert.usuarioCreacion = valiJson.'autorizadoPorUsuario'
+			cert.fechaCreacion = new Date()
+			cert.fechaModificacion = new Date()
+			
 			println("cert.varianteFigura.idFigura")
 			println(cert.varianteFigura.idFigura)
 			
-			val.autorizadoPorUsuario = valiJson.'autorizadoPorUsuario'
-			
 			val.fechaCreacion = new Date()
 			val.fechaModificacion = new Date()
-			
+			//si pierde la autorizacion necesita tener examen
 			val.metodoValidacion = MetodoValidacion.get( MetodosValidacionTypes.EXAMEN )
 			//TODO: PASAR ID DE RESERVACION DE EXAMEN
 			
@@ -525,6 +536,7 @@ class CertificacionRestfulController extends RestfulController{
 		
 		respond cert
 	}
+	
 	def createCambioFigura(){
 		def newData = request.JSON
 		long id = newData.'certificacion'.'id'
@@ -563,6 +575,11 @@ class CertificacionRestfulController extends RestfulController{
 			cert.statusAutorizacion = StatusAutorizacion.get( StatusAutorizacionTypes.DICTAMEN_PREVIO )
 			cert.statusCertificacion = StatusCertificacion.get( StatusCertificacionTypes.CERTIFICADO )
 			
+			cert.fechaModificacion = new Date()
+			cert.usuarioModificacion = valiJson.'autorizadoPorUsuario'
+			if(cert.usuarioCreacion == null){
+				cert.usuarioCreacion  = valiJson.'autorizadoPorUsuario'
+			}
 			
 			//para la actualizacion de la autorizacion
 			if(!JSONObject.NULL.equals(certJson.'fechaAutorizacionInicio')) cert.fechaAutorizacionInicio = df.parse(certJson.'fechaAutorizacionInicio'.substring(0,10))
