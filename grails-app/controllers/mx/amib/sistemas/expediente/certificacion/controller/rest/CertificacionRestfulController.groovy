@@ -17,6 +17,7 @@ import mx.amib.sistemas.expediente.certificacion.model.catalog.*
 import grails.rest.RestfulController
 import grails.transaction.Transactional
 import grails.converters.JSON
+import groovy.time.TimeCategory
 
 @Transactional(readOnly = false)
 class CertificacionRestfulController extends RestfulController{
@@ -619,6 +620,60 @@ class CertificacionRestfulController extends RestfulController{
 		}
 		
 		respond cert
+	}
+	
+	def proximosDesautorizados(){
+		println("entro a proximosDesautorizados")
+		println("request")
+		println(request.JSON)
+		def datosRequest = request.JSON
+		println("params")
+		println(params)
+		
+		int max = Integer.parseInt(params.max?:"10")
+		int offset = Integer.parseInt(params.offset?:"0")
+		String sort = params.sort?:"id"
+		String order = params.order?:"asc"
+		Integer numeroFolio = datosRequest.'folio'?:0
+		Integer numeroMatricula = datosRequest.'matricula'?:0
+		if(numeroFolio != 0){
+			numeroMatricula = Sustentante.findById(numeroFolio).numeroMatricula
+			numeroFolio = 0
+		}
+		def fechaInicio 
+		def fechaFin
+		
+		try {
+			DateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss")
+			
+			if(!JSONObject.NULL.equals(params.'fechaInicio')){
+				fechaInicio = df.parse(params.'fechaInicio'.substring(0,10)+" 00:00:00")
+			}else{
+				def aux = Calendar.getInstance()
+				aux.set(Calendar.HOUR_OF_DAY, 0)
+				aux.set(Calendar.MINUTE, 0)
+				aux.set(Calendar.MILLISECOND, 0)
+				aux.add(Calendar.DAY_OF_YEAR, 10)
+				fechaInicio = aux.getTime()
+			}
+			if(!JSONObject.NULL.equals(params.'fechaFin')){
+				fechaFin = df.parse(params.'fechaFin'.substring(0,10)+" 00:00:00")
+			}else{
+				def aux = Calendar.getInstance()
+				aux.set(Calendar.HOUR_OF_DAY, 0)
+				aux.set(Calendar.MINUTE, 0)
+				aux.set(Calendar.MILLISECOND, 0)
+				aux.add(Calendar.MONTH, 3)
+				aux.add(Calendar.DAY_OF_YEAR, 1)
+				fechaFin = aux.getTime()
+			}
+		}catch (Exception e) {
+			println("exception explained proximosDesauthorizados")
+				println(e?.message)
+		}
+		println("fechaInicio++++++++++++++"+fechaInicio)
+		println("fechaFin+++++++++++++++++"+fechaFin)
+		respond certificacionService.findAllProximosDesautorizados( numeroFolio, numeroMatricula, fechaInicio, fechaFin, offset , order, max)
 	}
 	
 }
